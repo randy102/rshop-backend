@@ -1,0 +1,26 @@
+type Permission{
+  _id: String
+  name: String
+  description: String
+}
+
+input CreatePermissionInput{
+  name: String!
+  description: String
+}
+
+input UpdatePermissionInput{
+  _id: String!
+  name: String!
+  description: String
+}
+
+type Query{
+  permissions: [Permission] @isAuth
+}
+
+type Mutation{
+  createPermission(input: CreatePermissionInput): Permission @isAuth @hasType(type: "ADMIN")
+  updatePermission(input: UpdatePermissionInput): Permission @isAuth @hasType(type: "ADMIN")
+  deletePermission(ids: [String]): Boolean @isAuth @hasType(type: "ADMIN")
+}

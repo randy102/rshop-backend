@@ -1,0 +1,36 @@
+type Admin{
+  _id: String
+  email: String
+  fullname: String
+}
+
+input CreateAdminInput{
+  email: String!
+  fullname: String
+  password: String!
+}
+
+input UpdateAdminInput{
+  _id: String!
+  email: String!
+  fullname: String
+  password: String!
+}
+
+input AdminLoginInput{
+  email: String!
+  password: String!
+}
+
+type Query{
+  admins: [Admin] @isAuth @hasType(type: "ADMIN")
+  currentAdmin: Admin @isAuth @hasType(type: "ADMIN")
+}
+
+type Mutation{
+  adminLogin(input: AdminLoginInput): String!
+
+  createAdmin(input: CreateAdminInput): Admin @isAuth @hasType(type: "ADMIN")
+  updateAdmin(input: UpdateAdminInput): Admin @isAuth @hasType(type: "ADMIN")
+  deleteAdmin(ids: [String]): Boolean @isAuth @hasType(type: "ADMIN")
+}

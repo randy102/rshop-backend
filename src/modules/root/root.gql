@@ -1,0 +1,3 @@
+directive @isAuth on FIELD | FIELD_DEFINITION
+directive @hasPermission(permission: String) on FIELD | FIELD_DEFINITION
+directive @hasType(type: String) on FIELD | FIELD_DEFINITION
