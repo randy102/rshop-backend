@@ -10,7 +10,7 @@ export default class TypeOrmConfigService implements TypeOrmOptionsFactory {
       port: +process.env.MONGO_PORT,
       username: '',
       password: '',
-      database: process.env.MONGO_DB,
+      database:process.env.NODE_ENV === 'testing' ? process.env.MONGO_DB_TEST : process.env.MONGO_DB,
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
       autoLoadEntities: true,

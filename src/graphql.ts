@@ -35,6 +35,10 @@ export class UpdatePermissionInput {
     description?: string;
 }
 
+export class DeletePermissionInput {
+    ids?: string[];
+}
+
 export class Admin {
     _id?: string;
     email?: string;
@@ -62,7 +66,7 @@ export abstract class IMutation {
 
     abstract updatePermission(input?: UpdatePermissionInput): Permission | Promise<Permission>;
 
-    abstract deletePermission(ids?: string[]): boolean | Promise<boolean>;
+    abstract deletePermission(input?: DeletePermissionInput): boolean | Promise<boolean>;
 }
 
 export class Permission {
