@@ -1,11 +1,11 @@
-import { AccountType } from "src/constants/account";
+import { ACCOUNT_TYPE } from "src/graphql.schema";
 
 export interface AccountPayload{
-  type: AccountType
+  type: ACCOUNT_TYPE
   _id: string
 }
 
-export function generateAccountPayload(type: AccountType, _id: string): AccountPayload{
+export function generateAccountPayload(type: ACCOUNT_TYPE, _id: string): AccountPayload{
   return {
     type,
     _id

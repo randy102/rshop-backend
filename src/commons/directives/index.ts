@@ -1,9 +1,7 @@
 import AuthDirective from "./auth.directive";
-import PermissionDirective from "./permission.directive";
-import AccountTypeDirective from "./accountType.directive";
+import AccountDirective from "./account.directive";
 
 export default {
-  isAuth: AuthDirective,
-  hasPermission: PermissionDirective,
-  hasType: AccountTypeDirective
+  Authenticated: AuthDirective,
+  Account: AccountDirective
 }

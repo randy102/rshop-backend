@@ -6,22 +6,35 @@
 
 /* tslint:disable */
 /* eslint-disable */
+export enum ACCOUNT_TYPE {
+    ADMIN = "ADMIN",
+    USER = "USER",
+    CUSTOMER = "CUSTOMER"
+}
+
+export enum PERMISSION {
+    STORE = "STORE",
+    STAFF = "STAFF"
+}
+
 export class CreateAdminInput {
     email: string;
     fullname?: string;
-    password: string;
 }
 
 export class UpdateAdminInput {
     _id: string;
     email: string;
     fullname?: string;
-    password: string;
 }
 
 export class AdminLoginInput {
     email: string;
     password: string;
+}
+
+export class DeleteAdminInput {
+    ids?: string[];
 }
 
 export class CreatePermissionInput {
@@ -60,7 +73,7 @@ export abstract class IMutation {
 
     abstract updateAdmin(input?: UpdateAdminInput): Admin | Promise<Admin>;
 
-    abstract deleteAdmin(ids?: string[]): boolean | Promise<boolean>;
+    abstract deleteAdmin(input?: DeleteAdminInput): boolean | Promise<boolean>;
 
     abstract createPermission(input?: CreatePermissionInput): Permission | Promise<Permission>;
 

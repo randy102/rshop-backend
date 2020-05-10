@@ -1,22 +1,30 @@
 import { SchemaDirectiveVisitor } from 'graphql-tools'
 import { defaultFieldResolver } from 'graphql'
 import {AuthError, NoPermissionError} from '../exceptions/GqlException'
+import { ACCOUNT_TYPE, PERMISSION } from 'src/graphql.schema'
 
 class AccountTypeDirective extends SchemaDirectiveVisitor {
 	visitFieldDefinition(field) {
 		const { resolve = defaultFieldResolver } = field
-		const { type } = this.args
+		const requiredType: ACCOUNT_TYPE = this.args.type
+		const requiredPermissions: PERMISSION[] = this.args.permissions
 
 		field.resolve = async function(...args) {
-			const { currentAccount, accountType } = args[2]
+			const context =  args[2]
 
-			// console.log('Hello', permission, permissions)
-
+			const { currentAccount } = context
+			const { accountType } = context
+			const accountPermissions: string[] = context.permission
+			
 			if (!currentAccount) {
 				throw new AuthError()
 			}
 
-			if (accountType !== type) {
+			if (accountType !== requiredType) {
+				throw new NoPermissionError()
+			}
+
+			if (requiredPermissions && !requiredPermissions.every(per => accountPermissions.includes(per))) {
 				throw new NoPermissionError()
 			}
 

@@ -1,3 +1,14 @@
-directive @isAuth on FIELD | FIELD_DEFINITION
-directive @hasPermission(permission: String) on FIELD | FIELD_DEFINITION
-directive @hasType(type: String) on FIELD | FIELD_DEFINITION
+directive @Authenticated on FIELD | FIELD_DEFINITION
+directive @Account(type: ACCOUNT_TYPE ,permissions: [PERMISSION]) on FIELD | FIELD_DEFINITION
+
+
+enum ACCOUNT_TYPE{
+  ADMIN
+  USER
+  CUSTOMER
+}
+
+enum PERMISSION{
+  STORE
+  STAFF
+}

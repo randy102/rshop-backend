@@ -2,11 +2,10 @@ import { Resolver, Mutation, Args, Query, Context } from '@nestjs/graphql';
 import * as md5 from 'md5'
 
 
-import {CreateAdminInput, Admin, UpdateAdminInput, AdminLoginInput} from '../../graphql.schema'
+import {CreateAdminInput, Admin, UpdateAdminInput, AdminLoginInput, DeleteAdminInput, ACCOUNT_TYPE} from '../../graphql.schema'
 import { AdminService } from './admin.service';
 import { NotFoundError, LoginError, DuplicateError } from 'src/commons/exceptions/GqlException';
 import { generateAccountPayload } from 'src/utils/jwt/accountPayload';
-import { AccountType } from 'src/constants/account';
 import { sign } from 'src/utils/jwt';
 import AdminEntity from './admin.entity';
 
@@ -33,7 +32,7 @@ export class AdminResolver {
     
     return await this.adminService.save({
       ...input,
-      password: md5(input.password),
+      password: md5('12345678'),
       createdBy: admin._id
     });
   }
@@ -48,16 +47,15 @@ export class AdminResolver {
 
     const updated = await this.adminService.save({
       ...existed,
-      ...input,
-      password: md5(input.password)
+      ...input
     })
 
     return updated
   }
 
   @Mutation()
-  async deleteAdmin(@Args('ids') ids: string[]): Promise<boolean>{
-    const deleted = await this.adminService.delete(ids)
+  async deleteAdmin(@Args('input') input: DeleteAdminInput): Promise<boolean>{
+    const deleted = await this.adminService.delete(input.ids)
     return !!deleted
   }
 
@@ -66,7 +64,7 @@ export class AdminResolver {
     const admin = await this.adminService.login(input.email, md5(input.password))
     if(!admin) throw new LoginError()
 
-    const jwt = sign(generateAccountPayload(AccountType.ADMIN, admin._id), process.env.JWT_SECRET)
+    const jwt = sign(generateAccountPayload(ACCOUNT_TYPE.ADMIN, admin._id), process.env.JWT_SECRET)
     return jwt
   }
 }

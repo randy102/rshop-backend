@@ -4,8 +4,7 @@ import { AuthError } from '../commons/exceptions/GqlException'
 import { verify } from 'src/utils/jwt';
 import schemaDirectives from '../commons/directives'
 import { AdminService } from 'src/modules/admin/admin.service';
-import { AccountType } from 'src/constants/account';
-import { Permission } from 'src/constants/permission';
+import { ACCOUNT_TYPE, PERMISSION } from 'src/graphql.schema';
 
 export default async function GqlConfigService(
   adminService: AdminService
@@ -17,9 +16,9 @@ export default async function GqlConfigService(
       return { currentAccount }
     }
 
-    let accountType: AccountType
+    let accountType: ACCOUNT_TYPE
     let currentAccount = []
-    let permissions: Permission[]
+    let permissions: PERMISSION[]
 
     const token = req.headers['token']
     if(!token) return // If not have token
@@ -28,15 +27,14 @@ export default async function GqlConfigService(
     if(!payload) return // If verify failed
     
     const { type, _id } = payload
-    if(!(type in AccountType)) return // If type is not in Account type
+    if(!(type in ACCOUNT_TYPE)) return // If type is not in Account type
 
     accountType = type
 
-    if (type === AccountType.ADMIN){
+    if (type === ACCOUNT_TYPE.ADMIN){
       currentAccount = await adminService.getAccount(_id)
-
     }
-    else if(type === AccountType.USER){
+    else if(type === ACCOUNT_TYPE.USER){
       currentAccount = []
     }
     else{

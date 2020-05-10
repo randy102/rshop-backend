@@ -8,6 +8,8 @@ const ACCOUNT = {
   'ADMIN': ['welldey102@gmail.com', '12345', 'adminLogin']
 }
 
+export {ACCOUNT}
+
 export async function getTestAppModule(): Promise<INestApplication> {
   const moduleFixture: TestingModule = await Test.createTestingModule({
     imports: [AppModule],
@@ -15,8 +17,7 @@ export async function getTestAppModule(): Promise<INestApplication> {
   moduleFixture.useLogger(new LoggerConfigService())
   return moduleFixture.createNestApplication()
 }
-
-async function getTestLogin(app: INestApplication, [email, password, field]: string[]) {
+export async function getToken(app: INestApplication, [email, password, field]: string[]) {
   const res = await request(app.getHttpServer())
     .post('/graphql')
     .send({
@@ -25,10 +26,6 @@ async function getTestLogin(app: INestApplication, [email, password, field]: str
       query: `mutation { ${field}(input: {email: "${email}", password: "${password}"})}`
     })
   return res.body.data[field]
-}
-
-export async function getTestAdminToken(app: INestApplication) {
-  return await getTestLogin(app, ACCOUNT.ADMIN)
 }
 
 export async function query(query: string, field: string, app: INestApplication, token: string) {
@@ -56,8 +53,8 @@ export function expectNotFound(error) {
 }
 
 export function expectCreatedExist(data: any[], input: object) {
-  expect(data.length).toEqual(1)
-  expect(data[0]).toMatchObject(input)
+  const found = data.find(obj => Object.keys(input).every(k => obj[k] === input[k]))
+  expect(found).not.toEqual(undefined)
 }
 
 //* Generator *//
@@ -70,3 +67,5 @@ export function generateInput(inputs: object) {
 export function generateGqlQuery(type: string, field: string, fields: string, inputs?: object) {
   return `${type} {${field + generateInput(inputs)} ${fields}}`
 }
+
+

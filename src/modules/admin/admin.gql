@@ -7,14 +7,12 @@ type Admin{
 input CreateAdminInput{
   email: String!
   fullname: String
-  password: String!
 }
 
 input UpdateAdminInput{
   _id: String!
   email: String!
   fullname: String
-  password: String!
 }
 
 input AdminLoginInput{
@@ -22,15 +20,19 @@ input AdminLoginInput{
   password: String!
 }
 
+input DeleteAdminInput{
+  ids: [String]
+}
+
 type Query{
-  admins: [Admin] @isAuth @hasType(type: "ADMIN")
-  currentAdmin: Admin @isAuth @hasType(type: "ADMIN")
+  admins: [Admin] @Authenticated @Account(type: ADMIN)
+  currentAdmin: Admin @Authenticated @Account(type: ADMIN)
 }
 
 type Mutation{
   adminLogin(input: AdminLoginInput): String!
 
-  createAdmin(input: CreateAdminInput): Admin @isAuth @hasType(type: "ADMIN")
-  updateAdmin(input: UpdateAdminInput): Admin @isAuth @hasType(type: "ADMIN")
-  deleteAdmin(ids: [String]): Boolean @isAuth @hasType(type: "ADMIN")
+  createAdmin(input: CreateAdminInput): Admin @Authenticated @Account(type: ADMIN)
+  updateAdmin(input: UpdateAdminInput): Admin @Authenticated @Account(type: ADMIN)
+  deleteAdmin(input: DeleteAdminInput): Boolean @Authenticated @Account(type: ADMIN)
 }
