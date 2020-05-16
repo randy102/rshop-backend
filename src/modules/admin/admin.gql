@@ -25,14 +25,14 @@ input DeleteAdminInput{
 }
 
 type Query{
-  admins: [Admin] @Authenticated @Account(type: ADMIN)
-  currentAdmin: Admin @Authenticated @Account(type: ADMIN)
+  admins: [Admin] @Auth @Account(type: ADMIN)
+  currentAdmin: Admin @Auth @Account(type: ADMIN)
 }
 
 type Mutation{
-  adminLogin(input: AdminLoginInput): String!
+  loginAdmin(input: AdminLoginInput): String!
 
-  createAdmin(input: CreateAdminInput): Admin @Authenticated @Account(type: ADMIN)
-  updateAdmin(input: UpdateAdminInput): Admin @Authenticated @Account(type: ADMIN)
-  deleteAdmin(input: DeleteAdminInput): Boolean @Authenticated @Account(type: ADMIN)
+  createAdmin(input: CreateAdminInput): Admin @Auth @Account(type: ADMIN)
+  updateAdmin(input: UpdateAdminInput): Admin @Auth @Account(type: ADMIN)
+  deleteAdmin(input: DeleteAdminInput): Boolean @Auth @Account(type: ADMIN)
 }

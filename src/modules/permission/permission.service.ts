@@ -1,12 +1,31 @@
 import { Injectable } from '@nestjs/common';
-import { Permission } from 'src/graphql.schema';
 import PermissionEntity from './permission.entity';
-import { getMongoRepository, DeleteWriteOpResultObject, MongoRepository } from 'typeorm';
 import RootService from '../root/root.service';
-import { InjectRepository } from '@nestjs/typeorm';
+import { Permission } from 'src/graphql.schema';
+
 
 @Injectable()
 export class PermissionService extends RootService {
-  constructor(@InjectRepository(PermissionEntity) readonly repo: MongoRepository<PermissionEntity>){ super(PermissionEntity) }
-  
+  constructor() { super(PermissionEntity, 'Permission') }
+
+  async create(input, createdBy: string) {
+    await this.checkDuplication({ name: input.name })
+
+    return this.save({
+      ...input,
+      createdBy
+    })
+  }
+
+  async update(input) {
+    const existed: Permission = await this.checkExistedId(input._id)
+
+    await this.checkDuplication({ name: input.name, _id: { $ne: input._id } })
+
+    return this.save({
+      ...existed,
+      ...input
+    })
+
+  }
 }

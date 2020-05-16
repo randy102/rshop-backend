@@ -5,7 +5,7 @@ import * as request from 'supertest';
 import LoggerConfigService from "src/configs/LoggerTestService";
 
 const ACCOUNT = {
-  'ADMIN': ['welldey102@gmail.com', '12345', 'adminLogin']
+  'ADMIN': ['welldey102@gmail.com', '12345', 'loginAdmin']
 }
 
 export {ACCOUNT}

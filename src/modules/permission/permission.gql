@@ -20,11 +20,11 @@ input DeletePermissionInput{
 }
 
 type Query{
-  permissions: [Permission] @Authenticated
+  permissions: [Permission] @Auth
 }
 
 type Mutation{
-  createPermission(input: CreatePermissionInput): Permission @Authenticated @Account(type: ADMIN)
-  updatePermission(input: UpdatePermissionInput): Permission @Authenticated @Account(type: ADMIN)
-  deletePermission(input: DeletePermissionInput): Boolean @Authenticated @Account(type: ADMIN)
+  createPermission(input: CreatePermissionInput): Permission @Auth @Account(type: ADMIN)
+  updatePermission(input: UpdatePermissionInput): Permission @Auth @Account(type: ADMIN)
+  deletePermission(input: DeletePermissionInput): Boolean @Auth @Account(type: ADMIN)
 }

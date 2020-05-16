@@ -8,6 +8,8 @@ import GqlConfigService from './configs/GqlConfig.service'
 import TypeOrmConfigService from './configs/TypeormConfig.service'
 import { AdminService } from './modules/admin/admin.service';
 import { PermissionModule } from './modules/permission/permission.module';
+import { UserModule } from './modules/user/user.module';
+import { UserService } from './modules/user/user.service';
 
 
 
@@ -16,12 +18,13 @@ import { PermissionModule } from './modules/permission/permission.module';
     TypeOrmModule.forRootAsync({ useClass: TypeOrmConfigService }),
     ConfigModule.forRoot({ isGlobal: true }),
     GraphQLModule.forRootAsync({
-      imports: [AdminModule],
-      inject: [AdminService],
+      imports: [AdminModule, UserModule],
+      inject: [AdminService, UserService],
       useFactory: GqlConfigService
     }),
     AdminModule,
     PermissionModule,
+    UserModule,
   ],
 })
 export class AppModule { }

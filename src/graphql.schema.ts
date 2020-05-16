@@ -52,6 +52,27 @@ export class DeletePermissionInput {
     ids?: string[];
 }
 
+export class RegisterUserInput {
+    email?: string;
+    fullname?: string;
+    password?: string;
+}
+
+export class LoginUserInput {
+    email: string;
+    password: string;
+}
+
+export class UpdateUserInput {
+    fullname?: string;
+    phone?: string;
+    address?: string;
+}
+
+export class DeleteUserInput {
+    ids?: string[];
+}
+
 export class Admin {
     _id?: string;
     email?: string;
@@ -64,10 +85,12 @@ export abstract class IQuery {
     abstract currentAdmin(): Admin | Promise<Admin>;
 
     abstract permissions(): Permission[] | Promise<Permission[]>;
+
+    abstract users(): User[] | Promise<User[]>;
 }
 
 export abstract class IMutation {
-    abstract adminLogin(input?: AdminLoginInput): string | Promise<string>;
+    abstract loginAdmin(input?: AdminLoginInput): string | Promise<string>;
 
     abstract createAdmin(input?: CreateAdminInput): Admin | Promise<Admin>;
 
@@ -80,10 +103,28 @@ export abstract class IMutation {
     abstract updatePermission(input?: UpdatePermissionInput): Permission | Promise<Permission>;
 
     abstract deletePermission(input?: DeletePermissionInput): boolean | Promise<boolean>;
+
+    abstract loginUser(input?: LoginUserInput): string | Promise<string>;
+
+    abstract registerUser(input?: RegisterUserInput): string | Promise<string>;
+
+    abstract updateUser(input?: UpdateUserInput): User | Promise<User>;
+
+    abstract deleteUser(input?: DeleteUserInput): User | Promise<User>;
 }
 
 export class Permission {
     _id?: string;
     name?: string;
     description?: string;
+}
+
+export class User {
+    _id?: string;
+    email?: string;
+    fullname?: string;
+    phone?: string;
+    address?: string;
+    createdAt?: number;
+    createdBy?: string;
 }

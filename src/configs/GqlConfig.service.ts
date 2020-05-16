@@ -5,9 +5,11 @@ import { verify } from 'src/utils/jwt';
 import schemaDirectives from '../commons/directives'
 import { AdminService } from 'src/modules/admin/admin.service';
 import { ACCOUNT_TYPE, PERMISSION } from 'src/graphql.schema';
+import { UserService } from 'src/modules/user/user.service';
 
 export default async function GqlConfigService(
-  adminService: AdminService
+  adminService: AdminService,
+  userService: UserService
 ): Promise<GqlModuleOptions> {
 
   async function contextHandler({ req, connection }) {
@@ -17,7 +19,7 @@ export default async function GqlConfigService(
     }
 
     let accountType: ACCOUNT_TYPE
-    let currentAccount = []
+    let currentAccount = undefined
     let permissions: PERMISSION[]
 
     const token = req.headers['token']
@@ -32,24 +34,22 @@ export default async function GqlConfigService(
     accountType = type
 
     if (type === ACCOUNT_TYPE.ADMIN){
-      currentAccount = await adminService.getAccount(_id)
+      currentAccount = await adminService.findById(_id)
     }
     else if(type === ACCOUNT_TYPE.USER){
-      currentAccount = []
+      currentAccount = await userService.findById(_id)
     }
     else{
-      currentAccount = []
+      currentAccount = undefined
     }
     
-    if(!currentAccount.length) return // If account not found
+    if(!currentAccount) return // If account not found
     
     return {
-      currentAccount: currentAccount[0],
+      currentAccount,
       accountType,
       permissions
     }
-
-
   }
 
   return {

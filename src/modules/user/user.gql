@@ -1,0 +1,42 @@
+type User{
+  _id: String
+  email: String
+  fullname: String
+  phone: String
+  address: String
+  createdAt: Float
+  createdBy: String
+}
+
+input RegisterUserInput{
+  email: String
+  fullname: String
+  password: String
+}
+
+input LoginUserInput{
+  email: String!
+  password: String!
+}
+
+input UpdateUserInput{
+  fullname: String
+  phone: String
+  address: String
+}
+
+input DeleteUserInput{
+  ids: [String]
+}
+
+type Query{
+  users: [User] @Auth @Account(type: ADMIN)
+}
+
+type Mutation{
+  loginUser(input: LoginUserInput): String
+  registerUser(input: RegisterUserInput): String
+
+  updateUser(input: UpdateUserInput): User @Auth @Account(type: USER)
+  deleteUser(input: DeleteUserInput): User @Auth @Account(type: ADMIN)
+}

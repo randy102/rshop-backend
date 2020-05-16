@@ -1,4 +1,4 @@
-directive @Authenticated on FIELD | FIELD_DEFINITION
+directive @Auth on FIELD | FIELD_DEFINITION
 directive @Account(type: ACCOUNT_TYPE ,permissions: [PERMISSION]) on FIELD | FIELD_DEFINITION
 
 

@@ -13,7 +13,7 @@ CRUDTest({
     fullname: 'edited'
   },
   afterCreate: ['Admin Login', async (app) => {
-    const token = await getToken(app, ['test@123', '12345678', 'adminLogin'])
+    const token = await getToken(app, ['test@123', '12345678', 'loginAdmin'])
     expect(token).toBeDefined()
   }]
 })

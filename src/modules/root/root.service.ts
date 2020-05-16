@@ -1,10 +1,13 @@
 import { getMongoRepository, MongoRepository } from "typeorm"
+import { DuplicateError, NotFoundError } from "src/commons/exceptions/GqlException"
 
 export default class RootService{
   private readonly Entity
+  private readonly Name
 
-  constructor(entity){
+  constructor(entity, name: string){
     this.Entity = entity
+    this.Name = name
   }
 
   findById(_id: string){
@@ -23,7 +26,19 @@ export default class RootService{
     return getMongoRepository(this.Entity).save(new this.Entity(entity))
   }
 
-  delete(ids: string[]){
-    return getMongoRepository(this.Entity).deleteMany({_id: {$in: ids}})
+  async delete(ids: string[]): Promise<boolean>{
+    const deleted = await getMongoRepository(this.Entity).deleteMany({_id: {$in: ids}})
+    return !!deleted
+  }
+
+  async checkDuplication(query: any): Promise<void>{
+    const existed = await this.findOne(query)
+    if(existed) throw new DuplicateError(this.Name)
+  }
+
+  async checkExistedId(id: string){
+    const existed = await this.findById(id)
+    if(!existed) throw new NotFoundError(this.Name)
+    return existed
   }
 }

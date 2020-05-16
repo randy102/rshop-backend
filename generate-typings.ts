@@ -5,6 +5,5 @@ const definitionsFactory = new GraphQLDefinitionsFactory();
 definitionsFactory.generate({
   typePaths: ['./src/**/*.gql'],
   path: join(process.cwd(), 'src/graphql.schema.ts'),
-  outputAs: 'class',
-  watch: true
+  outputAs: 'class'
 });
