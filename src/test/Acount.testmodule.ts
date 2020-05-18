@@ -1,19 +1,22 @@
 import { INestApplication } from "@nestjs/common"
-import { getTestAppModule, query, generateGqlQuery, getToken, ACCOUNT, expectDuplicated, expectCreatedExist } from "./root.testmodule"
-import { async } from "rxjs/internal/scheduler/async"
+import { getTestAppModule, query, generateGqlQuery, getToken, ACCOUNT_DATA, expectDuplicated, expectCreatedExist } from "./root.testmodule"
+import { ACCOUNT_TYPE } from "src/graphql.schema"
+
 
 interface AccountTestInput{
   subject: string
   registerInput: object
   updateInput: object
   fields: string
+  admin: string
 }
 
 export function AccountTest({
   subject,
   registerInput = {},
   updateInput = {},
-  fields
+  fields,
+  admin = ACCOUNT_TYPE.ADMIN
 }: AccountTestInput){
   describe(`${subject} Account Test`, () => {
     let app: INestApplication
@@ -28,13 +31,13 @@ export function AccountTest({
     const gqlRegister = generateGqlQuery('mutation',REGISTER_FIELD, '', registerInput)
     const gqlLogin = generateGqlQuery('mutation', LOGIN_FIELD, '', {email: registerInput['email'], password: registerInput['password']})
     const gqlRead = generateGqlQuery('query',READ_FIELD,fields)
-    const gqlUpdate = _id => generateGqlQuery('mutation', UPDATE_FIELD, fields, {...updateInput, _id})
+    const gqlUpdate = generateGqlQuery('mutation', UPDATE_FIELD, fields, updateInput)
 
     beforeAll(async () => {
       app = await getTestAppModule()
       await app.init()
 
-      adminToken = await getToken(app, ACCOUNT.ADMIN)
+      adminToken = await getToken(app, ACCOUNT_DATA[admin])
     });
 
     afterAll(async () => {
@@ -51,15 +54,19 @@ export function AccountTest({
       expectDuplicated(error)
     })
 
-    it.only(`Read ${subject}`, async () => {
+    it(`Read ${subject}`, async () => {
       const {data} = await query(gqlRead, READ_FIELD, app, adminToken)
       expectCreatedExist(data, registerInput)
     })
 
     it(`Login ${subject}`, async () => {
-      const {data,error} = await query(gqlLogin, LOGIN_FIELD, app, '')
-      console.log({error, gqlLogin})
+      const {data} = await query(gqlLogin, LOGIN_FIELD, app, '')
       expect(data).toEqual(accountToken)
+    })
+
+    it(`Update ${subject}`, async () => {
+      const {data} = await query(gqlUpdate, UPDATE_FIELD, app, accountToken)
+      expect(data).toMatchObject(updateInput)
     })
   })
 }

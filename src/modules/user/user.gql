@@ -31,11 +31,14 @@ input DeleteUserInput{
 
 type Query{
   users: [User] @Auth @Account(type: ADMIN)
+  currentUser: USer @Auth @Account(type: USER)
 }
 
 type Mutation{
   loginUser(input: LoginUserInput): String
+  needRegisterUser(input: NeedRegisterUserInput): Boolean
   registerUser(input: RegisterUserInput): String
+  
 
   updateUser(input: UpdateUserInput): User @Auth @Account(type: USER)
   deleteUser(input: DeleteUserInput): User @Auth @Account(type: ADMIN)

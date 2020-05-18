@@ -4,12 +4,13 @@ import { ConfigModule } from '@nestjs/config'
 import { TypeOrmModule } from '@nestjs/typeorm'
 
 import { AdminModule } from './modules/admin/admin.module';
-import GqlConfigService from './configs/GqlConfig.service'
-import TypeOrmConfigService from './configs/TypeormConfig.service'
+import GqlConfigFactory from './configs/Gql.config'
+import TypeOrmConfigService from './configs/Typeorm.config'
 import { AdminService } from './modules/admin/admin.service';
 import { PermissionModule } from './modules/permission/permission.module';
 import { UserModule } from './modules/user/user.module';
 import { UserService } from './modules/user/user.service';
+import { TokenModule } from './modules/token/token.module';
 
 
 
@@ -20,11 +21,12 @@ import { UserService } from './modules/user/user.service';
     GraphQLModule.forRootAsync({
       imports: [AdminModule, UserModule],
       inject: [AdminService, UserService],
-      useFactory: GqlConfigService
+      useFactory: GqlConfigFactory
     }),
     AdminModule,
     PermissionModule,
     UserModule,
+    TokenModule,
   ],
 })
 export class AppModule { }

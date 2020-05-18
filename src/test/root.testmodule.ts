@@ -2,13 +2,13 @@ import { INestApplication } from "@nestjs/common";
 import { TestingModule, Test } from "@nestjs/testing";
 import { AppModule } from "src/app.module";
 import * as request from 'supertest';
-import LoggerConfigService from "src/configs/LoggerTestService";
+import LoggerConfigService from "src/configs/LoggerTest.config";
 
-const ACCOUNT = {
+const ACCOUNT_DATA = {
   'ADMIN': ['welldey102@gmail.com', '12345', 'loginAdmin']
 }
 
-export {ACCOUNT}
+export {ACCOUNT_DATA}
 
 export async function getTestAppModule(): Promise<INestApplication> {
   const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -53,7 +53,7 @@ export function expectNotFound(error) {
 }
 
 export function expectCreatedExist(data: any[], input: object) {
-  const found = data.find(obj => Object.keys(input).every(k => obj[k] === input[k]))
+  const found = data.find(obj => Object.keys(input).every(k => !obj[k] || obj[k] === input[k]))
   expect(found).not.toEqual(undefined)
 }
 

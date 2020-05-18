@@ -1,5 +1,5 @@
 import { INestApplication } from '@nestjs/common';
-import { getTestAppModule, query, expectDuplicated, generateGqlQuery, expectCreatedExist, getToken, ACCOUNT } from "./root.testmodule";
+import { getTestAppModule, query, expectDuplicated, generateGqlQuery, expectCreatedExist, getToken, ACCOUNT_DATA } from "./root.testmodule";
 
 export interface CRUDTestInput {
   subject: string
@@ -49,7 +49,7 @@ export function CRUDTest({
       app = await getTestAppModule()
       await app.init()
 
-      adminToken = await getToken(app, ACCOUNT.ADMIN)
+      adminToken = await getToken(app, ACCOUNT_DATA.ADMIN)
     });
 
     afterAll(async () => {

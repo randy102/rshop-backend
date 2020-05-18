@@ -7,7 +7,7 @@ import { AdminService } from 'src/modules/admin/admin.service';
 import { ACCOUNT_TYPE, PERMISSION } from 'src/graphql.schema';
 import { UserService } from 'src/modules/user/user.service';
 
-export default async function GqlConfigService(
+export default async function GqlConfigFactory(
   adminService: AdminService,
   userService: UserService
 ): Promise<GqlModuleOptions> {
