@@ -38,7 +38,7 @@ export default class RootService{
     if(existed) throw new DuplicateError(this.Name+subjectStr)
   }
 
-  async checkExistedId(id: string){
+  async checkExistedId(id: string): Promise<any>{
     const existed = await this.findById(id)
     if(!existed) throw new NotFoundError(this.Name)
     return existed

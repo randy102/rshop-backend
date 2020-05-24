@@ -69,6 +69,11 @@ export class UpdateUserInput {
     address?: string;
 }
 
+export class ChangeUserPasswordInput {
+    old?: string;
+    new?: string;
+}
+
 export class DeleteUserInput {
     ids?: string[];
 }
@@ -117,6 +122,8 @@ export abstract class IMutation {
     abstract registerUser(input?: RegisterUserInput): string | Promise<string>;
 
     abstract updateUser(input?: UpdateUserInput): User | Promise<User>;
+
+    abstract changeUserPassword(input?: ChangeUserPasswordInput): boolean | Promise<boolean>;
 
     abstract deleteUser(input?: DeleteUserInput): User | Promise<User>;
 }

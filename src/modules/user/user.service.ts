@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import RootService from '../root/root.service';
 import UserEntity from './user.entity';
-import { User, ACCOUNT_TYPE, RegisterUserInput } from 'src/graphql.schema';
-import { getMongoRepository } from 'typeorm';
+import { User, ACCOUNT_TYPE, RegisterUserInput, UpdateUserInput, ChangeUserPasswordInput } from 'src/graphql.schema';
 import md5 = require('md5');
 import { LoginError } from 'src/commons/exceptions/GqlException';
-import moment = require('moment')
+
 import { JwtService } from '../jwt/jwt.service';
 import { MailerService } from '../mailer/mailer.service';
 import { TokenService } from '../token/token.service';
+import {FieldError} from 'src/commons/exceptions/GqlException'
 
 @Injectable()
 export class UserService extends RootService {
@@ -55,14 +55,26 @@ export class UserService extends RootService {
     return jwt
   }
 
-  async update(_id, input) {
+  async update(_id, input: UpdateUserInput) {
     const existed: User = await this.checkExistedId(_id)
-
-    await this.checkDuplication({ email: input.email, _id: { $ne: _id } })
     
     return this.save(new UserEntity({
       ...existed,
       ...input
     }))
+  }
+
+  async changePassword(password: ChangeUserPasswordInput, _id: string){
+    const existed: UserEntity = await this.checkExistedId(_id)
+
+    if(existed.password !== md5(password.old))
+      throw new FieldError('Password')
+
+    const result = await this.save(new UserEntity({
+      ...existed,
+      password: md5(password.new)
+    }))
+
+    return !!result
   }
 }

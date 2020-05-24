@@ -12,6 +12,13 @@ export class DuplicateError extends GraphQLError{
   }
 }
 
+
+export class FieldError extends GraphQLError{
+  constructor(sub: string){
+    super(`Incorrect: ${sub}`)
+  }
+}
+
 export class NoPermissionError extends GraphQLError{
   constructor(){
     super(`No Permission`)
