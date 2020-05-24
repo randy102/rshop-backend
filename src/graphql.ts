@@ -53,7 +53,7 @@ export class DeletePermissionInput {
 }
 
 export class RegisterUserInput {
-    email?: string;
+    token?: string;
     fullname?: string;
     password?: string;
 }
@@ -73,6 +73,10 @@ export class DeleteUserInput {
     ids?: string[];
 }
 
+export class ConfirmUserEmailInput {
+    email?: string;
+}
+
 export class Admin {
     _id?: string;
     email?: string;
@@ -87,6 +91,8 @@ export abstract class IQuery {
     abstract permissions(): Permission[] | Promise<Permission[]>;
 
     abstract users(): User[] | Promise<User[]>;
+
+    abstract currentUser(): User | Promise<User>;
 }
 
 export abstract class IMutation {
@@ -105,6 +111,8 @@ export abstract class IMutation {
     abstract deletePermission(input?: DeletePermissionInput): boolean | Promise<boolean>;
 
     abstract loginUser(input?: LoginUserInput): string | Promise<string>;
+
+    abstract confirmUserEmail(input?: ConfirmUserEmailInput): boolean | Promise<boolean>;
 
     abstract registerUser(input?: RegisterUserInput): string | Promise<string>;
 

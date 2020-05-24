@@ -1,15 +1,16 @@
 import { join } from 'path'
 import { GqlModuleOptions } from '@nestjs/graphql';
-import { AuthError } from '../commons/exceptions/GqlException'
-import { verify } from 'src/utils/jwt';
+
 import schemaDirectives from '../commons/directives'
 import { AdminService } from 'src/modules/admin/admin.service';
 import { ACCOUNT_TYPE, PERMISSION } from 'src/graphql.schema';
 import { UserService } from 'src/modules/user/user.service';
+import { JwtService } from 'src/modules/jwt/jwt.service';
+import { AccountService } from 'src/modules/account/account.service';
 
 export default async function GqlConfigFactory(
-  adminService: AdminService,
-  userService: UserService
+  jwtService: JwtService,
+  accountService: AccountService
 ): Promise<GqlModuleOptions> {
 
   async function contextHandler({ req, connection }) {
@@ -25,7 +26,7 @@ export default async function GqlConfigFactory(
     const token = req.headers['token']
     if(!token) return // If not have token
 
-    const payload = await verify(token, process.env.JWT_SECRET)
+    const payload = await jwtService.verify(token)
     if(!payload) return // If verify failed
     
     const { type, _id } = payload
@@ -33,15 +34,7 @@ export default async function GqlConfigFactory(
 
     accountType = type
 
-    if (type === ACCOUNT_TYPE.ADMIN){
-      currentAccount = await adminService.findById(_id)
-    }
-    else if(type === ACCOUNT_TYPE.USER){
-      currentAccount = await userService.findById(_id)
-    }
-    else{
-      currentAccount = undefined
-    }
+    currentAccount = await accountService.getCurrentAccount(_id, type)
     
     if(!currentAccount) return // If account not found
     

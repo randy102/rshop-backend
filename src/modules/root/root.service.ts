@@ -22,8 +22,8 @@ export default class RootService{
     return getMongoRepository(this.Entity).findOne(query)
   }
 
-  save(entity: object){
-    return getMongoRepository(this.Entity).save(new this.Entity(entity))
+  save(entity: any){
+    return getMongoRepository(this.Entity).save(entity)
   }
 
   async delete(ids: string[]): Promise<boolean>{
@@ -31,9 +31,11 @@ export default class RootService{
     return !!deleted
   }
 
-  async checkDuplication(query: any): Promise<void>{
+  async checkDuplication(query: any, subject?: string): Promise<void>{
+    const subjectStr = subject ? ` [${subject}]` : ''
+
     const existed = await this.findOne(query)
-    if(existed) throw new DuplicateError(this.Name)
+    if(existed) throw new DuplicateError(this.Name+subjectStr)
   }
 
   async checkExistedId(id: string){

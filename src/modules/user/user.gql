@@ -9,7 +9,7 @@ type User{
 }
 
 input RegisterUserInput{
-  email: String
+  token: String
   fullname: String
   password: String
 }
@@ -29,14 +29,18 @@ input DeleteUserInput{
   ids: [String]
 }
 
+input ConfirmUserEmailInput{
+  email: String
+}
+
 type Query{
   users: [User] @Auth @Account(type: ADMIN)
-  currentUser: USer @Auth @Account(type: USER)
+  currentUser: User @Auth @Account(type: USER)
 }
 
 type Mutation{
   loginUser(input: LoginUserInput): String
-  needRegisterUser(input: NeedRegisterUserInput): Boolean
+  confirmUserEmail(input: ConfirmUserEmailInput): Boolean
   registerUser(input: RegisterUserInput): String
   
 

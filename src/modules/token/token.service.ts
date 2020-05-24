@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { getMongoRepository } from 'typeorm';
+import { getMongoRepository, getRepository } from 'typeorm';
 import TokenEntity from './token.entity';
 import { NotFoundError } from 'src/commons/exceptions/GqlException';
 
@@ -10,9 +10,11 @@ export class TokenService {
     return created._id
   }
 
-  async get(_id: string): Promise<object>{
+  async get(_id: string): Promise<any>{
     const existed = await getMongoRepository(TokenEntity).findOne({_id})
     if(!existed) throw new NotFoundError('Token')
+
+    await getRepository(TokenEntity).remove(existed)
 
     return JSON.parse(existed.content)
   }

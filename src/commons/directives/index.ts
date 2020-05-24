@@ -3,5 +3,5 @@ import AccountDirective from "./account.directive";
 
 export default {
   Auth: AuthDirective,
-  Account: AccountDirective
+  Account: AccountDirective,
 }

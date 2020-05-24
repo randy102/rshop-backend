@@ -11,6 +11,11 @@ import { PermissionModule } from './modules/permission/permission.module';
 import { UserModule } from './modules/user/user.module';
 import { UserService } from './modules/user/user.service';
 import { TokenModule } from './modules/token/token.module';
+import { JwtModule } from './modules/jwt/jwt.module';
+import { JwtService } from './modules/jwt/jwt.service';
+import { AccountModule } from './modules/account/account.module';
+import { AccountService } from './modules/account/account.service';
+import { MailerModule } from './modules/mailer/mailer.module';
 
 
 
@@ -19,14 +24,17 @@ import { TokenModule } from './modules/token/token.module';
     TypeOrmModule.forRootAsync({ useClass: TypeOrmConfigService }),
     ConfigModule.forRoot({ isGlobal: true }),
     GraphQLModule.forRootAsync({
-      imports: [AdminModule, UserModule],
-      inject: [AdminService, UserService],
+      imports: [JwtModule, AccountModule],
+      inject: [JwtService, AccountService],
       useFactory: GqlConfigFactory
     }),
     AdminModule,
     PermissionModule,
     UserModule,
     TokenModule,
+    JwtModule,
+    AccountModule,
+    MailerModule,
   ],
 })
 export class AppModule { }

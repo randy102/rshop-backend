@@ -1,6 +1,6 @@
 import { Resolver, Query, Mutation, Args, Context } from '@nestjs/graphql';
 import { UserService } from './user.service';
-import { User, LoginUserInput, RegisterUserInput, UpdateUserInput, DeleteUserInput } from 'src/graphql.schema';
+import { User, LoginUserInput, RegisterUserInput, UpdateUserInput, DeleteUserInput, ConfirmUserEmailInput } from 'src/graphql.schema';
 import UserEntity from './user.entity';
 
 @Resolver('User')
@@ -15,6 +15,11 @@ export class UserResolver {
   @Mutation()
   loginUser(@Args('input') input: LoginUserInput): Promise<string> {
     return this.userService.login(input)
+  }
+
+  @Mutation()
+  confirmUserEmail(@Args('input') input: ConfirmUserEmailInput){
+    return this.userService.confirmEmail(input.email)
   }
 
   @Mutation()
