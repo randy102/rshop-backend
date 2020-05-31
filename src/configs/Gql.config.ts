@@ -1,16 +1,13 @@
 import { join } from 'path'
 import { GqlModuleOptions } from '@nestjs/graphql';
-
 import schemaDirectives from '../commons/directives'
-import { AdminService } from 'src/modules/admin/admin.service';
 import { ACCOUNT_TYPE, PERMISSION } from 'src/graphql.schema';
-import { UserService } from 'src/modules/user/user.service';
 import { JwtService } from 'src/modules/jwt/jwt.service';
-import { AccountService } from 'src/modules/account/account.service';
+import { AuthService } from 'src/modules/auth/auth.service';
 
 export default async function GqlConfigFactory(
   jwtService: JwtService,
-  accountService: AccountService
+  authService: AuthService
 ): Promise<GqlModuleOptions> {
 
   async function contextHandler({ req, connection }) {
@@ -33,8 +30,7 @@ export default async function GqlConfigFactory(
     if(!(type in ACCOUNT_TYPE)) return // If type is not in Account type
 
     accountType = type
-
-    currentAccount = await accountService.getCurrentAccount(_id, type)
+    currentAccount = await authService.getCurrentAccount(_id, type)
     
     if(!currentAccount) return // If account not found
     

@@ -4,6 +4,9 @@ import { AdminResolver } from './admin.resolver';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import AdminEntity from './admin.entity';
 import { JwtModule } from '../jwt/jwt.module';
+import { CredentialModule } from '../credential/credential.module';
+import { UtilsModule } from '../utils/utils.module';
+import { ProfileModule } from '../profile/profile.module';
 
 
 
@@ -11,7 +14,10 @@ import { JwtModule } from '../jwt/jwt.module';
   providers: [AdminService, AdminResolver],
   imports: [
     TypeOrmModule.forFeature([AdminEntity]),
-    JwtModule
+    JwtModule,
+    CredentialModule,
+    UtilsModule,
+    ProfileModule
   ],
   exports: [AdminService]
 })

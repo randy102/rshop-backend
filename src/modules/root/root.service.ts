@@ -2,27 +2,27 @@ import { getMongoRepository, MongoRepository } from "typeorm"
 import { DuplicateError, NotFoundError } from "src/commons/exceptions/GqlException"
 
 export default class RootService{
-  private readonly Entity
-  private readonly Name
+  protected readonly Entity
+  protected readonly Name
 
   constructor(entity, name: string){
     this.Entity = entity
     this.Name = name
   }
 
-  findById(_id: string){
+  findById(_id: string): Promise<any>{
     return getMongoRepository(this.Entity).findOne({_id})
   }
 
-  find(query?){
+  find(query?): Promise<any>{
     return getMongoRepository(this.Entity).find(query)
   }
 
-  findOne(query?){
+  findOne(query?): Promise<any>{
     return getMongoRepository(this.Entity).findOne(query)
   }
 
-  save(entity: any){
+  save(entity: any): Promise<any>{
     return getMongoRepository(this.Entity).save(entity)
   }
 
@@ -41,6 +41,12 @@ export default class RootService{
   async checkExistedId(id: string): Promise<any>{
     const existed = await this.findById(id)
     if(!existed) throw new NotFoundError(this.Name)
+    return existed
+  }
+
+  async checkExisted(query: any, subject: string): Promise<any>{
+    const existed = await this.findOne(query)
+    if(!existed) throw new NotFoundError(subject)
     return existed
   }
 }

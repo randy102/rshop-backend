@@ -1,41 +1,45 @@
 import { Injectable } from '@nestjs/common';
-import { Admin, ACCOUNT_TYPE, CreateAdminInput, UpdateAdminInput } from 'src/graphql.schema';
+import { Admin, ACCOUNT_TYPE, CreateAdminInput, UpdateProfileInput } from 'src/graphql.schema';
 import AdminEntity from './admin.entity';
-import RootService from '../root/root.service';
-import md5 = require('md5');
 import { LoginError } from 'src/commons/exceptions/GqlException';
 import { JwtService } from '../jwt/jwt.service';
+import AccountRootService from '../root/account-root.service';
+import { CredentialService } from '../credential/credential.service';
+import { HashService } from '../utils/hash/hash.service';
+import CredentialEntity from '../credential/credential.entity';
+import { ProfileService } from '../profile/profile.service';
 
 
 @Injectable()
-export class AdminService extends RootService {
-  constructor(private readonly jwtService: JwtService) { super(AdminEntity, 'Admin') }
+export class AdminService extends AccountRootService {
+  constructor(
+    private readonly jwtService: JwtService,
+    private readonly credentialService: CredentialService,
+    private readonly hashService: HashService,
+    private readonly profileService: ProfileService
+  ) { super(AdminEntity, 'Admin') }
 
   async login({ email, password }): Promise<string> {
-    const admin: Admin = await this.findOne({ email, password: md5(password) })
-    if (!admin) throw new LoginError()
+    const hashedPassword = this.hashService.create(password)
 
+    const admin: AdminEntity = await this.authenticate(email,hashedPassword)
     return this.jwtService.sign(ACCOUNT_TYPE.ADMIN, admin._id)
   }
 
   async create(input: CreateAdminInput, createdBy: string) {
-    await this.checkDuplication({ email: input.email })
+    const DEFAULT_PASSWORD = '12345678'
+
+    await this.checkAccountDuplication(input.email)
+
+    const createdCredential = await this.credentialService.create(input.email, DEFAULT_PASSWORD)
+    const createdProfile = await this.profileService.create(input)
 
     return this.save(new AdminEntity({
-      ...input,
-      password: md5('12345678'),
+      idCredential: createdCredential._id,
+      idProfile: createdProfile._id,  
       createdBy
     }));
   }
 
-  async update(input: UpdateAdminInput) {
-    const existed: Admin = await this.checkExistedId(input._id)
-
-    await this.checkDuplication({ email: input.email, _id: { $ne: input._id } })
-
-    return this.save(new AdminEntity({
-      ...existed,
-      ...input
-    }))
-  }
+  
 }

@@ -6,6 +6,7 @@ import UserEntity from './user.entity';
 import { JwtModule } from '../jwt/jwt.module';
 import { MailerModule } from '../mailer/mailer.module';
 import { TokenModule } from '../token/token.module';
+import { UtilsModule } from '../utils/utils.module';
 
 @Module({
   providers: [UserResolver, UserService],
@@ -13,7 +14,8 @@ import { TokenModule } from '../token/token.module';
     TypeOrmModule.forFeature([UserEntity]),
     JwtModule,
     MailerModule,
-    TokenModule
+    TokenModule,
+    UtilsModule
   ],
   exports: [UserService]
 })

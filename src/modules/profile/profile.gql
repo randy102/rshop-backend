@@ -1,0 +1,15 @@
+type Profile{
+  dob: Float
+  fullName: String
+  address: String
+  phone: String
+  avatar: String
+}
+
+input UpdateProfileInput{
+  dob: Float
+  fullName: String
+  address: String
+  phone: String
+  avatar: String
+}

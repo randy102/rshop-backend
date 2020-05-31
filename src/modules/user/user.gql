@@ -38,18 +38,22 @@ input ConfirmUserEmailInput{
   email: String
 }
 
+input ForgotUserPasswordInput{
+  email: String
+}
+
 type Query{
-  users: [User] @Auth @Account(type: ADMIN)
-  currentUser: User @Auth @Account(type: USER)
+  users: [User] @Auth @Has(type: ADMIN)
+  currentUser: User @Auth @Has(type: USER)
 }
 
 type Mutation{
   loginUser(input: LoginUserInput): String
   confirmUserEmail(input: ConfirmUserEmailInput): Boolean
   registerUser(input: RegisterUserInput): String
-  
+  forgotUserPassword(input: ForgotUserPasswordInput): Boolean
 
-  updateUser(input: UpdateUserInput): User @Auth @Account(type: USER)
-  changeUserPassword(input: ChangeUserPasswordInput): Boolean @Auth @Account(type: USER)
-  deleteUser(input: DeleteUserInput): User @Auth @Account(type: ADMIN)
+  updateUser(input: UpdateUserInput): User @Auth @Has(type: USER)
+  changeUserPassword(input: ChangeUserPasswordInput): Boolean @Auth @Has(type: USER)
+  deleteUser(input: DeleteUserInput): User @Auth @Has(type: ADMIN)
 }

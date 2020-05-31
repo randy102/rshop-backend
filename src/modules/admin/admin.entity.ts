@@ -1,25 +1,18 @@
 import { Entity, ObjectIdColumn, Column } from "typeorm";
 import {Expose, plainToClass} from 'class-transformer'
-import {v4 as uuidv4} from 'uuid'
 import * as moment from 'moment'
+import { uuid } from "src/utils/uuid";
+import { AccountRootEntity } from "../root/account-root.entity";
 
 @Entity({ name: 'Admin' })
-export default class AdminEntity {
+export default class AdminEntity extends AccountRootEntity{
   @Expose()
   @ObjectIdColumn()
   _id: string
 
   @Expose()
   @Column()
-  email: string
-
-  @Expose()
-  @Column()
-  password: string
-
-  @Expose()
-  @Column()
-  fullname: string
+  credentialHash: string
 
   @Expose()
   @Column()
@@ -31,10 +24,11 @@ export default class AdminEntity {
 
 
   constructor(admin: Partial<AdminEntity>){
+    super()
+
     if(admin){
       Object.assign(this, plainToClass(AdminEntity, admin, {excludeExtraneousValues: true}))
-
-      this._id = this._id || uuidv4()
+      this._id = this._id || uuid()
       this.createdAt = this.createdAt || moment().valueOf()
     }
   }

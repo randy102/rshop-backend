@@ -4,7 +4,7 @@ import { AdminService } from '../admin/admin.service';
 import { UserService } from '../user/user.service';
 
 @Injectable()
-export class AccountService {
+export class AuthService {
   constructor(
     private readonly adminService: AdminService,
     private readonly userService: UserService

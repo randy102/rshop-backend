@@ -18,23 +18,22 @@ export enum PERMISSION {
 }
 
 export class CreateAdminInput {
-    email: string;
-    fullname?: string;
-}
-
-export class UpdateAdminInput {
-    _id: string;
-    email: string;
-    fullname?: string;
-}
-
-export class AdminLoginInput {
-    email: string;
-    password: string;
+    email?: string;
+    fullName?: string;
 }
 
 export class DeleteAdminInput {
     ids?: string[];
+}
+
+export class ChangePasswordInput {
+    old?: string;
+    new?: string;
+}
+
+export class LoginInput {
+    email: string;
+    password: string;
 }
 
 export class CreatePermissionInput {
@@ -50,6 +49,14 @@ export class UpdatePermissionInput {
 
 export class DeletePermissionInput {
     ids?: string[];
+}
+
+export class UpdateProfileInput {
+    dob?: number;
+    fullName?: string;
+    address?: string;
+    phone?: string;
+    avatar?: string;
 }
 
 export class RegisterUserInput {
@@ -82,10 +89,14 @@ export class ConfirmUserEmailInput {
     email?: string;
 }
 
+export class ForgotUserPasswordInput {
+    email?: string;
+}
+
 export class Admin {
     _id?: string;
-    email?: string;
-    fullname?: string;
+    profile?: Profile;
+    credential?: Credential;
 }
 
 export abstract class IQuery {
@@ -101,11 +112,13 @@ export abstract class IQuery {
 }
 
 export abstract class IMutation {
-    abstract loginAdmin(input?: AdminLoginInput): string | Promise<string>;
+    abstract loginAdmin(input?: LoginInput): string | Promise<string>;
 
     abstract createAdmin(input?: CreateAdminInput): Admin | Promise<Admin>;
 
-    abstract updateAdmin(input?: UpdateAdminInput): Admin | Promise<Admin>;
+    abstract updateAdminProfile(input?: UpdateProfileInput): boolean | Promise<boolean>;
+
+    abstract changeAdminPassword(input?: ChangePasswordInput): boolean | Promise<boolean>;
 
     abstract deleteAdmin(input?: DeleteAdminInput): boolean | Promise<boolean>;
 
@@ -121,6 +134,8 @@ export abstract class IMutation {
 
     abstract registerUser(input?: RegisterUserInput): string | Promise<string>;
 
+    abstract forgotUserPassword(input?: ForgotUserPasswordInput): boolean | Promise<boolean>;
+
     abstract updateUser(input?: UpdateUserInput): User | Promise<User>;
 
     abstract changeUserPassword(input?: ChangeUserPasswordInput): boolean | Promise<boolean>;
@@ -128,10 +143,22 @@ export abstract class IMutation {
     abstract deleteUser(input?: DeleteUserInput): User | Promise<User>;
 }
 
+export class Credential {
+    email?: string;
+}
+
 export class Permission {
     _id?: string;
     name?: string;
     description?: string;
+}
+
+export class Profile {
+    dob?: number;
+    fullName?: string;
+    address?: string;
+    phone?: string;
+    avatar?: string;
 }
 
 export class User {
