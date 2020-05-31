@@ -4,17 +4,20 @@ import RootService from "./root.service"
 import CredentialEntity from "../credential/credential.entity"
 import { AccountRootEntity } from "./account-root.entity"
 import ProfileEntity from "../profile/profile.entity"
+import { LoginInput } from "src/graphql.schema"
 
-export default class AccountRootService extends RootService{
+export default abstract class AccountRootService extends RootService{
   constructor(entity, name: string){
     super(entity, name)
   }
 
-  async authenticate(email: string, hashedPassword: string): Promise<any>{
-    const existedAccount = await getMongoRepository(CredentialEntity).findOne({email,password: hashedPassword})
-    if(!existedAccount) throw new LoginError()
+  abstract generateCredentialHash(id: string, credentials: any): void
+  abstract login(input: LoginInput): Promise<string>
 
-    const matchedAccount = await this.findOne({idAccount: existedAccount._id})
+  async authenticate(email: string, hashedPassword: string): Promise<any>{
+    const existedCredentials = await getMongoRepository(CredentialEntity).find({email,password: hashedPassword})
+    const credentialIds = existedCredentials.map(cred => cred._id)
+    const matchedAccount = await this.findOne({idCredential: {$in: credentialIds}})
     if(!matchedAccount) throw new LoginError()
 
     return matchedAccount
@@ -25,9 +28,9 @@ export default class AccountRootService extends RootService{
     const accountIds = accounts.map(acc => acc._id)
 
     if(exceptId){
-      await this.checkDuplication({idAccount: {$in: accountIds}, _id: {$ne: exceptId}})
+      await this.checkDuplication({idCredential: {$in: accountIds}, _id: {$ne: exceptId}})
     } else {
-      await this.checkDuplication({idAccount: {$in: accountIds}})
+      await this.checkDuplication({idCredential: {$in: accountIds}})
     }
   }
 

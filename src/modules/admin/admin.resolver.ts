@@ -1,4 +1,4 @@
-import { Resolver, Mutation, Args, Query, Context } from '@nestjs/graphql';
+import { Resolver, Mutation, Args, Query, Context, ResolveField, Parent } from '@nestjs/graphql';
 import {CreateAdminInput, Admin, DeleteAdminInput, ACCOUNT_TYPE, UpdateProfileInput, LoginInput, ChangePasswordInput} from '../../graphql.schema'
 import { AdminService } from './admin.service';
 import AdminEntity from './admin.entity';
@@ -12,6 +12,16 @@ export class AdminResolver {
     private readonly profileService: ProfileService,
     private readonly credentialService: CredentialService,
   ){}
+  
+  @ResolveField()
+  profile(@Parent() admin: AdminEntity){
+    return this.profileService.findById(admin.idProfile)
+  }
+
+  @ResolveField()
+  credential(@Parent() admin: AdminEntity){
+    return this.credentialService.findById(admin.idCredential)
+  }
 
   @Query()
   admins(): Promise<Admin[]>{

@@ -6,23 +6,7 @@ import { AccountRootEntity } from "../root/account-root.entity";
 
 @Entity({ name: 'Admin' })
 export default class AdminEntity extends AccountRootEntity{
-  @Expose()
-  @ObjectIdColumn()
-  _id: string
-
-  @Expose()
-  @Column()
-  credentialHash: string
-
-  @Expose()
-  @Column()
-  createdAt: number
   
-  @Expose()
-  @Column()
-  createdBy: string
-
-
   constructor(admin: Partial<AdminEntity>){
     super()
 

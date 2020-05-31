@@ -4,6 +4,7 @@ import schemaDirectives from '../commons/directives'
 import { ACCOUNT_TYPE, PERMISSION } from 'src/graphql.schema';
 import { JwtService } from 'src/modules/jwt/jwt.service';
 import { AuthService } from 'src/modules/auth/auth.service';
+import { AccountRootEntity } from 'src/modules/root/account-root.entity';
 
 export default async function GqlConfigFactory(
   jwtService: JwtService,
@@ -17,7 +18,7 @@ export default async function GqlConfigFactory(
     }
 
     let accountType: ACCOUNT_TYPE
-    let currentAccount = undefined
+    let currentAccount: AccountRootEntity
     let permissions: PERMISSION[]
 
     const token = req.headers['token']
@@ -26,13 +27,19 @@ export default async function GqlConfigFactory(
     const payload = await jwtService.verify(token)
     if(!payload) return // If verify failed
     
-    const { type, _id } = payload
-    if(!(type in ACCOUNT_TYPE)) return // If type is not in Account type
+    const { type, _id, credentialHash } = payload
+    
+    // If type is not in Account type
+    if(!(type in ACCOUNT_TYPE)) return 
 
     accountType = type
     currentAccount = await authService.getCurrentAccount(_id, type)
-    
-    if(!currentAccount) return // If account not found
+
+    // If account not found
+    if(!currentAccount) return 
+
+    // If account's credential has been change
+    if(credentialHash !== currentAccount.credentialHash) return
     
     return {
       currentAccount,

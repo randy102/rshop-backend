@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { ACCOUNT_TYPE } from 'src/graphql.schema';
 import { AdminService } from '../admin/admin.service';
 import { UserService } from '../user/user.service';
+import { AccountRootEntity } from '../root/account-root.entity';
+import {CredentialError} from 'src/commons/exceptions/GqlException'
 
 @Injectable()
 export class AuthService {
@@ -10,7 +12,7 @@ export class AuthService {
     private readonly userService: UserService
   ){}
 
-  async getCurrentAccount(_id: string, type: ACCOUNT_TYPE): Promise<any>{
+  getCurrentAccount(_id: string, type: ACCOUNT_TYPE): Promise<AccountRootEntity>{
     if (type === ACCOUNT_TYPE.ADMIN){
       return this.adminService.findById(_id)
     }
@@ -20,5 +22,10 @@ export class AuthService {
     else{
       return undefined
     }
+  }
+
+  checkCredentialHash(tokenHash: string, accountHash: string){
+    if(tokenHash !== accountHash)
+      throw new CredentialError()
   }
 }

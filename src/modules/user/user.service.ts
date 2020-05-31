@@ -21,14 +21,14 @@ export class UserService extends RootService {
   ) { super(UserEntity, 'User') }
 
 
-  async login({ email, password }): Promise<string> {
-    const hashedPassword = this.hashService.create(password)
+  // async login({ email, password }): Promise<string> {
+  //   const hashedPassword = this.hashService.create(password)
 
-    const user: UserEntity = await this.findOne({ email, password: hashedPassword })
-    if (!user) throw new LoginError()
+  //   const user: UserEntity = await this.findOne({ email, password: hashedPassword })
+  //   if (!user) throw new LoginError()
     
-    return this.jwtService.sign(ACCOUNT_TYPE.USER, user._id)
-  }
+  //   return this.jwtService.sign(ACCOUNT_TYPE.USER, user._id)
+  // }
 
   async register(input: RegisterUserInput) {
     const { email } = await this.tokenService.get(input.token)

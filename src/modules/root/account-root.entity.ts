@@ -1,7 +1,11 @@
 import { Expose } from "class-transformer";
-import { Column } from "typeorm";
+import { Column, ObjectIdColumn } from "typeorm";
 
 export class AccountRootEntity{
+  @Expose()
+  @ObjectIdColumn()
+  _id: string
+
   @Expose()
   @Column()
   idCredential: string
@@ -9,4 +13,16 @@ export class AccountRootEntity{
   @Expose()
   @Column()
   idProfile: string
+
+  @Expose()
+  @Column()
+  credentialHash: string
+
+  @Expose()
+  @Column()
+  createdAt: number
+  
+  @Expose()
+  @Column()
+  createdBy: string
 }

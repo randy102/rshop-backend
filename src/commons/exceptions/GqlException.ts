@@ -36,3 +36,9 @@ export class AuthError extends GraphQLError{
     super(`Authentication failed`)
   }
 }
+
+export class CredentialError extends GraphQLError{
+  constructor(){
+    super(`Account's credential has been changed`)
+  }
+}

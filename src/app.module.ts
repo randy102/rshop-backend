@@ -31,7 +31,7 @@ import { ProfileModule } from './modules/profile/profile.module';
     }),
     AdminModule,
     PermissionModule,
-    UserModule,
+    // UserModule,
     TokenModule,
     JwtModule,
     CredentialModule,

@@ -12,10 +12,10 @@ export class UserResolver {
     return this.userService.find()
   }
 
-  @Mutation()
-  loginUser(@Args('input') input: LoginUserInput): Promise<string> {
-    return this.userService.login(input)
-  }
+  // @Mutation()
+  // loginUser(@Args('input') input: LoginUserInput): Promise<string> {
+  //   return this.userService.login(input)
+  // }
 
   @Mutation()
   confirmUserEmail(@Args('input') input: ConfirmUserEmailInput){

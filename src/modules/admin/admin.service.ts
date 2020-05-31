@@ -1,12 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { Admin, ACCOUNT_TYPE, CreateAdminInput, UpdateProfileInput } from 'src/graphql.schema';
+import { ACCOUNT_TYPE, CreateAdminInput, LoginInput } from 'src/graphql.schema';
 import AdminEntity from './admin.entity';
-import { LoginError } from 'src/commons/exceptions/GqlException';
 import { JwtService } from '../jwt/jwt.service';
 import AccountRootService from '../root/account-root.service';
 import { CredentialService } from '../credential/credential.service';
 import { HashService } from '../utils/hash/hash.service';
-import CredentialEntity from '../credential/credential.entity';
 import { ProfileService } from '../profile/profile.service';
 
 
@@ -19,11 +17,21 @@ export class AdminService extends AccountRootService {
     private readonly profileService: ProfileService
   ) { super(AdminEntity, 'Admin') }
 
-  async login({ email, password }): Promise<string> {
-    const hashedPassword = this.hashService.create(password)
+  async generateCredentialHash(id: string){
+    const account: AdminEntity = await this.findById(id)
+    const credential = await this.credentialService.findById(account.idCredential)
+    const credentialHash = this.hashService.create(JSON.stringify(credential))
+    this.save(new AdminEntity({
+      ...account,
+      credentialHash
+    }))
+  }
 
-    const admin: AdminEntity = await this.authenticate(email,hashedPassword)
-    return this.jwtService.sign(ACCOUNT_TYPE.ADMIN, admin._id)
+  async login(input: LoginInput): Promise<string> {
+    const hashedPassword = this.hashService.create(input.password)
+
+    const admin: AdminEntity = await this.authenticate(input.email,hashedPassword)
+    return this.jwtService.sign(ACCOUNT_TYPE.ADMIN, admin)
   }
 
   async create(input: CreateAdminInput, createdBy: string) {
@@ -34,11 +42,14 @@ export class AdminService extends AccountRootService {
     const createdCredential = await this.credentialService.create(input.email, DEFAULT_PASSWORD)
     const createdProfile = await this.profileService.create(input)
 
-    return this.save(new AdminEntity({
+    const createdAdmin: AdminEntity = await this.save(new AdminEntity({
       idCredential: createdCredential._id,
       idProfile: createdProfile._id,  
       createdBy
-    }));
+    }))
+
+    await this.generateCredentialHash(createdAdmin._id)
+    return createdAdmin
   }
 
   
