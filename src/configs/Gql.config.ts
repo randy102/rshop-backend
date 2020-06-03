@@ -22,24 +22,41 @@ export default async function GqlConfigFactory(
     let permissions: PERMISSION[]
 
     const token = req.headers['token']
-    if(!token) return // If not have token
+    // If not have token
+    if(!token) {
+      console.log('Not having token')
+      return
+    } 
 
     const payload = await jwtService.verify(token)
-    if(!payload) return // If verify failed
+    // If verify failed
+    if(!payload){
+      console.log("Token verify failed")
+      return
+    } 
     
     const { type, _id, credentialHash } = payload
     
     // If type is not in Account type
-    if(!(type in ACCOUNT_TYPE)) return 
+    if(!(type in ACCOUNT_TYPE)){
+      console.log("Invalid account type")
+      return
+    } 
 
     accountType = type
     currentAccount = await authService.getCurrentAccount(_id, type)
 
     // If account not found
-    if(!currentAccount) return 
+    if(!currentAccount) {
+      console.log("Account not found")
+      return
+    } 
 
-    // If account's credential has been change
-    if(credentialHash !== currentAccount.credentialHash) return
+    // If account's credential not match
+    if(credentialHash !== currentAccount.credentialHash){
+      console.log("Credential hash not match")
+      return
+    } 
     
     return {
       currentAccount,

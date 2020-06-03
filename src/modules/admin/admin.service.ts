@@ -20,7 +20,10 @@ export class AdminService extends AccountRootService {
   async generateCredentialHash(id: string){
     const account: AdminEntity = await this.findById(id)
     const credential = await this.credentialService.findById(account.idCredential)
-    const credentialHash = this.hashService.create(JSON.stringify(credential))
+    const hashContent = {
+      ...credential
+    }
+    const credentialHash = this.hashService.create(JSON.stringify(hashContent))
     this.save(new AdminEntity({
       ...account,
       credentialHash
@@ -35,10 +38,9 @@ export class AdminService extends AccountRootService {
   }
 
   async create(input: CreateAdminInput, createdBy: string) {
-    const DEFAULT_PASSWORD = '12345678'
-
     await this.checkAccountDuplication(input.email)
-
+    
+    const DEFAULT_PASSWORD = '12345678'
     const createdCredential = await this.credentialService.create(input.email, DEFAULT_PASSWORD)
     const createdProfile = await this.profileService.create(input)
 

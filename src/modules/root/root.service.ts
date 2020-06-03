@@ -1,11 +1,12 @@
 import { getMongoRepository, MongoRepository } from "typeorm"
 import { DuplicateError, NotFoundError } from "src/commons/exceptions/GqlException"
+import { RootEntity } from "./root.entity"
 
 export default class RootService{
-  protected readonly Entity
-  protected readonly Name
+  protected readonly Entity: any
+  protected readonly Name: string
 
-  constructor(entity, name: string){
+  constructor(entity: any, name: string){
     this.Entity = entity
     this.Name = name
   }

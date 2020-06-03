@@ -2,13 +2,11 @@ import { Entity, ObjectIdColumn, Column } from "typeorm";
 import {Expose, plainToClass} from 'class-transformer'
 import {v4 as uuidv4} from 'uuid'
 import * as moment from 'moment'
+import { AccountRootEntity } from "../root/account-root.entity";
 
 @Entity({ name: 'User' })
-export default class UserEntity {
-  @Expose()
-  @ObjectIdColumn()
-  _id: string
-
+export default class UserEntity extends AccountRootEntity{
+  
   @Expose()
   @Column()
   email: string
@@ -29,16 +27,9 @@ export default class UserEntity {
   @Column()
   address: string
 
-  @Expose()
-  @Column()
-  createdAt: number
-  
-  @Expose()
-  @Column()
-  createdBy: string
-
 
   constructor(plain: Partial<UserEntity>){
+    super()
     if(plain){
       Object.assign(this, plainToClass(UserEntity, plain, {excludeExtraneousValues: true}))
 
