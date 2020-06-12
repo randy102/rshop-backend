@@ -39,15 +39,13 @@ export default class RootService{
     if(existed) throw new DuplicateError(this.Name+subjectStr)
   }
 
-  async checkExistedId(id: string): Promise<any>{
-    const existed = await this.findById(id)
-    if(!existed) throw new NotFoundError(this.Name)
-    return existed
-  }
-
   async checkExisted(query: any, subject: string): Promise<any>{
     const existed = await this.findOne(query)
     if(!existed) throw new NotFoundError(subject)
     return existed
+  }
+
+  checkExistedId(id: string): Promise<any>{
+    return this.checkExisted({_id:id}, this.Name)
   }
 }

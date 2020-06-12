@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { ACCOUNT_TYPE, CreateAdminInput, LoginInput } from 'src/graphql.schema';
+import { ACCOUNT_TYPE, CreateAdminInput, LoginInput, ChangePasswordInput } from 'src/graphql.schema';
 import AdminEntity from './admin.entity';
 import { JwtService } from '../jwt/jwt.service';
 import AccountRootService from '../root/account-root.service';
 import { CredentialService } from '../credential/credential.service';
 import { HashService } from '../utils/hash/hash.service';
 import { ProfileService } from '../profile/profile.service';
+import { AccountRootEntity } from '../root/account-root.entity';
 
 
 @Injectable()
@@ -16,16 +17,19 @@ export class AdminService extends AccountRootService {
     private readonly hashService: HashService,
     private readonly profileService: ProfileService
   ) { super(AdminEntity, 'Admin') }
-
-  async generateCredentialHash(id: string){
-    const account: AdminEntity = await this.findById(id)
-    const credential = await this.credentialService.findById(account.idCredential)
+  
+  async updateCredentialHash(id: string): Promise<AccountRootEntity>{
+    const admin: AdminEntity = await this.findById(id)
+    const credential = await this.credentialService.findById(admin.idCredential)
+    
     const hashContent = {
       ...credential
     }
+
     const credentialHash = this.hashService.create(JSON.stringify(hashContent))
-    this.save(new AdminEntity({
-      ...account,
+
+    return this.save(new AdminEntity({
+      ...admin,
       credentialHash
     }))
   }
@@ -50,9 +54,13 @@ export class AdminService extends AccountRootService {
       createdBy
     }))
 
-    await this.generateCredentialHash(createdAdmin._id)
+    await this.updateCredentialHash(createdAdmin._id)
     return createdAdmin
   }
-
   
+  async changePassword(admin: AccountRootEntity, input: ChangePasswordInput): Promise<string>{
+    await this.credentialService.changePassword(admin.idCredential, input)
+    const updated = await this.updateCredentialHash(admin._id)
+    return this.jwtService.sign(ACCOUNT_TYPE.ADMIN, updated)
+  }
 }

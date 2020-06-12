@@ -45,7 +45,7 @@ export class AdminResolver extends AccountRootResolver {
   }
 
   @Mutation()
-  changeAdminPassword(@Context("currentAccount") admin: AdminEntity, @Args('input') input: ChangePasswordInput): Promise<boolean> {
-    return this.credentialService.changePassword(admin.idCredential, input)
+  changeAdminPassword(@Context("currentAccount") admin: AdminEntity, @Args('input') input: ChangePasswordInput): Promise<string> {
+    return this.adminService.changePassword(admin,input)
   }
 }

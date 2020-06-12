@@ -4,16 +4,25 @@ import RootService from "./root.service"
 import CredentialEntity from "../credential/credential.entity"
 import { AccountRootEntity } from "./account-root.entity"
 import ProfileEntity from "../profile/profile.entity"
-import { LoginInput } from "src/graphql.schema"
+import { LoginInput, ChangePasswordInput } from "src/graphql.schema"
 
 export default abstract class AccountRootService extends RootService{
   constructor(readonly entity: any, readonly name: string){
     super(entity, name)
   }
   
-  // Generate Credential Hash of account base on customized fields
-  abstract generateCredentialHash(id: string, credentials: any): void
+ 
+  abstract updateCredentialHash(accountId: string): Promise<AccountRootEntity>
+
+  /**
+   * @returns {string} new jwt
+   */
   abstract login(input: LoginInput): Promise<string>
+
+  /**
+   * @returns {string} new jwt
+   */
+  abstract changePassword(account: AccountRootEntity, input: ChangePasswordInput): Promise<string>
 
   /**
    * 

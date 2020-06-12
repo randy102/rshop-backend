@@ -2,9 +2,10 @@ import { Entity, ObjectIdColumn, Column } from "typeorm";
 import {Expose, plainToClass} from 'class-transformer'
 import {v4 as uuidv4} from 'uuid'
 import * as moment from 'moment'
+import { RootEntity } from "../root/root.entity";
 
 @Entity({ name: 'Permission' })
-export default class PermissionEntity {
+export default class PermissionEntity extends RootEntity{
   @Expose()
   @ObjectIdColumn()
   _id: string
@@ -27,6 +28,7 @@ export default class PermissionEntity {
 
 
   constructor(permission: Partial<PermissionEntity>){
+    super()
     if(permission){
       Object.assign(this, plainToClass(PermissionEntity, permission, {excludeExtraneousValues: true}))
 

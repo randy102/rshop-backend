@@ -57,7 +57,7 @@ export function expectCreatedExist(data: any[], input: object) {
   expect(found).not.toEqual(undefined)
 }
 
-//* Generator *//
+//* GQL Generator *//
 
 export function generateInput(inputs: object) {
   const getVal = (val) => typeof val === 'string' ? `"${val}"` : `[${val.map(v => `"${v}"`)}]`

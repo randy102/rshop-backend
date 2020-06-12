@@ -1,12 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { ACCOUNT_TYPE, ChangePasswordInput } from 'src/graphql.schema';
-import { AdminService } from '../admin/admin.service';
-import { UserService } from '../user/user.service';
+import { ChangePasswordInput } from 'src/graphql.schema';
 import RootService from '../root/root.service';
 import CredentialEntity from './credential.entity';
 import { HashService } from '../utils/hash/hash.service';
 import { FieldError } from 'src/commons/exceptions/GqlException';
-import moment = require('moment');
 import { Moment } from 'src/utils/moment';
 
 @Injectable()
@@ -22,7 +19,7 @@ export class CredentialService extends RootService {
     }))
   }
 
-  checkPassword(password: string, _password: string){
+  checkPasswordMatch(password: string, _password: string){
     if(password !== _password)
       throw new FieldError('Password')
   }
@@ -32,7 +29,8 @@ export class CredentialService extends RootService {
 
     const hashedOldPassword = this.hashService.create(input.old)
     const hashedNewPassword = this.hashService.create(input.new)
-    this.checkPassword(existed.password, hashedOldPassword)
+    
+    this.checkPasswordMatch(existed.password, hashedOldPassword)
 
     const updatedPassword = await this.save(new CredentialEntity({
       _id,
