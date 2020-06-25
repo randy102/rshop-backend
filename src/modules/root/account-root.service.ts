@@ -7,13 +7,13 @@ import ProfileEntity from "../profile/profile.entity"
 import { LoginInput, ChangePasswordInput } from "src/graphql.schema"
 
 
-export default abstract class AccountRootService<E extends AccountRootEntity> extends RootService<E>{
+export default abstract class AccountRootService<E extends AccountRootEntity<E>> extends RootService<E>{
   constructor(readonly entity: any, readonly name: string){
     super(entity, name)
   }
   
  
-  abstract updateCredentialHash(accountId: string): Promise<AccountRootEntity>
+  abstract updateCredentialHash(accountId: string): Promise<AccountRootEntity<E>>
 
   /**
    * @returns {string} new jwt
@@ -23,7 +23,7 @@ export default abstract class AccountRootService<E extends AccountRootEntity> ex
   /**
    * @returns {string} new jwt
    */
-  abstract changePassword(account: AccountRootEntity, input: ChangePasswordInput): Promise<string>
+  abstract changePassword(account: AccountRootEntity<E>, input: ChangePasswordInput): Promise<string>
 
   /**
    * 
@@ -72,7 +72,7 @@ export default abstract class AccountRootService<E extends AccountRootEntity> ex
    */
   async deleteAccount(ids: string[]){
     for(let id of ids){
-      const account: AccountRootEntity = await this.findById(id)
+      const account: AccountRootEntity<E> = await this.findById(id)
 
       await getMongoRepository(CredentialEntity).delete({_id: account.idCredential})
       await getMongoRepository(ProfileEntity).delete({_id: account.idProfile})

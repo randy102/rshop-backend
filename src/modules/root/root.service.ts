@@ -2,7 +2,7 @@ import { getMongoRepository, MongoRepository } from "typeorm"
 import { DuplicateError, NotFoundError } from "src/commons/exceptions/GqlException"
 import { RootEntity } from "./root.entity"
 
-export default class RootService<E extends RootEntity>{
+export default class RootService<E extends RootEntity<E>>{
   protected readonly Entity: any
   protected readonly Name: string
 

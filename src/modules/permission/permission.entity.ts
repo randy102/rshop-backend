@@ -5,7 +5,7 @@ import * as moment from 'moment'
 import { RootEntity } from "../root/root.entity";
 
 @Entity({ name: 'Permission' })
-export default class PermissionEntity extends RootEntity{
+export default class PermissionEntity extends RootEntity<PermissionEntity>{
   @Expose()
   @ObjectIdColumn()
   _id: string
@@ -28,12 +28,12 @@ export default class PermissionEntity extends RootEntity{
 
 
   constructor(permission: Partial<PermissionEntity>){
-    super()
-    if(permission){
-      Object.assign(this, plainToClass(PermissionEntity, permission, {excludeExtraneousValues: true}))
+    super(permission, PermissionEntity)
+    // if(permission){
+    //   Object.assign(this, plainToClass(PermissionEntity, permission, {excludeExtraneousValues: true}))
 
-      this._id = this._id || uuidv4()
-      this.createdAt = this.createdAt || moment().valueOf()
-    }
+    //   this._id = this._id || uuidv4()
+    //   this.createdAt = this.createdAt || moment().valueOf()
+    // }
   }
 }

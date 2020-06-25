@@ -1,6 +1,7 @@
 import { Expose, plainToClass } from "class-transformer";
 import { Column, ObjectIdColumn, Entity } from "typeorm";
 import { uuid } from "src/utils/uuid";
+import { Moment } from "src/utils/moment";
 
 @Entity()
 export class RootEntity<E>{
@@ -8,7 +9,6 @@ export class RootEntity<E>{
   @ObjectIdColumn()
   _id: string
 
-  @Expose()
   @Column()
   createdAt: number
   
@@ -16,7 +16,6 @@ export class RootEntity<E>{
   @Column()
   createdBy: string
 
-  @Expose()
   @Column()
   updatedAt: number
   
@@ -25,8 +24,11 @@ export class RootEntity<E>{
   updatedBy: string
 
   constructor(plain: Partial<E>, entity: any){
-    if(entity){
+    if(plain){
       Object.assign(this, plainToClass<E, any>(entity, plain, {excludeExtraneousValues: true}))
+      
+      this.updatedAt = this._id && Moment().valueOf()
+      this.createdAt = this.createdAt || Moment().valueOf()
       this._id = this._id || uuid()
     }
   }

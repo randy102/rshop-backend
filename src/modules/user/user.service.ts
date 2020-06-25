@@ -1,13 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { ACCOUNT_TYPE, CreateUserInput, LoginInput, ChangePasswordInput } from 'src/graphql.schema';
+import { CreateUserInput, LoginInput, ChangePasswordInput, UpdateAdminInput } from 'src/graphql.schema';
 import UserEntity from './user.entity';
 import { JwtService } from '../jwt/jwt.service';
 import AccountRootService from '../root/account-root.service';
 import { CredentialService } from '../credential/credential.service';
 import { HashService } from '../utils/hash/hash.service';
 import { ProfileService } from '../profile/profile.service';
-import { AccountRootEntity } from '../root/account-root.entity';
-
 
 @Injectable()
 export class UserService extends AccountRootService<UserEntity> {
@@ -19,11 +17,12 @@ export class UserService extends AccountRootService<UserEntity> {
   ) { super(UserEntity, 'User') }
   
   async updateCredentialHash(id: string): Promise<UserEntity>{
-    const user: UserEntity = await this.findById(id)
-    const credential = await this.credentialService.findById(user.idCredential)
+    const user: UserEntity = await this.checkExistedId(id)
+    const credential = await this.credentialService.checkExistedId(user.idCredential)
     
     const hashContent = {
-      ...credential
+      ...credential,
+      isAdmin: user.isAdmin
     }
 
     const credentialHash = this.hashService.create(JSON.stringify(hashContent))
@@ -59,9 +58,19 @@ export class UserService extends AccountRootService<UserEntity> {
     return createdUser
   }
   
-  async changePassword(user: AccountRootEntity, input: ChangePasswordInput): Promise<string>{
+  async changePassword(user: UserEntity, input: ChangePasswordInput): Promise<string>{
     await this.credentialService.changePassword(user.idCredential, input)
     const updated = await this.updateCredentialHash(user._id)
     return this.jwtService.sign(updated)
+  }
+
+  async updateAdmin(input: UpdateAdminInput): Promise<UserEntity>{
+    const existed = await this.checkExistedId(input._id)
+    const updated = await this.save(new UserEntity({
+      ...existed,
+      isAdmin: input.isAdmin
+    }))
+    await this.updateCredentialHash(input._id)
+    return updated
   }
 }

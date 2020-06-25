@@ -4,7 +4,7 @@ import { uuid } from "src/utils/uuid";
 import { RootEntity } from "../root/root.entity";
 
 @Entity({name: 'Profile'})
-export default class ProfileEntity extends RootEntity{
+export default class ProfileEntity extends RootEntity<ProfileEntity>{
  
 
   @Expose()
@@ -29,10 +29,10 @@ export default class ProfileEntity extends RootEntity{
 
   
   constructor(profile: Partial<ProfileEntity>){
-    super()
-    if(profile){
-      Object.assign(this, plainToClass(ProfileEntity, profile, {excludeExtraneousValues: true}))
-      this._id = this._id || uuid()
-    }
+    super(profile, ProfileEntity)
+    // if(profile){
+    //   Object.assign(this, plainToClass(ProfileEntity, profile, {excludeExtraneousValues: true}))
+    //   this._id = this._id || uuid()
+    // }
   }
 }

@@ -6,16 +6,18 @@ type User{
 }
 
 type Query{
-  users: [User] @Auth
+  users: [User] @Auth @Admin
   currentUser: User @Auth 
 }
 
 type Mutation{
   loginUser(input: LoginInput): String!
+  
   changeUserPassword(input: ChangePasswordInput): String @Auth 
 
-  createUser(input: CreateUserInput): User @Auth
-  deleteUser(input: DeleteUserInput): Boolean @Auth 
+  createUser(input: CreateUserInput): User @Auth @Admin
+  updateAdmin(input: UpdateAdminInput): User @Auth @Admin
+  deleteUser(input: DeleteUserInput): Boolean @Auth @Admin
 }
 
 input CreateUserInput{
@@ -26,4 +28,9 @@ input CreateUserInput{
 
 input DeleteUserInput{
   ids: [String]
+}
+
+input UpdateAdminInput{
+  _id: String
+  isAdmin: Boolean
 }

@@ -1,5 +1,5 @@
 import { Resolver, Mutation, Args, Query, Context, ResolveField, Parent } from '@nestjs/graphql';
-import { CreateUserInput, User, DeleteUserInput, ACCOUNT_TYPE, UpdateProfileInput, LoginInput, ChangePasswordInput } from '../../graphql.schema'
+import { CreateUserInput, User, DeleteUserInput,  LoginInput, ChangePasswordInput, UpdateAdminInput } from '../../graphql.schema'
 import { UserService } from './user.service';
 import UserEntity from './user.entity';
 import { ProfileService } from '../profile/profile.service';
@@ -8,7 +8,7 @@ import { AccountRootResolver } from '../root/account-root.resolver';
 import ProfileEntity from '../profile/profile.entity';
 
 @Resolver('User')
-export class UserResolver extends AccountRootResolver {
+export class UserResolver extends AccountRootResolver<UserEntity> {
   constructor(
     private readonly userService: UserService,
     readonly profileService: ProfileService,
@@ -31,7 +31,8 @@ export class UserResolver extends AccountRootResolver {
   }
 
   @Mutation()
-  deleteUser(@Args('input') input: DeleteUserInput): Promise<boolean> {
+  deleteUser(@Context('user') user: UserEntity, @Args('input') input: DeleteUserInput): Promise<boolean> {
+    if(!input.ids.some(id => id === user._id))
     return this.userService.deleteAccount(input.ids)
   }
 
@@ -41,7 +42,13 @@ export class UserResolver extends AccountRootResolver {
   }
 
   @Mutation()
-  changeUserPassword(@Context("user") user: UserEntity, @Args('input') input: ChangePasswordInput): Promise<string> {
+  changeUserPassword(@Context('user') user: UserEntity, @Args('input') input: ChangePasswordInput): Promise<string> {
     return this.userService.changePassword(user,input)
+  }
+
+  @Mutation()
+  updateAdmin(@Context('user') user: UserEntity, @Args('input') inp: UpdateAdminInput): Promise<User>{
+    if(user._id !== inp._id)
+    return this.userService.updateAdmin(inp)
   }
 }

@@ -1,7 +1,6 @@
 import { sign as jwtSign, verify as jwtVerify } from 'jsonwebtoken'
 import { Injectable } from '@nestjs/common';
-import { ACCOUNT_TYPE } from 'src/graphql.schema';
-import { AccountRootEntity } from '../root/account-root.entity';
+import UserEntity from '../user/user.entity';
 
 export interface AccountPayload{
   _id: string
@@ -10,7 +9,7 @@ export interface AccountPayload{
 
 @Injectable()
 export class JwtService {
-  sign(account: AccountRootEntity) {
+  sign(account: UserEntity) {
     const payload: AccountPayload = {
       _id: account._id,
       credentialHash: account.credentialHash

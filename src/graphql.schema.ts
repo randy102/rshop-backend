@@ -60,6 +60,11 @@ export class DeleteUserInput {
     ids?: string[];
 }
 
+export class UpdateAdminInput {
+    _id?: string;
+    isAdmin?: boolean;
+}
+
 export class Credential {
     email?: string;
 }
@@ -92,6 +97,8 @@ export abstract class IMutation {
     abstract changeUserPassword(input?: ChangePasswordInput): string | Promise<string>;
 
     abstract createUser(input?: CreateUserInput): User | Promise<User>;
+
+    abstract updateAdmin(input?: UpdateAdminInput): User | Promise<User>;
 
     abstract deleteUser(input?: DeleteUserInput): boolean | Promise<boolean>;
 }
