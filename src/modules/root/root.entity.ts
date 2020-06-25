@@ -1,8 +1,9 @@
-import { Expose } from "class-transformer";
+import { Expose, plainToClass } from "class-transformer";
 import { Column, ObjectIdColumn, Entity } from "typeorm";
+import { uuid } from "src/utils/uuid";
 
 @Entity()
-export class RootEntity{
+export class RootEntity<E>{
   @Expose()
   @ObjectIdColumn()
   _id: string
@@ -22,4 +23,11 @@ export class RootEntity{
   @Expose()
   @Column()
   updatedBy: string
+
+  constructor(plain: Partial<E>, entity: any){
+    if(entity){
+      Object.assign(this, plainToClass<E, any>(entity, plain, {excludeExtraneousValues: true}))
+      this._id = this._id || uuid()
+    }
+  }
 }

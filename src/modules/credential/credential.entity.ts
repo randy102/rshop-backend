@@ -4,7 +4,7 @@ import { uuid } from "src/utils/uuid";
 import { RootEntity } from "../root/root.entity";
 
 @Entity({name: "Credential"})
-export default class CredentialEntity extends RootEntity{
+export default class CredentialEntity extends RootEntity<CredentialEntity>{
   
   @Expose()
   @Column()
@@ -15,10 +15,10 @@ export default class CredentialEntity extends RootEntity{
   password: string
 
   constructor(credential: Partial<CredentialEntity>){
-    super()
+    super(credential, CredentialEntity)
     if(credential){
-      Object.assign(this, plainToClass(CredentialEntity, credential, {excludeExtraneousValues: true}))
-      this._id = this._id || uuid()
+      // Object.assign(this, plainToClass(CredentialEntity, credential, {excludeExtraneousValues: true}))
+      // this._id = this._id || uuid()
     }
   }
 }

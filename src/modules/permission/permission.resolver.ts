@@ -1,7 +1,7 @@
 import { Resolver, Mutation, Args, Query, Context } from '@nestjs/graphql';
 import { CreatePermissionInput, Permission, UpdatePermissionInput, DeletePermissionInput } from 'src/graphql.schema';
 import { PermissionService } from './permission.service';
-import AdminEntity from '../admin/admin.entity';
+import UserEntity from '../user/user.entity';
 
 @Resolver('Permission')
 export class PermissionResolver {
@@ -13,7 +13,7 @@ export class PermissionResolver {
   }
 
   @Mutation()
-  createPermission(@Context('currentAccount') admin: AdminEntity, @Args('input') input: CreatePermissionInput): Promise<Permission> {
+  createPermission(@Context('currentAccount') admin: UserEntity, @Args('input') input: CreatePermissionInput): Promise<Permission> {
     return this.permissionService.create(input, admin._id)
   }
 

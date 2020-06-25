@@ -1,39 +1,21 @@
 import { Entity, ObjectIdColumn, Column } from "typeorm";
 import {Expose, plainToClass} from 'class-transformer'
-import {v4 as uuidv4} from 'uuid'
 import * as moment from 'moment'
+import { uuid } from "src/utils/uuid";
 import { AccountRootEntity } from "../root/account-root.entity";
 
 @Entity({ name: 'User' })
 export default class UserEntity extends AccountRootEntity{
-  
   @Expose()
   @Column()
-  email: string
+  isAdmin: boolean
 
-  @Expose()
-  @Column()
-  password: string
-
-  @Expose()
-  @Column()
-  fullname: string
-
-  @Expose()
-  @Column()
-  phone: string
-
-  @Expose()
-  @Column()
-  address: string
-
-
-  constructor(plain: Partial<UserEntity>){
+  constructor(user: Partial<UserEntity>){
     super()
-    if(plain){
-      Object.assign(this, plainToClass(UserEntity, plain, {excludeExtraneousValues: true}))
 
-      this._id = this._id || uuidv4()
+    if(user){
+      Object.assign(this, plainToClass(UserEntity, user, {excludeExtraneousValues: true}))
+      this._id = this._id || uuid()
       this.createdAt = this.createdAt || moment().valueOf()
     }
   }

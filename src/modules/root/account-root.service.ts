@@ -1,12 +1,13 @@
-import { getMongoRepository, MongoRepository } from "typeorm"
-import { DuplicateError, NotFoundError, LoginError } from "src/commons/exceptions/GqlException"
+import { getMongoRepository } from "typeorm"
+import {  LoginError } from "src/commons/exceptions/GqlException"
 import RootService from "./root.service"
 import CredentialEntity from "../credential/credential.entity"
 import { AccountRootEntity } from "./account-root.entity"
 import ProfileEntity from "../profile/profile.entity"
 import { LoginInput, ChangePasswordInput } from "src/graphql.schema"
 
-export default abstract class AccountRootService extends RootService{
+
+export default abstract class AccountRootService<E extends AccountRootEntity> extends RootService<E>{
   constructor(readonly entity: any, readonly name: string){
     super(entity, name)
   }

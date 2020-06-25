@@ -2,7 +2,7 @@ import { getMongoRepository, MongoRepository } from "typeorm"
 import { DuplicateError, NotFoundError } from "src/commons/exceptions/GqlException"
 import { RootEntity } from "./root.entity"
 
-export default class RootService{
+export default class RootService<E extends RootEntity>{
   protected readonly Entity: any
   protected readonly Name: string
 
@@ -11,25 +11,26 @@ export default class RootService{
     this.Name = name
   }
 
-  findById(_id: string): Promise<any>{
-    return getMongoRepository(this.Entity).findOne({_id})
+  async findById(_id: string): Promise<E>{
+    const result = await this.find({_id})
+    return result[0]
   }
 
-  find(query?): Promise<any>{
-    return getMongoRepository(this.Entity).find(query)
+  find(query?): Promise<E[]>{
+    return getMongoRepository<E>(this.Entity).find(query)
   }
 
-  findOne(query?): Promise<any>{
-    return getMongoRepository(this.Entity).findOne(query)
+  findOne(query?): Promise<E>{
+    return getMongoRepository<E>(this.Entity).findOne(query)
   }
 
-  save(entity: any): Promise<any>{
-    return getMongoRepository(this.Entity).save(entity)
+  save(entity: any): Promise<E>{
+    return getMongoRepository<E>(this.Entity).save(entity)
   }
 
   async delete(ids: string[]): Promise<boolean>{
     const deleted = await getMongoRepository(this.Entity).deleteMany({_id: {$in: ids}})
-    return !!deleted
+    return !!deleted.result.ok
   }
 
   async checkDuplication(query: any, subject?: string): Promise<void>{
@@ -39,13 +40,13 @@ export default class RootService{
     if(existed) throw new DuplicateError(this.Name+subjectStr)
   }
 
-  async checkExisted(query: any, subject: string): Promise<any>{
+  async checkExisted(query: any, subject: string): Promise<E>{
     const existed = await this.findOne(query)
     if(!existed) throw new NotFoundError(subject)
     return existed
   }
 
-  checkExistedId(id: string): Promise<any>{
+  checkExistedId(id: string): Promise<E>{
     return this.checkExisted({_id:id}, this.Name)
   }
 }

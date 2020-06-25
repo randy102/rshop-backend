@@ -13,3 +13,7 @@ input UpdateProfileInput{
   phone: String
   avatar: String
 }
+
+type Mutation {
+  updateUserProfile(input: UpdateProfileInput): Profile @Auth
+}

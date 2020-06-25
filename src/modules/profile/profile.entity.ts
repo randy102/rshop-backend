@@ -1,12 +1,11 @@
 import { Entity, ObjectIdColumn, Column } from "typeorm";
 import { Expose, plainToClass } from "class-transformer";
 import { uuid } from "src/utils/uuid";
+import { RootEntity } from "../root/root.entity";
 
 @Entity({name: 'Profile'})
-export default class ProfileEntity{
-  @Expose()
-  @ObjectIdColumn()
-  _id: string
+export default class ProfileEntity extends RootEntity{
+ 
 
   @Expose()
   @Column()
@@ -28,14 +27,11 @@ export default class ProfileEntity{
   @Column()
   phone: string
 
-  @Expose()
-  @Column()
-  updatedAt: number
   
   constructor(profile: Partial<ProfileEntity>){
+    super()
     if(profile){
       Object.assign(this, plainToClass(ProfileEntity, profile, {excludeExtraneousValues: true}))
-
       this._id = this._id || uuid()
     }
   }

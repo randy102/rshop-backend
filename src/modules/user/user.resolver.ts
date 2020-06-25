@@ -1,44 +1,47 @@
-import { Resolver, Query, Mutation, Args, Context } from '@nestjs/graphql';
+import { Resolver, Mutation, Args, Query, Context, ResolveField, Parent } from '@nestjs/graphql';
+import { CreateUserInput, User, DeleteUserInput, ACCOUNT_TYPE, UpdateProfileInput, LoginInput, ChangePasswordInput } from '../../graphql.schema'
 import { UserService } from './user.service';
-import { User, LoginUserInput, RegisterUserInput, UpdateUserInput, DeleteUserInput, ConfirmUserEmailInput, ChangeUserPasswordInput } from 'src/graphql.schema';
 import UserEntity from './user.entity';
+import { ProfileService } from '../profile/profile.service';
+import { CredentialService } from '../credential/credential.service';
+import { AccountRootResolver } from '../root/account-root.resolver';
+import ProfileEntity from '../profile/profile.entity';
 
 @Resolver('User')
-export class UserResolver {
-  constructor(private readonly userService: UserService) { }
+export class UserResolver extends AccountRootResolver {
+  constructor(
+    private readonly userService: UserService,
+    readonly profileService: ProfileService,
+    readonly credentialService: CredentialService,
+  ) { super(profileService, credentialService) }
 
   @Query()
   users(): Promise<User[]> {
     return this.userService.find()
   }
 
-  // @Mutation()
-  // loginUser(@Args('input') input: LoginUserInput): Promise<string> {
-  //   return this.userService.login(input)
-  // }
-
-  @Mutation()
-  confirmUserEmail(@Args('input') input: ConfirmUserEmailInput){
-    return this.userService.confirmEmail(input.email)
+  @Query()
+  currentUser(@Context("user") user: UserEntity): User {
+    return user
   }
 
   @Mutation()
-  registerUser(@Args('input') input: RegisterUserInput): Promise<string> {
-    return this.userService.register(input)
+  createUser(@Context('user') user: UserEntity, @Args('input') input: CreateUserInput): Promise<User> {
+    return this.userService.create(input, '')
   }
 
   @Mutation()
-  updateUser(@Context('currentAccount') user: UserEntity, @Args('input') input: UpdateUserInput): Promise<User> {
-    return this.userService.update(user._id, input)
+  deleteUser(@Args('input') input: DeleteUserInput): Promise<boolean> {
+    return this.userService.deleteAccount(input.ids)
   }
 
   @Mutation()
-  changeUserPassword(@Context('currentAccount') user: UserEntity, @Args('input') input: ChangeUserPasswordInput): Promise<boolean>{
-    return this.userService.changePassword(input, user._id)
+  loginUser(@Args('input') input: LoginInput): Promise<string> {
+    return this.userService.login(input)
   }
 
   @Mutation()
-  deleteUser(@Args('input') input: DeleteUserInput): Promise<boolean>{
-    return this.userService.delete(input.ids)
+  changeUserPassword(@Context("user") user: UserEntity, @Args('input') input: ChangePasswordInput): Promise<string> {
+    return this.userService.changePassword(user,input)
   }
 }

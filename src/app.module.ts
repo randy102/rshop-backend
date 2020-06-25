@@ -3,11 +3,10 @@ import { GraphQLModule } from '@nestjs/graphql'
 import { ConfigModule } from '@nestjs/config'
 import { TypeOrmModule } from '@nestjs/typeorm'
 
-import { AdminModule } from './modules/admin/admin.module';
+import { UserModule } from './modules/user/user.module';
 import GqlConfigFactory from './configs/Gql.config'
 import TypeOrmConfigService from './configs/Typeorm.config'
 import { PermissionModule } from './modules/permission/permission.module';
-import { UserModule } from './modules/user/user.module';
 import { TokenModule } from './modules/token/token.module';
 import { JwtModule } from './modules/jwt/jwt.module';
 import { JwtService } from './modules/jwt/jwt.service';
@@ -20,6 +19,7 @@ import { ProfileModule } from './modules/profile/profile.module';
 
 
 
+
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({ useClass: TypeOrmConfigService }),
@@ -29,9 +29,8 @@ import { ProfileModule } from './modules/profile/profile.module';
       inject: [JwtService, AuthService],
       useFactory: GqlConfigFactory
     }),
-    AdminModule,
+    UserModule,
     PermissionModule,
-    // UserModule,
     TokenModule,
     JwtModule,
     CredentialModule,

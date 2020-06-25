@@ -1,59 +1,29 @@
 type User{
   _id: String
+  isAdmin: Boolean
+  profile: Profile
+  credential: Credential
+}
+
+type Query{
+  users: [User] @Auth
+  currentUser: User @Auth 
+}
+
+type Mutation{
+  loginUser(input: LoginInput): String!
+  changeUserPassword(input: ChangePasswordInput): String @Auth 
+
+  createUser(input: CreateUserInput): User @Auth
+  deleteUser(input: DeleteUserInput): Boolean @Auth 
+}
+
+input CreateUserInput{
   email: String
-  fullname: String
-  phone: String
-  address: String
-  createdAt: Float
-  createdBy: String
-}
-
-input RegisterUserInput{
-  token: String
-  fullname: String
-  password: String
-}
-
-input LoginUserInput{
-  email: String!
-  password: String!
-}
-
-input UpdateUserInput{
-  fullname: String
-  phone: String
-  address: String
-}
-
-input ChangeUserPasswordInput{
-  old: String
-  new: String
+  fullName: String
+  isAdmin: Boolean
 }
 
 input DeleteUserInput{
   ids: [String]
-}
-
-input ConfirmUserEmailInput{
-  email: String
-}
-
-input ForgotUserPasswordInput{
-  email: String
-}
-
-type Query{
-  users: [User] @Auth @Has(type: ADMIN)
-  currentUser: User @Auth @Has(type: USER)
-}
-
-type Mutation{
-  loginUser(input: LoginUserInput): String
-  confirmUserEmail(input: ConfirmUserEmailInput): Boolean
-  registerUser(input: RegisterUserInput): String
-  forgotUserPassword(input: ForgotUserPasswordInput): Boolean
-
-  updateUser(input: UpdateUserInput): User @Auth @Has(type: USER)
-  changeUserPassword(input: ChangeUserPasswordInput): Boolean @Auth @Has(type: USER)
-  deleteUser(input: DeleteUserInput): User @Auth @Has(type: ADMIN)
 }

@@ -7,8 +7,8 @@ class AuthDirective extends SchemaDirectiveVisitor {
     const { resolve = defaultFieldResolver } = field
 
     field.resolve = function (...args) {
-      const { currentAccount } = args[2] //Context
-      if (!currentAccount) throw new AuthError()
+      const { user } = args[2] //Context
+      if (!user) throw new AuthError()
 
       return resolve.apply(this, args)
     }

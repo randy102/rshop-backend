@@ -7,7 +7,7 @@ import { FieldError } from 'src/commons/exceptions/GqlException';
 import { Moment } from 'src/utils/moment';
 
 @Injectable()
-export class CredentialService extends RootService {
+export class CredentialService extends RootService<CredentialEntity> {
   constructor(
     private readonly hashService: HashService
   ){super(CredentialEntity,'Credential')}
@@ -33,7 +33,7 @@ export class CredentialService extends RootService {
     this.checkPasswordMatch(existed.password, hashedOldPassword)
 
     const updatedPassword = await this.save(new CredentialEntity({
-      _id,
+      ...existed,
       password: hashedNewPassword,
       updatedAt: Moment().valueOf()
     }))

@@ -1,107 +1,67 @@
 import { Injectable } from '@nestjs/common';
-import RootService from '../root/root.service';
+import { ACCOUNT_TYPE, CreateUserInput, LoginInput, ChangePasswordInput } from 'src/graphql.schema';
 import UserEntity from './user.entity';
-import { User, ACCOUNT_TYPE, RegisterUserInput, UpdateUserInput, ChangeUserPasswordInput } from 'src/graphql.schema';
-import { LoginError } from 'src/commons/exceptions/GqlException';
-
 import { JwtService } from '../jwt/jwt.service';
-import { MailerService } from '../mailer/mailer.service';
-import { TokenService } from '../token/token.service';
-import { FieldError } from 'src/commons/exceptions/GqlException'
+import AccountRootService from '../root/account-root.service';
+import { CredentialService } from '../credential/credential.service';
 import { HashService } from '../utils/hash/hash.service';
-import { AdminService } from '../admin/admin.service';
+import { ProfileService } from '../profile/profile.service';
+import { AccountRootEntity } from '../root/account-root.entity';
+
 
 @Injectable()
-export class UserService extends RootService {
+export class UserService extends AccountRootService<UserEntity> {
   constructor(
     private readonly jwtService: JwtService,
-    private readonly mailerService: MailerService,
-    private readonly tokenService: TokenService,
-    private readonly hashService: HashService
+    private readonly credentialService: CredentialService,
+    private readonly hashService: HashService,
+    private readonly profileService: ProfileService
   ) { super(UserEntity, 'User') }
-
-
-  // async login({ email, password }): Promise<string> {
-  //   const hashedPassword = this.hashService.create(password)
-
-  //   const user: UserEntity = await this.findOne({ email, password: hashedPassword })
-  //   if (!user) throw new LoginError()
+  
+  async updateCredentialHash(id: string): Promise<UserEntity>{
+    const user: UserEntity = await this.findById(id)
+    const credential = await this.credentialService.findById(user.idCredential)
     
-  //   return this.jwtService.sign(ACCOUNT_TYPE.USER, user._id)
-  // }
+    const hashContent = {
+      ...credential
+    }
 
-  async register(input: RegisterUserInput) {
-    const { email } = await this.tokenService.get(input.token)
-    await this.checkDuplication({ email }, 'Email')
-    const created = await this.save(new UserEntity({
-      ...input,
-      email,
-      password: this.hashService.create(input.password),
-    }))
-
-    return this.jwtService.sign(ACCOUNT_TYPE.USER, created._id)
-  }
-
-  sendConfirmMail(to: string, token: string): Promise<any> {
-    return this.mailerService.send({
-      to,
-      subject: 'Xác thực tài khoản',
-      html: `Vui lòng nhấn vào liên kết <a href="${token}">này</a> để hoàn thành bước xác thực email của bạn.`,
-    })
-  }
-
-  async confirmEmail(email: string) {
-    await this.checkDuplication({ email }, 'Email')
-    const confirmToken = await this.tokenService.generate({ email })
-    const result = await this.sendConfirmMail(email, confirmToken)
-    return !!result
-  }
-
-
-
-  async update(_id, input: UpdateUserInput) {
-    const existed: User = await this.checkExistedId(_id)
+    const credentialHash = this.hashService.create(JSON.stringify(hashContent))
 
     return this.save(new UserEntity({
-      ...existed,
-      ...input
+      ...user,
+      credentialHash
     }))
   }
 
-  async changePassword(password: ChangeUserPasswordInput, _id: string) {
-    const existed: UserEntity = await this.checkExistedId(_id)
-    const hashedNewPassword = this.hashService.create(password.new)
-    const hashedOldPassword = this.hashService.create(password.old)
+  async login(input: LoginInput): Promise<string> {
+    const hashedPassword = this.hashService.create(input.password)
 
-    if (existed.password !== hashedOldPassword)
-      throw new FieldError('Password')
-
-    const result = await this.save(new UserEntity({
-      ...existed,
-      password: hashedNewPassword
-    }))
-
-    return !!result
+    const user: UserEntity = await this.authenticate(input.email,hashedPassword)
+    return this.jwtService.sign(user)
   }
 
-  sendNewPasswordEmail(to: string, newPassword: string) {
-    return this.mailerService.send({
-      to,
-      subject: 'Mật khẩu ',
-      html: ``,
-    })
-  }
+  async create(input: CreateUserInput, createdBy: string) {
+    await this.checkAccountDuplication(input.email)
+    
+    const DEFAULT_PASSWORD = '12345678'
+    const createdCredential = await this.credentialService.create(input.email, DEFAULT_PASSWORD)
+    const createdProfile = await this.profileService.create(input)
 
-  async resetPassword(email: String) {
-    const PASSWORD_SIZE = 8
-    const existed: UserEntity = await this.checkExisted({ email }, 'Email')
-    const newPassword = this.hashService.rand(PASSWORD_SIZE)
-
-    const updated = await this.save(new UserEntity({
-      ...existed,
-      password: this.hashService.create(newPassword)
+    const createdUser: UserEntity = await this.save(new UserEntity({
+      isAdmin: input.isAdmin,
+      idCredential: createdCredential._id,
+      idProfile: createdProfile._id,  
+      createdBy
     }))
 
-    return updated ? newPassword : undefined
+    await this.updateCredentialHash(createdUser._id)
+    return createdUser
+  }
+  
+  async changePassword(user: AccountRootEntity, input: ChangePasswordInput): Promise<string>{
+    await this.credentialService.changePassword(user.idCredential, input)
+    const updated = await this.updateCredentialHash(user._id)
+    return this.jwtService.sign(updated)
   }
 }

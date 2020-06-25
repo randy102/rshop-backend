@@ -1,10 +1,9 @@
 import { join } from 'path'
 import { GqlModuleOptions } from '@nestjs/graphql';
-import schemaDirectives from '../commons/directives'
-import { ACCOUNT_TYPE, PERMISSION } from 'src/graphql.schema';
-import { JwtService } from 'src/modules/jwt/jwt.service';
+import schemaDirectives from '../commons/directives' 
+import { JwtService, AccountPayload } from 'src/modules/jwt/jwt.service';
 import { AuthService } from 'src/modules/auth/auth.service';
-import { AccountRootEntity } from 'src/modules/root/account-root.entity';
+import UserEntity from 'src/modules/user/user.entity';
 
 export default async function GqlConfigFactory(
   jwtService: JwtService,
@@ -17,51 +16,23 @@ export default async function GqlConfigFactory(
       return { currentAccount }
     }
 
-    let accountType: ACCOUNT_TYPE
-    let currentAccount: AccountRootEntity
-    let permissions: PERMISSION[]
+    var user: UserEntity
+    var token = req.headers['token']
 
-    const token = req.headers['token']
-    // If not have token
-    if(!token) {
-      console.log('Not having token')
-      return
-    } 
+    if(token) {
+      const payload = await jwtService.verify(token)
 
-    const payload = await jwtService.verify(token)
-    // If verify failed
-    if(!payload){
-      console.log("Token verify failed")
-      return
-    } 
-    
-    const { type, _id, credentialHash } = payload
-    
-    // If type is not in Account type
-    if(!(type in ACCOUNT_TYPE)){
-      console.log("Invalid account type")
-      return
-    } 
+      if(payload){
+        const userEntity =  await authService.getCurrentAccount(payload._id)
 
-    accountType = type
-    currentAccount = await authService.getCurrentAccount(_id, type)
-
-    // If account not found
-    if(!currentAccount) {
-      console.log("Account not found")
-      return
-    } 
-
-    // If account's credential not match
-    if(credentialHash !== currentAccount.credentialHash){
-      console.log("Credential hash not match")
-      return
-    } 
-    
+        if(userEntity && payload.credentialHash === userEntity.credentialHash){
+          user = userEntity
+        }
+      }
+    }
+   
     return {
-      currentAccount,
-      accountType,
-      permissions
+      user
     }
   }
 
