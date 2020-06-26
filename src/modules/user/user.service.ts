@@ -1,11 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserInput, LoginInput, ChangePasswordInput, UpdateAdminInput } from 'src/graphql.schema';
+import { CreateUserInput, LoginInput, ChangePasswordInput, UpdateAdminInput, RegisterUserInput, User } from 'src/graphql.schema';
 import UserEntity from './user.entity';
 import { JwtService } from '../jwt/jwt.service';
 import AccountRootService from '../root/account-root.service';
 import { CredentialService } from '../credential/credential.service';
 import { HashService } from '../utils/hash/hash.service';
 import { ProfileService } from '../profile/profile.service';
+import { TokenService } from '../token/token.service';
+import { MailerService } from '../mailer/mailer.service';
+import {SendMailError} from 'src/commons/exceptions/GqlException'
 
 @Injectable()
 export class UserService extends AccountRootService<UserEntity> {
@@ -13,7 +16,9 @@ export class UserService extends AccountRootService<UserEntity> {
     private readonly jwtService: JwtService,
     private readonly credentialService: CredentialService,
     private readonly hashService: HashService,
-    private readonly profileService: ProfileService
+    private readonly profileService: ProfileService,
+    private readonly tokenService: TokenService,
+    private readonly mailerService: MailerService
   ) { super(UserEntity, 'User') }
   
   async updateCredentialHash(id: string): Promise<UserEntity>{
@@ -72,5 +77,32 @@ export class UserService extends AccountRootService<UserEntity> {
     }))
     await this.updateCredentialHash(input._id)
     return updated
+  }
+
+  async requestEmailConfirm(email: string): Promise<string>{
+    await this.checkAccountDuplication(email)
+    const token = await this.tokenService.generate({email})
+    const sentEmail = await this.mailerService.sendComfirmEmail({to: email,token})
+    if(!sentEmail) throw new SendMailError()
+    
+    return email
+  }
+
+  async registerUser({token,fullName,password}: RegisterUserInput, createdBy: string): Promise<User>{
+    const {email} = await this.tokenService.get(token)
+    await this.checkAccountDuplication(email)
+
+    const createdCredential = await this.credentialService.create(email, password)
+    const createdProfile = await this.profileService.create({fullName})
+
+    const createdUser: UserEntity = await this.save(new UserEntity({
+      isAdmin: false,
+      idCredential: createdCredential._id,
+      idProfile: createdProfile._id,  
+      createdBy
+    }))
+
+    await this.updateCredentialHash(createdUser._id)
+    return createdUser
   }
 }

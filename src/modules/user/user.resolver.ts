@@ -1,11 +1,11 @@
-import { Resolver, Mutation, Args, Query, Context, ResolveField, Parent } from '@nestjs/graphql';
-import { CreateUserInput, User, DeleteUserInput,  LoginInput, ChangePasswordInput, UpdateAdminInput } from '../../graphql.schema'
+import { Resolver, Mutation, Args, Query, Context } from '@nestjs/graphql';
+import { CreateUserInput, User, DeleteUserInput,  LoginInput, ChangePasswordInput, UpdateAdminInput, RequestEmailConfirmInput, RegisterUserInput } from '../../graphql.schema'
 import { UserService } from './user.service';
 import UserEntity from './user.entity';
 import { ProfileService } from '../profile/profile.service';
 import { CredentialService } from '../credential/credential.service';
 import { AccountRootResolver } from '../root/account-root.resolver';
-import ProfileEntity from '../profile/profile.entity';
+
 
 @Resolver('User')
 export class UserResolver extends AccountRootResolver<UserEntity> {
@@ -26,6 +26,21 @@ export class UserResolver extends AccountRootResolver<UserEntity> {
   }
 
   @Mutation()
+  loginUser(@Args('input') input: LoginInput): Promise<string> {
+    return this.userService.login(input)
+  }
+
+  @Mutation()
+  requestEmailConfirm(@Args('input') i: RequestEmailConfirmInput): Promise<string>{
+    return this.userService.requestEmailConfirm(i.email)
+  }
+
+  @Mutation()
+  registerUser(@Context('user') u: UserEntity, @Args('input') i: RegisterUserInput): Promise<User>{
+    return this.userService.registerUser(i, u._id)
+  }
+
+  @Mutation()
   createUser(@Context('user') user: UserEntity, @Args('input') input: CreateUserInput): Promise<User> {
     return this.userService.create(input, '')
   }
@@ -34,11 +49,6 @@ export class UserResolver extends AccountRootResolver<UserEntity> {
   deleteUser(@Context('user') user: UserEntity, @Args('input') input: DeleteUserInput): Promise<boolean> {
     if(!input.ids.some(id => id === user._id))
     return this.userService.deleteAccount(input.ids)
-  }
-
-  @Mutation()
-  loginUser(@Args('input') input: LoginInput): Promise<string> {
-    return this.userService.login(input)
   }
 
   @Mutation()

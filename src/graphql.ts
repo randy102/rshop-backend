@@ -65,6 +65,16 @@ export class UpdateAdminInput {
     isAdmin?: boolean;
 }
 
+export class RequestEmailConfirmInput {
+    email?: string;
+}
+
+export class RegisterUserInput {
+    token?: string;
+    fullName?: string;
+    password?: string;
+}
+
 export class Credential {
     email?: string;
 }
@@ -93,6 +103,10 @@ export abstract class IMutation {
     abstract updateUserProfile(input?: UpdateProfileInput): Profile | Promise<Profile>;
 
     abstract loginUser(input?: LoginInput): string | Promise<string>;
+
+    abstract requestEmailConfirm(input?: RequestEmailConfirmInput): string | Promise<string>;
+
+    abstract registerUser(input?: RegisterUserInput): User | Promise<User>;
 
     abstract changeUserPassword(input?: ChangePasswordInput): string | Promise<string>;
 

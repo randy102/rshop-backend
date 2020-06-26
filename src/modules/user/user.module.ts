@@ -7,6 +7,8 @@ import { JwtModule } from '../jwt/jwt.module';
 import { CredentialModule } from '../credential/credential.module';
 import { UtilsModule } from '../utils/utils.module';
 import { ProfileModule } from '../profile/profile.module';
+import { TokenModule } from '../token/token.module';
+import { MailerModule } from '../mailer/mailer.module';
 
 
 
@@ -17,7 +19,9 @@ import { ProfileModule } from '../profile/profile.module';
     JwtModule,
     CredentialModule,
     UtilsModule,
-    ProfileModule
+    ProfileModule,
+    TokenModule,
+    MailerModule
   ],
   exports: [UserService]
 })

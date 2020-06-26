@@ -42,3 +42,9 @@ export class CredentialError extends GraphQLError{
     super(`Account's credential has been changed`)
   }
 }
+
+export class SendMailError extends GraphQLError{
+  constructor(){
+    super(`Mail didn't send successfully. Please try again!`)
+  }
+}

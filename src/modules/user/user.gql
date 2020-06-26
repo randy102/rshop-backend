@@ -11,9 +11,11 @@ type Query{
 }
 
 type Mutation{
-  loginUser(input: LoginInput): String!
-  
-  changeUserPassword(input: ChangePasswordInput): String @Auth 
+  loginUser(input: LoginInput): String #Return token
+  requestEmailConfirm(input: RequestEmailConfirmInput): String #Return requested email after mail sent
+  registerUser(input: RegisterUserInput): User #Return created user
+
+  changeUserPassword(input: ChangePasswordInput): String @Auth  #Return new token
 
   createUser(input: CreateUserInput): User @Auth @Admin
   updateAdmin(input: UpdateAdminInput): User @Auth @Admin
@@ -33,4 +35,14 @@ input DeleteUserInput{
 input UpdateAdminInput{
   _id: String
   isAdmin: Boolean
+}
+
+input RequestEmailConfirmInput{
+  email: String
+}
+
+input RegisterUserInput{
+  token: String
+  fullName: String
+  password: String
 }
