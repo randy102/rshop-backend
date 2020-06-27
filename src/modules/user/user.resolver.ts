@@ -36,13 +36,13 @@ export class UserResolver extends AccountRootResolver<UserEntity> {
   }
 
   @Mutation()
-  registerUser(@Context('user') u: UserEntity, @Args('input') i: RegisterUserInput): Promise<User>{
-    return this.userService.registerUser(i, u._id)
+  registerUser(@Args('input') i: RegisterUserInput): Promise<User>{
+    return this.userService.registerUser(i)
   }
 
   @Mutation()
   createUser(@Context('user') user: UserEntity, @Args('input') input: CreateUserInput): Promise<User> {
-    return this.userService.create(input, '')
+    return this.userService.create(input, user._id)
   }
 
   @Mutation()

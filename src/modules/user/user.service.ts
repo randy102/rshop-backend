@@ -19,7 +19,7 @@ export class UserService extends AccountRootService<UserEntity> {
     private readonly profileService: ProfileService,
     private readonly tokenService: TokenService,
     private readonly mailerService: MailerService
-  ) { super(UserEntity, 'User') }
+  ) { super(UserEntity, 'Người dùng') }
   
   async updateCredentialHash(id: string): Promise<UserEntity>{
     const user: UserEntity = await this.checkExistedId(id)
@@ -88,7 +88,7 @@ export class UserService extends AccountRootService<UserEntity> {
     return email
   }
 
-  async registerUser({token,fullName,password}: RegisterUserInput, createdBy: string): Promise<User>{
+  async registerUser({token,fullName,password}: RegisterUserInput): Promise<User>{
     const {email} = await this.tokenService.get(token)
     await this.checkAccountDuplication(email)
 
@@ -98,8 +98,7 @@ export class UserService extends AccountRootService<UserEntity> {
     const createdUser: UserEntity = await this.save(new UserEntity({
       isAdmin: false,
       idCredential: createdCredential._id,
-      idProfile: createdProfile._id,  
-      createdBy
+      idProfile: createdProfile._id
     }))
 
     await this.updateCredentialHash(createdUser._id)

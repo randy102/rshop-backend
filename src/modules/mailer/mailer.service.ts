@@ -38,9 +38,9 @@ export class MailerService {
   }
 
   sendComfirmEmail({ to, token }): Promise<boolean>{
-    const host = process.env.HOSTNAME || 'localhost'
-    const confirmURL = host + '/confirmemail/' + token
-    const subject = 'Confirm your email!'
+    const host = process.env.HOSTNAME || 'http://localhost:3000'
+    const confirmURL = host + '/register/create/' + token
+    const subject = 'Xác thực tài khoản RShop'
     const style = `
       padding: 5px 70px;
       background: #229ac9;
@@ -50,13 +50,10 @@ export class MailerService {
     `
     const html = `
       <p>
-        Please click this button below to confirm your email:
+        Vui lòng bấm vào nút bên dưới để xác thực tài khoản:
       </p>
-      <a
-        style="${style}"
-        href=${confirmURL}
-      >
-        Confirm Email
+      <a href="${confirmURL}" style="${style}">
+        Xác nhận
       </a>
     `
     return this.send({to,subject,html})
