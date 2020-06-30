@@ -4,7 +4,7 @@ import RootService from "./root.service"
 import CredentialEntity from "../credential/credential.entity"
 import { AccountRootEntity } from "./account-root.entity"
 import ProfileEntity from "../profile/profile.entity"
-import { LoginInput, ChangePasswordInput } from "src/graphql.schema"
+import { LoginInput, ChangePasswordInput, LoginResponse } from "src/graphql.schema"
 
 
 export default abstract class AccountRootService<E extends AccountRootEntity<E>> extends RootService<E>{
@@ -18,7 +18,7 @@ export default abstract class AccountRootService<E extends AccountRootEntity<E>>
   /**
    * @returns {string} new jwt
    */
-  abstract login(input: LoginInput): Promise<string>
+  abstract login(input: LoginInput): Promise<LoginResponse>
 
   /**
    * @returns {string} new jwt

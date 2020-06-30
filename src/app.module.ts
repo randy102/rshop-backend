@@ -16,6 +16,7 @@ import { UtilsModule } from './modules/utils/utils.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { AuthService } from './modules/auth/auth.service';
 import { ProfileModule } from './modules/profile/profile.module';
+import { PhotoModule } from './modules/photo/photo.module';
 
 
 
@@ -38,6 +39,7 @@ import { ProfileModule } from './modules/profile/profile.module';
     UtilsModule,
     AuthModule,
     ProfileModule,
+    PhotoModule,
   ],
 })
 export class AppModule { }

@@ -1,5 +1,5 @@
 import { Resolver, Mutation, Args, Query, Context } from '@nestjs/graphql';
-import { CreateUserInput, User, DeleteUserInput,  LoginInput, ChangePasswordInput, UpdateAdminInput, RequestEmailConfirmInput, RegisterUserInput } from '../../graphql.schema'
+import { CreateUserInput, LoginResponse, User, DeleteUserInput,  LoginInput, ChangePasswordInput, UpdateAdminInput, RequestEmailConfirmInput, RegisterUserInput } from '../../graphql.schema'
 import { UserService } from './user.service';
 import UserEntity from './user.entity';
 import { ProfileService } from '../profile/profile.service';
@@ -26,7 +26,7 @@ export class UserResolver extends AccountRootResolver<UserEntity> {
   }
 
   @Mutation()
-  loginUser(@Args('input') input: LoginInput): Promise<string> {
+  loginUser(@Args('input') input: LoginInput): Promise<LoginResponse> {
     return this.userService.login(input)
   }
 
@@ -58,7 +58,6 @@ export class UserResolver extends AccountRootResolver<UserEntity> {
 
   @Mutation()
   updateAdmin(@Context('user') user: UserEntity, @Args('input') inp: UpdateAdminInput): Promise<User>{
-    if(user._id !== inp._id)
-    return this.userService.updateAdmin(inp)
+    return this.userService.updateAdmin(inp, user)
   }
 }

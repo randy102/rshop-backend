@@ -10,8 +10,13 @@ type Query{
   currentUser: User @Auth 
 }
 
+type LoginResponse{
+  token: String
+  user: User
+}
+
 type Mutation{
-  loginUser(input: LoginInput): String #Return token
+  loginUser(input: LoginInput): LoginResponse
   requestEmailConfirm(input: RequestEmailConfirmInput): String #Return requested email after mail sent
   registerUser(input: RegisterUserInput): User #Return created user
 

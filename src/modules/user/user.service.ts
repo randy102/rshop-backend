@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserInput, LoginInput, ChangePasswordInput, UpdateAdminInput, RegisterUserInput, User } from 'src/graphql.schema';
+import { CreateUserInput, LoginResponse ,LoginInput, ChangePasswordInput, UpdateAdminInput, RegisterUserInput, User } from 'src/graphql.schema';
 import UserEntity from './user.entity';
 import { JwtService } from '../jwt/jwt.service';
 import AccountRootService from '../root/account-root.service';
@@ -8,7 +8,8 @@ import { HashService } from '../utils/hash/hash.service';
 import { ProfileService } from '../profile/profile.service';
 import { TokenService } from '../token/token.service';
 import { MailerService } from '../mailer/mailer.service';
-import {SendMailError} from 'src/commons/exceptions/GqlException'
+import {SendMailError, SelfUpdateRoleError} from 'src/commons/exceptions/GqlException'
+
 
 @Injectable()
 export class UserService extends AccountRootService<UserEntity> {
@@ -38,11 +39,14 @@ export class UserService extends AccountRootService<UserEntity> {
     }))
   }
 
-  async login(input: LoginInput): Promise<string> {
+  async login(input: LoginInput): Promise<LoginResponse> {
     const hashedPassword = this.hashService.create(input.password)
 
     const user: UserEntity = await this.authenticate(input.email,hashedPassword)
-    return this.jwtService.sign(user)
+    return {
+      token: this.jwtService.sign(user),
+      user
+    }
   }
 
   async create(input: CreateUserInput, createdBy: string) {
@@ -69,7 +73,9 @@ export class UserService extends AccountRootService<UserEntity> {
     return this.jwtService.sign(updated)
   }
 
-  async updateAdmin(input: UpdateAdminInput): Promise<UserEntity>{
+  async updateAdmin(input: UpdateAdminInput, updateBy: UserEntity): Promise<UserEntity>{
+    if(input._id === updateBy._id) throw new SelfUpdateRoleError()
+    
     const existed = await this.checkExistedId(input._id)
     const updated = await this.save(new UserEntity({
       ...existed,

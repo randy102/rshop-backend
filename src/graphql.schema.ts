@@ -102,7 +102,7 @@ export abstract class IMutation {
 
     abstract updateUserProfile(input?: UpdateProfileInput): Profile | Promise<Profile>;
 
-    abstract loginUser(input?: LoginInput): string | Promise<string>;
+    abstract loginUser(input?: LoginInput): LoginResponse | Promise<LoginResponse>;
 
     abstract requestEmailConfirm(input?: RequestEmailConfirmInput): string | Promise<string>;
 
@@ -130,4 +130,9 @@ export class User {
     isAdmin?: boolean;
     profile?: Profile;
     credential?: Credential;
+}
+
+export class LoginResponse {
+    token?: string;
+    user?: User;
 }

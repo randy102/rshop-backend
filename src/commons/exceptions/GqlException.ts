@@ -48,3 +48,9 @@ export class SendMailError extends GraphQLError{
     super(`Gửi thư thất bại. Vui lòng thử lại sau!`)
   }
 }
+
+export class SelfUpdateRoleError extends GraphQLError{
+  constructor(){
+    super(`Không thể thay đổi quyền của bạn!`)
+  }
+}
