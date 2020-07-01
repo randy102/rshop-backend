@@ -6,7 +6,6 @@ import { RootEntity } from "../root/root.entity";
 @Entity({name: 'Profile'})
 export default class ProfileEntity extends RootEntity<ProfileEntity>{
  
-
   @Expose()
   @Column()
   avatar: string

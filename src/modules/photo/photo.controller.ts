@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post, UseInterceptors, UploadedFile, Res } from '@nestjs/common'
+import { Controller, Get, Param, Post, UseInterceptors, UploadedFile, Res, Delete, Body } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { Response } from 'express';
 import AWS = require('aws-sdk')
@@ -19,8 +19,14 @@ export class PhotoController {
   }
 
   @Post()
-  @UseInterceptors(FileInterceptor("file"))
+  @UseInterceptors(FileInterceptor('file'))
   uploadPhoto(@UploadedFile() file: File) {
     return this.photoService.save(file)
+  }
+
+  @Delete()
+  deletePhoto(@Body() body){
+    if(body.id === 'default') return true
+    return this.photoService.remove(body.id)
   }
 }

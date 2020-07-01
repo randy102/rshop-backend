@@ -16,6 +16,7 @@ export class ProfileService extends RootService<ProfileEntity>{
     return this.save(new ProfileEntity({
       _id,
       ...input,
+      avatar: input.avatar || 'default',
       updatedAt: Moment().valueOf()
     }))
   }
