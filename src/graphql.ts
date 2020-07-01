@@ -17,16 +17,6 @@ export enum PERMISSION {
     STAFF = "STAFF"
 }
 
-export class ChangePasswordInput {
-    old?: string;
-    new?: string;
-}
-
-export class LoginInput {
-    email: string;
-    password: string;
-}
-
 export class CreatePermissionInput {
     name: string;
     description?: string;
@@ -50,10 +40,20 @@ export class UpdateProfileInput {
     avatar?: string;
 }
 
+export class LoginInput {
+    email: string;
+    password: string;
+}
+
 export class CreateUserInput {
     email?: string;
     fullName?: string;
     isAdmin?: boolean;
+}
+
+export class ChangePasswordInput {
+    old?: string;
+    new?: string;
 }
 
 export class DeleteUserInput {
@@ -73,10 +73,6 @@ export class RegisterUserInput {
     token?: string;
     fullName?: string;
     password?: string;
-}
-
-export class Credential {
-    email?: string;
 }
 
 export class Permission {
@@ -130,6 +126,10 @@ export class User {
     isAdmin?: boolean;
     profile?: Profile;
     credential?: Credential;
+}
+
+export class Credential {
+    email?: string;
 }
 
 export class LoginResponse {

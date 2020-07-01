@@ -15,7 +15,7 @@ export class DuplicateError extends GraphQLError{
 
 export class FieldError extends GraphQLError{
   constructor(sub: string, msg?: string){
-    super(`${sub} không đúng. ${msg}`)
+    super(`${sub} không đúng. ${msg || ''}`)
   }
 }
 

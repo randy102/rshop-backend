@@ -21,7 +21,7 @@ export class CredentialService extends RootService<CredentialEntity> {
 
   checkPasswordMatch(password: string, _password: string){
     if(password !== _password)
-      throw new FieldError('Password')
+      throw new FieldError('Mật khẩu')
   }
 
   async changePassword(_id: string, input: ChangePasswordInput): Promise<boolean>{

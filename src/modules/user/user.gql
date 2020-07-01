@@ -5,14 +5,19 @@ type User{
   credential: Credential
 }
 
-type Query{
-  users: [User] @Auth @Admin
-  currentUser: User @Auth 
+type Credential{
+  email: String
 }
+
 
 type LoginResponse{
   token: String
   user: User
+}
+
+type Query{
+  users: [User] @Auth @Admin
+  currentUser: User @Auth 
 }
 
 type Mutation{
@@ -27,10 +32,21 @@ type Mutation{
   deleteUser(input: DeleteUserInput): Boolean @Auth @Admin
 }
 
+
+input LoginInput{
+  email: String!
+  password: String!
+}
+
 input CreateUserInput{
   email: String
   fullName: String
   isAdmin: Boolean
+}
+
+input ChangePasswordInput{
+  old: String
+  new: String
 }
 
 input DeleteUserInput{

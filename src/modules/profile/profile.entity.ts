@@ -29,9 +29,8 @@ export default class ProfileEntity extends RootEntity<ProfileEntity>{
   
   constructor(profile: Partial<ProfileEntity>){
     super(profile, ProfileEntity)
-    // if(profile){
-    //   Object.assign(this, plainToClass(ProfileEntity, profile, {excludeExtraneousValues: true}))
-    //   this._id = this._id || uuid()
-    // }
+    if(profile){
+      this.avatar = this.avatar || 'default'
+    }
   }
 }
