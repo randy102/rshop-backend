@@ -58,6 +58,6 @@ export class UserResolver extends AccountRootResolver<UserEntity> {
 
   @Mutation()
   updateAdmin(@Context('user') user: UserEntity, @Args('input') inp: UpdateAdminInput): Promise<User>{
-    return this.userService.updateAdmin(inp, user)
+    return this.userService.updateAdmin(inp, user._id)
   }
 }

@@ -6,6 +6,12 @@
 
 /* tslint:disable */
 /* eslint-disable */
+export enum PlanState {
+    DRAFT = "DRAFT",
+    PUBLISHED = "PUBLISHED",
+    SUPPRESSED = "SUPPRESSED"
+}
+
 export enum ACCOUNT_TYPE {
     ADMIN = "ADMIN",
     USER = "USER",
@@ -30,6 +36,23 @@ export class UpdatePermissionInput {
 
 export class DeletePermissionInput {
     ids?: string[];
+}
+
+export class CreateDraftPlanInput {
+    name?: string;
+    duration?: number;
+    price?: number;
+    numShop?: number;
+    description?: string;
+}
+
+export class UpdateDraftPlanInput {
+    _id?: string;
+    name?: string;
+    duration?: number;
+    price?: number;
+    numShop?: number;
+    description?: string;
 }
 
 export class UpdateProfileInput {
@@ -84,6 +107,10 @@ export class Permission {
 export abstract class IQuery {
     abstract permissions(): Permission[] | Promise<Permission[]>;
 
+    abstract plans(): Plan[] | Promise<Plan[]>;
+
+    abstract publishedPlans(): Plan[] | Promise<Plan[]>;
+
     abstract users(): User[] | Promise<User[]>;
 
     abstract currentUser(): User | Promise<User>;
@@ -95,6 +122,16 @@ export abstract class IMutation {
     abstract updatePermission(input?: UpdatePermissionInput): Permission | Promise<Permission>;
 
     abstract deletePermission(input?: DeletePermissionInput): boolean | Promise<boolean>;
+
+    abstract createDraftPlan(input?: CreateDraftPlanInput): Plan | Promise<Plan>;
+
+    abstract updateDraftPlan(input?: UpdateDraftPlanInput): Plan | Promise<Plan>;
+
+    abstract deleteDraftPlan(ids?: string[]): boolean | Promise<boolean>;
+
+    abstract publishPlan(id?: string): Plan | Promise<Plan>;
+
+    abstract suppressPlan(id?: string): Plan | Promise<Plan>;
 
     abstract updateUserProfile(input?: UpdateProfileInput): Profile | Promise<Profile>;
 
@@ -111,6 +148,16 @@ export abstract class IMutation {
     abstract updateAdmin(input?: UpdateAdminInput): User | Promise<User>;
 
     abstract deleteUser(input?: DeleteUserInput): boolean | Promise<boolean>;
+}
+
+export class Plan {
+    _id?: string;
+    name?: string;
+    duration?: number;
+    price?: number;
+    numShop?: number;
+    state?: PlanState;
+    description?: string;
 }
 
 export class Profile {

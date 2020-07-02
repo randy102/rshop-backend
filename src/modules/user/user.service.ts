@@ -73,14 +73,17 @@ export class UserService extends AccountRootService<UserEntity> {
     return this.jwtService.sign(updated)
   }
 
-  async updateAdmin(input: UpdateAdminInput, updateBy: UserEntity): Promise<UserEntity>{
-    if(input._id === updateBy._id) throw new SelfUpdateRoleError()
+  async updateAdmin(input: UpdateAdminInput, updatedBy: string): Promise<UserEntity>{
+    if(input._id === updatedBy) throw new SelfUpdateRoleError()
     
     const existed = await this.checkExistedId(input._id)
+
     const updated = await this.save(new UserEntity({
       ...existed,
-      isAdmin: input.isAdmin
+      ...input,
+      updatedBy
     }))
+
     await this.updateCredentialHash(input._id)
     return updated
   }

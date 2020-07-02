@@ -6,6 +6,12 @@
 
 /* tslint:disable */
 /* eslint-disable */
+export enum PlanState {
+    DRAFT = "DRAFT",
+    PUBLISHED = "PUBLISHED",
+    SUPPRESSED = "SUPPRESSED"
+}
+
 export enum ACCOUNT_TYPE {
     ADMIN = "ADMIN",
     USER = "USER",
@@ -15,16 +21,6 @@ export enum ACCOUNT_TYPE {
 export enum PERMISSION {
     STORE = "STORE",
     STAFF = "STAFF"
-}
-
-export class ChangePasswordInput {
-    old?: string;
-    new?: string;
-}
-
-export class LoginInput {
-    email: string;
-    password: string;
 }
 
 export class CreatePermissionInput {
@@ -42,6 +38,23 @@ export class DeletePermissionInput {
     ids?: string[];
 }
 
+export class CreateDraftPlanInput {
+    name?: string;
+    duration?: number;
+    price?: number;
+    numShop?: number;
+    description?: string;
+}
+
+export class UpdateDraftPlanInput {
+    _id?: string;
+    name?: string;
+    duration?: number;
+    price?: number;
+    numShop?: number;
+    description?: string;
+}
+
 export class UpdateProfileInput {
     dob?: number;
     fullName?: string;
@@ -50,10 +63,20 @@ export class UpdateProfileInput {
     avatar?: string;
 }
 
+export class LoginInput {
+    email: string;
+    password: string;
+}
+
 export class CreateUserInput {
     email?: string;
     fullName?: string;
     isAdmin?: boolean;
+}
+
+export class ChangePasswordInput {
+    old?: string;
+    new?: string;
 }
 
 export class DeleteUserInput {
@@ -75,10 +98,6 @@ export class RegisterUserInput {
     password?: string;
 }
 
-export class Credential {
-    email?: string;
-}
-
 export class Permission {
     _id?: string;
     name?: string;
@@ -87,6 +106,10 @@ export class Permission {
 
 export abstract class IQuery {
     abstract permissions(): Permission[] | Promise<Permission[]>;
+
+    abstract plans(): Plan[] | Promise<Plan[]>;
+
+    abstract publishedPlans(): Plan[] | Promise<Plan[]>;
 
     abstract users(): User[] | Promise<User[]>;
 
@@ -99,6 +122,16 @@ export abstract class IMutation {
     abstract updatePermission(input?: UpdatePermissionInput): Permission | Promise<Permission>;
 
     abstract deletePermission(input?: DeletePermissionInput): boolean | Promise<boolean>;
+
+    abstract createDraftPlan(input?: CreateDraftPlanInput): Plan | Promise<Plan>;
+
+    abstract updateDraftPlan(input?: UpdateDraftPlanInput): Plan | Promise<Plan>;
+
+    abstract deleteDraftPlan(ids?: string[]): boolean | Promise<boolean>;
+
+    abstract publishPlan(id?: string): Plan | Promise<Plan>;
+
+    abstract suppressPlan(id?: string): Plan | Promise<Plan>;
 
     abstract updateUserProfile(input?: UpdateProfileInput): Profile | Promise<Profile>;
 
@@ -117,6 +150,16 @@ export abstract class IMutation {
     abstract deleteUser(input?: DeleteUserInput): boolean | Promise<boolean>;
 }
 
+export class Plan {
+    _id?: string;
+    name?: string;
+    duration?: number;
+    price?: number;
+    numShop?: number;
+    state?: PlanState;
+    description?: string;
+}
+
 export class Profile {
     dob?: number;
     fullName?: string;
@@ -130,6 +173,10 @@ export class User {
     isAdmin?: boolean;
     profile?: Profile;
     credential?: Credential;
+}
+
+export class Credential {
+    email?: string;
 }
 
 export class LoginResponse {

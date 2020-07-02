@@ -1,0 +1,45 @@
+type Plan{
+  _id: String
+  name: String
+  duration: Int
+  price: Float
+  numShop: Int
+  state: PlanState
+  description: String
+}
+
+enum PlanState{
+  DRAFT
+  PUBLISHED
+  SUPPRESSED
+}
+
+type Query{
+  plans: [Plan] @Admin
+  publishedPlans: [Plan]
+}
+
+type Mutation{
+  createDraftPlan(input: CreateDraftPlanInput): Plan @Admin
+  updateDraftPlan(input: UpdateDraftPlanInput): Plan @Admin
+  deleteDraftPlan(ids: [String]): Boolean @Admin
+  publishPlan(id: String): Plan @Admin
+  suppressPlan(id: String): Plan @Admin
+}
+
+input CreateDraftPlanInput{
+  name: String
+  duration: Int
+  price: Float
+  numShop: Int
+  description: String
+}
+
+input UpdateDraftPlanInput{
+  _id: String
+  name: String
+  duration: Int
+  price: Float
+  numShop: Int
+  description: String
+}
