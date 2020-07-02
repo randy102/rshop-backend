@@ -6,7 +6,7 @@ import { Permission, CreatePermissionInput, UpdatePermissionInput } from 'src/gr
 
 @Injectable()
 export class PermissionService extends RootService<PermissionEntity> {
-  constructor() { super(PermissionEntity, 'Permission') }
+  constructor() { super(PermissionEntity, 'Quyền') }
 
   async create(input: CreatePermissionInput, createdBy: string) {
     await this.checkDuplication({ name: input.name })

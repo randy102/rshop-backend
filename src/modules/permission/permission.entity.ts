@@ -18,22 +18,8 @@ export default class PermissionEntity extends RootEntity<PermissionEntity>{
   @Column()
   description: string
 
-  @Expose()
-  @Column()
-  createdAt: number
-  
-  @Expose()
-  @Column()
-  createdBy: string
-
-
   constructor(permission: Partial<PermissionEntity>){
     super(permission, PermissionEntity)
-    // if(permission){
-    //   Object.assign(this, plainToClass(PermissionEntity, permission, {excludeExtraneousValues: true}))
-
-    //   this._id = this._id || uuidv4()
-    //   this.createdAt = this.createdAt || moment().valueOf()
-    // }
+    
   }
 }

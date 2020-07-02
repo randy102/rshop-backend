@@ -13,7 +13,7 @@ export class PermissionResolver {
   }
 
   @Mutation()
-  createPermission(@Context('currentAccount') admin: UserEntity, @Args('input') input: CreatePermissionInput): Promise<Permission> {
+  createPermission(@Context('user') admin: UserEntity, @Args('input') input: CreatePermissionInput): Promise<Permission> {
     return this.permissionService.create(input, admin._id)
   }
 

@@ -24,7 +24,7 @@ type Query{
 }
 
 type Mutation{
-  createPermission(input: CreatePermissionInput): Permission @Auth @Has(type: ADMIN)
-  updatePermission(input: UpdatePermissionInput): Permission @Auth @Has(type: ADMIN)
-  deletePermission(input: DeletePermissionInput): Boolean @Auth @Has(type: ADMIN)
+  createPermission(input: CreatePermissionInput): Permission @Admin
+  updatePermission(input: UpdatePermissionInput): Permission @Admin
+  deletePermission(input: DeletePermissionInput): Boolean @Admin
 }
