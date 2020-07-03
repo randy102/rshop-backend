@@ -1,0 +1,29 @@
+type Contract{
+  _id: String
+  user: User
+  plan: Plan
+  expDate: Float #CreatedAt + Plan.duration
+  signDate: Float
+}
+
+type Query{
+  contracts: [Contract] @Admin
+  activeContract: Contract @Auth #Get acitve contract is being used by user
+  userContracts: [Contract] @Auth #Get all user's contracts
+}
+
+type Mutation{
+  signContract(input: SignContractInput): Contract @Auth #User sign contract
+  createContract(input: CreateContractInput): Contract @Admin #Admin create contract for user
+}
+
+input SignContractInput{
+  idPlan: String
+  
+}
+
+input CreateContractInput{
+  idPlan: String
+  idUser: String
+  
+}

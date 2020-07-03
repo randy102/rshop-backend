@@ -19,10 +19,6 @@ export class PlanEntity extends RootEntity<PlanEntity>{
 
   @Expose()
   @Column()
-  numShop: number
-
-  @Expose()
-  @Column()
   state: PlanState
 
   @Expose()

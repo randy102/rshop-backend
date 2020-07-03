@@ -7,28 +7,28 @@ import { GraphQLError } from 'graphql';
 @Injectable()
 export class PlanService extends RootService<PlanEntity>{
   constructor() {
-    super(PlanEntity,'Gói')
+    super(PlanEntity, 'Gói')
   }
 
-  getPublished(): Promise<PlanEntity[]>{
-    return this.find({state: PlanState.PUBLISHED})
+  getPublished(): Promise<PlanEntity[]> {
+    return this.find({ state: PlanState.PUBLISHED })
   }
 
-  async createDraft(input: CreateDraftPlanInput, createdBy: string): Promise<PlanEntity>{
-    await this.checkDuplication({name: input.name})
+  async createDraft(input: CreateDraftPlanInput, createdBy: string): Promise<PlanEntity> {
+    await this.checkDuplication({ name: input.name })
     return this.save(new PlanEntity({
       ...input,
       createdBy
     }))
   }
 
-  async updateDraft(input: UpdateDraftPlanInput, updatedBy: string): Promise<PlanEntity>{
+  async updateDraft(input: UpdateDraftPlanInput, updatedBy: string): Promise<PlanEntity> {
     var existed = await this.checkExistedId(input._id)
 
-    if(existed.state !== PlanState.DRAFT) 
+    if (existed.state !== PlanState.DRAFT)
       throw new GraphQLError('Chỉ có thể sửa gói ở trạng thái nháp!')
 
-    await this.checkDuplication({name: input.name, _id: {$ne: input._id}})
+    await this.checkDuplication({ name: input.name, _id: { $ne: input._id } })
 
     return this.save(new PlanEntity({
       ...existed,
@@ -37,15 +37,15 @@ export class PlanService extends RootService<PlanEntity>{
     }))
   }
 
-  async deleteDraft(ids: string[]): Promise<boolean>{
-    var notDraft = await this.find({_id: {$in: ids}, state: {$ne: PlanState.DRAFT}})
-    if(notDraft.length > 0)
+  async deleteDraft(ids: string[]): Promise<boolean> {
+    var notDraft = await this.find({ _id: { $in: ids }, state: { $ne: PlanState.DRAFT } })
+    if (notDraft.length > 0)
       throw new GraphQLError('Chỉ có thể xóa gói ở trạng thái nháp')
-      
+
     return this.delete(ids)
   }
 
-  async publish(id: string, updatedBy: string): Promise<PlanEntity>{
+  async publish(id: string, updatedBy: string): Promise<PlanEntity> {
     var existed = await this.checkExistedId(id)
 
     return this.save(new PlanEntity({
@@ -55,7 +55,7 @@ export class PlanService extends RootService<PlanEntity>{
     }))
   }
 
-  async suppress(id: string, updatedBy: string): Promise<PlanEntity>{
+  async suppress(id: string, updatedBy: string): Promise<PlanEntity> {
     var existed = await this.checkExistedId(id)
 
     return this.save(new PlanEntity({
@@ -63,5 +63,14 @@ export class PlanService extends RootService<PlanEntity>{
       state: PlanState.SUPPRESSED,
       updatedBy
     }))
+  }
+
+  async checkActive(id: string): Promise<PlanEntity> {
+    var plan = await this.checkExistedId(id)
+
+    if (plan.state !== PlanState.PUBLISHED)
+      throw new GraphQLError('Gói không khả dụng. Vui lòng thử lại sau')
+
+    return plan
   }
 }

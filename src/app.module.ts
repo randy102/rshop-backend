@@ -18,6 +18,7 @@ import { AuthService } from './modules/auth/auth.service';
 import { ProfileModule } from './modules/profile/profile.module';
 import { PhotoModule } from './modules/photo/photo.module';
 import { PlanModule } from './modules/plan/plan.module';
+import { ContractModule } from './modules/contract/contract.module';
 
 
 
@@ -42,6 +43,7 @@ import { PlanModule } from './modules/plan/plan.module';
     ProfileModule,
     PhotoModule,
     PlanModule,
+    ContractModule,
   ],
 })
 export class AppModule { }

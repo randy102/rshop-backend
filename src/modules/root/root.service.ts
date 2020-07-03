@@ -1,4 +1,4 @@
-import { getMongoRepository, MongoRepository } from "typeorm"
+import { getMongoRepository, MongoRepository, ObjectLiteral } from "typeorm"
 import { DuplicateError, NotFoundError } from "src/commons/exceptions/GqlException"
 import { RootEntity } from "./root.entity"
 
@@ -48,5 +48,9 @@ export default class RootService<E extends RootEntity<E>>{
 
   checkExistedId(id: string): Promise<E>{
     return this.checkExisted({_id:id}, this.Name)
+  }
+
+  aggregate(pipe: ObjectLiteral[]): Promise<any[]>{
+    return getMongoRepository<E>(this.Entity).aggregate(pipe).toArray()
   }
 }

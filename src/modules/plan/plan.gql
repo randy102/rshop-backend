@@ -3,7 +3,6 @@ type Plan{
   name: String
   duration: Int
   price: Float
-  numShop: Int
   state: PlanState
   description: String
 }
@@ -31,7 +30,6 @@ input CreateDraftPlanInput{
   name: String
   duration: Int
   price: Float
-  numShop: Int
   description: String
 }
 
@@ -40,6 +38,5 @@ input UpdateDraftPlanInput{
   name: String
   duration: Int
   price: Float
-  numShop: Int
   description: String
 }

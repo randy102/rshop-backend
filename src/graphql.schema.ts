@@ -23,6 +23,15 @@ export enum PERMISSION {
     STAFF = "STAFF"
 }
 
+export class SignContractInput {
+    idPlan?: string;
+}
+
+export class CreateContractInput {
+    idPlan?: string;
+    idUser?: string;
+}
+
 export class CreatePermissionInput {
     name: string;
     description?: string;
@@ -42,7 +51,6 @@ export class CreateDraftPlanInput {
     name?: string;
     duration?: number;
     price?: number;
-    numShop?: number;
     description?: string;
 }
 
@@ -51,7 +59,6 @@ export class UpdateDraftPlanInput {
     name?: string;
     duration?: number;
     price?: number;
-    numShop?: number;
     description?: string;
 }
 
@@ -98,13 +105,21 @@ export class RegisterUserInput {
     password?: string;
 }
 
-export class Permission {
+export class Contract {
     _id?: string;
-    name?: string;
-    description?: string;
+    user?: User;
+    plan?: Plan;
+    expDate?: number;
+    signDate?: number;
 }
 
 export abstract class IQuery {
+    abstract contracts(): Contract[] | Promise<Contract[]>;
+
+    abstract activeContract(): Contract | Promise<Contract>;
+
+    abstract userContracts(): Contract[] | Promise<Contract[]>;
+
     abstract permissions(): Permission[] | Promise<Permission[]>;
 
     abstract plans(): Plan[] | Promise<Plan[]>;
@@ -117,6 +132,10 @@ export abstract class IQuery {
 }
 
 export abstract class IMutation {
+    abstract signContract(input?: SignContractInput): Contract | Promise<Contract>;
+
+    abstract createContract(input?: CreateContractInput): Contract | Promise<Contract>;
+
     abstract createPermission(input?: CreatePermissionInput): Permission | Promise<Permission>;
 
     abstract updatePermission(input?: UpdatePermissionInput): Permission | Promise<Permission>;
@@ -150,12 +169,17 @@ export abstract class IMutation {
     abstract deleteUser(input?: DeleteUserInput): boolean | Promise<boolean>;
 }
 
+export class Permission {
+    _id?: string;
+    name?: string;
+    description?: string;
+}
+
 export class Plan {
     _id?: string;
     name?: string;
     duration?: number;
     price?: number;
-    numShop?: number;
     state?: PlanState;
     description?: string;
 }
