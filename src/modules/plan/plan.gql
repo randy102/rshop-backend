@@ -5,6 +5,7 @@ type Plan{
   price: Float
   state: PlanState
   description: String
+  createdAt: Float
 }
 
 enum PlanState{

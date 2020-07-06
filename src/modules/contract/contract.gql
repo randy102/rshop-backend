@@ -19,7 +19,6 @@ type Mutation{
 
 input SignContractInput{
   idPlan: String
-  
 }
 
 input CreateContractInput{

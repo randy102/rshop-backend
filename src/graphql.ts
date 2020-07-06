@@ -70,6 +70,36 @@ export class UpdateProfileInput {
     avatar?: string;
 }
 
+export class CreateShopInput {
+    name?: string;
+    domain?: string;
+    idTemplate?: string;
+    brandImg?: string;
+}
+
+export class UpdateShopInput {
+    _id?: string;
+    name?: string;
+    domain?: string;
+    idTemplate?: string;
+    brandImg?: string;
+    isActive?: boolean;
+}
+
+export class CreateTemplateInput {
+    name?: string;
+    code?: string;
+    isActive?: boolean;
+    demoImg?: string;
+}
+
+export class UpdateTemplateInput {
+    _id?: string;
+    name?: string;
+    isActive?: boolean;
+    demoImg?: string;
+}
+
 export class LoginInput {
     email: string;
     password: string;
@@ -126,6 +156,16 @@ export abstract class IQuery {
 
     abstract publishedPlans(): Plan[] | Promise<Plan[]>;
 
+    abstract shops(): Shop[] | Promise<Shop[]>;
+
+    abstract userShop(): Shop[] | Promise<Shop[]>;
+
+    abstract shopByDomain(domain?: string): Shop | Promise<Shop>;
+
+    abstract templates(): Template[] | Promise<Template[]>;
+
+    abstract activeTemplates(): Template[] | Promise<Template[]>;
+
     abstract users(): User[] | Promise<User[]>;
 
     abstract currentUser(): User | Promise<User>;
@@ -153,6 +193,14 @@ export abstract class IMutation {
     abstract suppressPlan(id?: string): Plan | Promise<Plan>;
 
     abstract updateUserProfile(input?: UpdateProfileInput): Profile | Promise<Profile>;
+
+    abstract createShop(input?: CreateShopInput): Shop | Promise<Shop>;
+
+    abstract updateShop(input?: UpdateShopInput): Shop | Promise<Shop>;
+
+    abstract createTemplate(input?: CreateTemplateInput): Template | Promise<Template>;
+
+    abstract updateTemplate(input?: UpdateTemplateInput): Template | Promise<Template>;
 
     abstract loginUser(input?: LoginInput): LoginResponse | Promise<LoginResponse>;
 
@@ -182,6 +230,7 @@ export class Plan {
     price?: number;
     state?: PlanState;
     description?: string;
+    createdAt?: number;
 }
 
 export class Profile {
@@ -190,6 +239,31 @@ export class Profile {
     address?: string;
     phone?: string;
     avatar?: string;
+}
+
+export class Role {
+    _id?: string;
+    shop?: Shop;
+    permission?: Permission[];
+    name?: string;
+    isMaster?: boolean;
+    description?: string;
+}
+
+export class Shop {
+    _id?: string;
+    name?: string;
+    domain?: string;
+    isActive?: boolean;
+    template?: Template;
+}
+
+export class Template {
+    _id?: string;
+    name?: string;
+    code?: string;
+    isActive?: boolean;
+    demoImg?: string;
 }
 
 export class User {

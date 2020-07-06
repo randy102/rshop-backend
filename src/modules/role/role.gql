@@ -1,0 +1,8 @@
+type Role{
+  _id: String
+  shop: Shop
+  permission: [Permission]
+  name: String
+  isMaster: Boolean
+  description: String
+}

@@ -1,0 +1,36 @@
+type Shop{
+  _id: String
+  name: String
+  domain: String
+  isActive: Boolean
+
+  template: Template
+}
+
+
+type Query{
+  shops: [Shop] @Admin #Get all shop
+  userShop: [Shop] @Auth #Get user's shop
+  shopByDomain(domain: String): Shop
+}
+
+type Mutation{
+  createShop(input: CreateShopInput): Shop @Auth
+  updateShop(input: UpdateShopInput): Shop @Auth
+}
+
+input CreateShopInput{
+  name: String
+  domain: String
+  idTemplate: String
+  brandImg: String
+}
+
+input UpdateShopInput{
+  _id: String
+  name: String
+  domain: String
+  idTemplate: String
+  brandImg: String
+  isActive: Boolean
+}

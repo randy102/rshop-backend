@@ -1,0 +1,31 @@
+type Template{
+  _id: String
+  name: String
+  code: String
+  isActive: Boolean
+  demoImg: String
+}
+
+type Query{
+  templates: [Template] @Admin
+  activeTemplates: [Template]
+}
+
+type Mutation{
+  createTemplate(input: CreateTemplateInput): Template @Admin
+  updateTemplate(input: UpdateTemplateInput): Template @Admin
+}
+
+input CreateTemplateInput{
+  name: String
+  code: String
+  isActive: Boolean
+  demoImg: String
+}
+
+input UpdateTemplateInput{
+  _id: String
+  name: String
+  isActive: Boolean
+  demoImg: String
+}

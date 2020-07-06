@@ -19,6 +19,9 @@ import { ProfileModule } from './modules/profile/profile.module';
 import { PhotoModule } from './modules/photo/photo.module';
 import { PlanModule } from './modules/plan/plan.module';
 import { ContractModule } from './modules/contract/contract.module';
+import { RoleModule } from './modules/role/role.module';
+import { ShopModule } from './modules/shop/shop.module';
+import { TemplateModule } from './modules/template/template.module';
 
 
 
@@ -44,6 +47,9 @@ import { ContractModule } from './modules/contract/contract.module';
     PhotoModule,
     PlanModule,
     ContractModule,
+    RoleModule,
+    ShopModule,
+    TemplateModule,
   ],
 })
 export class AppModule { }

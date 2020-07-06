@@ -23,7 +23,7 @@ export class PlanService extends RootService<PlanEntity>{
   }
 
   async updateDraft(input: UpdateDraftPlanInput, updatedBy: string): Promise<PlanEntity> {
-    var existed = await this.checkExistedId(input._id)
+    const existed = await this.checkExistedId(input._id)
 
     if (existed.state !== PlanState.DRAFT)
       throw new GraphQLError('Chỉ có thể sửa gói ở trạng thái nháp!')
@@ -38,7 +38,7 @@ export class PlanService extends RootService<PlanEntity>{
   }
 
   async deleteDraft(ids: string[]): Promise<boolean> {
-    var notDraft = await this.find({ _id: { $in: ids }, state: { $ne: PlanState.DRAFT } })
+    const notDraft = await this.find({ _id: { $in: ids }, state: { $ne: PlanState.DRAFT } })
     if (notDraft.length > 0)
       throw new GraphQLError('Chỉ có thể xóa gói ở trạng thái nháp')
 
@@ -46,7 +46,7 @@ export class PlanService extends RootService<PlanEntity>{
   }
 
   async publish(id: string, updatedBy: string): Promise<PlanEntity> {
-    var existed = await this.checkExistedId(id)
+    const existed = await this.checkExistedId(id)
 
     return this.save(new PlanEntity({
       ...existed,
@@ -56,7 +56,7 @@ export class PlanService extends RootService<PlanEntity>{
   }
 
   async suppress(id: string, updatedBy: string): Promise<PlanEntity> {
-    var existed = await this.checkExistedId(id)
+    const existed = await this.checkExistedId(id)
 
     return this.save(new PlanEntity({
       ...existed,
@@ -66,7 +66,7 @@ export class PlanService extends RootService<PlanEntity>{
   }
 
   async checkActive(id: string): Promise<PlanEntity> {
-    var plan = await this.checkExistedId(id)
+    const plan = await this.checkExistedId(id)
 
     if (plan.state !== PlanState.PUBLISHED)
       throw new GraphQLError('Gói không khả dụng. Vui lòng thử lại sau')

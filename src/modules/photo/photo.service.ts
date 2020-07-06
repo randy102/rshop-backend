@@ -36,7 +36,7 @@ export class PhotoService {
   }
 
   remove(id: string): Promise<boolean>{
-    var params = {
+    const params = {
       Bucket: this.BUCKET_NAME,
       Key: id
     }

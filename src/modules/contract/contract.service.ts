@@ -40,7 +40,7 @@ export class ContractService extends RootService<ContractEntity>{
   async getActive(idUser: string): Promise<ContractEntity>{
     await this.userService.checkExistedId(idUser)
 
-    var userContracts = await this.aggregate([
+    const userContracts = await this.aggregate([
       {
         $match: {idUser}
       },
@@ -69,8 +69,8 @@ export class ContractService extends RootService<ContractEntity>{
    * @returns {number} contract's expired date
    */
   async getExpDate(idContract: string): Promise<number>{
-    var contract = await this.findById(idContract)
-    var plan = await this.planService.findById(contract.idPlan)
+    const contract = await this.findById(idContract)
+    const plan = await this.planService.findById(contract.idPlan)
     return Moment(contract.signDate).add(plan.duration, 'day').valueOf()
   }
 
@@ -94,7 +94,7 @@ export class ContractService extends RootService<ContractEntity>{
    */
 
   async checkDuplicatedSignDate(idUser: string){
-    var existActive = await this.getActive(idUser)
+    const existActive = await this.getActive(idUser)
     
     if(existActive)
       throw new GraphQLError('Hợp đồng hiện tại đang có hiệu lực. Không thể đăng ký gói mới')
