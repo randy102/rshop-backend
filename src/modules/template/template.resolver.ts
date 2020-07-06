@@ -28,4 +28,9 @@ export class TemplateResolver {
   updateTemplate(@Context('user') u: UserEntity, @Args('input') i: UpdateTemplateInput): Promise<Template>{
     return this.templateService.update(i,u._id)
   }
+
+  @Mutation()
+  deleteTemplate(@Args('id') id: string): Promise<boolean>{
+    return this.templateService.deleteTemplate(id)
+  }
 }

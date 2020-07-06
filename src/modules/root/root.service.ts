@@ -34,10 +34,8 @@ export default class RootService<E extends RootEntity<E>>{
   }
 
   async checkDuplication(query: any, subject?: string): Promise<void>{
-    const subjectStr = subject ? ` [${subject}]` : ''
-
     const existed = await this.findOne(query)
-    if(existed) throw new DuplicateError(this.Name+subjectStr)
+    if(existed) throw new DuplicateError(subject || this.Name)
   }
 
   async checkExisted(query: any, subject: string): Promise<E>{

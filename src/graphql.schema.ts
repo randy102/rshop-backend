@@ -202,6 +202,8 @@ export abstract class IMutation {
 
     abstract updateTemplate(input?: UpdateTemplateInput): Template | Promise<Template>;
 
+    abstract deleteTemplate(id?: string): boolean | Promise<boolean>;
+
     abstract loginUser(input?: LoginInput): LoginResponse | Promise<LoginResponse>;
 
     abstract requestEmailConfirm(input?: RequestEmailConfirmInput): string | Promise<string>;

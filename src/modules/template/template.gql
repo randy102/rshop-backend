@@ -14,6 +14,7 @@ type Query{
 type Mutation{
   createTemplate(input: CreateTemplateInput): Template @Admin
   updateTemplate(input: UpdateTemplateInput): Template @Admin
+  deleteTemplate(id: String): Boolean @Admin
 }
 
 input CreateTemplateInput{
