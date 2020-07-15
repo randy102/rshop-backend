@@ -17,17 +17,18 @@ export class ContractService extends RootService<ContractEntity>{
     super(ContractEntity, 'Hợp đồng')
   }
 
-  async sign(input: SignContractInput, idUser: string): Promise<ContractEntity>{
+  async sign(input: SignContractInput, idUser: string): Promise<ContractEntity> {
     await this.planService.checkActive(input.idPlan)
     await this.checkDuplicatedSignDate(idUser)
-    
+    await this.checkRegisteredFreePlan(idUser, input.idPlan)
+
     return this.save(new ContractEntity({
       ...input,
       idUser
     }))
   }
 
-  async create(input: CreateContractInput, createdBy: string): Promise<ContractEntity>{
+  async create(input: CreateContractInput, createdBy: string): Promise<ContractEntity> {
     await this.planService.checkActive(input.idPlan)
     await this.checkDuplicatedSignDate(input.idUser)
 
@@ -37,12 +38,12 @@ export class ContractService extends RootService<ContractEntity>{
     }))
   }
 
-  async getActive(idUser: string): Promise<ContractEntity>{
+  async getActive(idUser: string): Promise<ContractEntity> {
     await this.userService.checkExistedId(idUser)
 
     const userContracts = await this.aggregate([
       {
-        $match: {idUser}
+        $match: { idUser }
       },
       {
         $lookup: {
@@ -52,10 +53,10 @@ export class ContractService extends RootService<ContractEntity>{
           as: 'plan'
         }
       },
-      {$unwind: {path: '$plan', preserveNullAndEmptyArrays: true}}
+      { $unwind: { path: '$plan', preserveNullAndEmptyArrays: true } }
     ])
 
-    return userContracts.find(contract => {
+    return userContracts.length && userContracts.find(contract => {
       let now = Moment().valueOf()
       let expDate = Moment(contract.signDate).add(contract.plan.duration, 'day').valueOf()
       return now <= expDate
@@ -64,11 +65,10 @@ export class ContractService extends RootService<ContractEntity>{
 
 
   /**
-   * 
    * @param idContract contract id
    * @returns {number} contract's expired date
    */
-  async getExpDate(idContract: string): Promise<number>{
+  async getExpDate(idContract: string): Promise<number> {
     const contract = await this.findById(idContract)
     const plan = await this.planService.findById(contract.idPlan)
     return Moment(contract.signDate).add(plan.duration, 'day').valueOf()
@@ -80,23 +80,50 @@ export class ContractService extends RootService<ContractEntity>{
    * @param idUser user id
    * @returns {ContractEntity[]} all contracts of user
    */
-  async byUser(idUser): Promise<ContractEntity[]>{
+  async byUser(idUser): Promise<ContractEntity[]> {
     await this.userService.checkExistedId(idUser)
-    return this.find({idUser})
+    return this.find({ idUser })
   }
 
 
   /**
-   * 
    * @param idUser user id
    * @description Check if user is having an active contract
-   * 
    */
-
-  async checkDuplicatedSignDate(idUser: string){
+  async checkDuplicatedSignDate(idUser: string) {
     const existActive = await this.getActive(idUser)
-    
-    if(existActive)
+
+    if (existActive)
       throw new GraphQLError('Hợp đồng hiện tại đang có hiệu lực. Không thể đăng ký gói mới')
+  }
+
+
+  /**
+   * @param idUser user id
+   * @param idPlan plan to register
+   * @description Check if user did register free plan
+   */
+  async checkRegisteredFreePlan(idUser: string, idPlan: string) {
+    const plan = await this.planService.findById(idPlan)
+    if (plan.price === 0) {
+      const userRegistered = await this.aggregate([
+        {
+          $match: { idUser }
+        },
+        {
+          $lookup: {
+            from: 'Plan',
+            localField: 'idPlan',
+            foreignField: '_id',
+            as: 'plan'
+          }
+        },
+        { $unwind: { path: '$plan', preserveNullAndEmptyArrays: true } }
+      ])
+
+      if(userRegistered.some(({plan}) => plan.price === 0)){
+        throw new GraphQLError("Gói dùng thử chỉ được đăng ký một lần")
+      }
+    }
   }
 }

@@ -6,3 +6,23 @@ type Role{
   isMaster: Boolean
   description: String
 }
+
+type Mutation{
+  createRole(input: CreateRoleInput): Boolean
+  updateRole(input: UpdateRoleInput): Boolean
+}
+
+input CreateRoleInput{
+  idShop: String
+  idUser: String
+  idPermissions: [String]
+  name: String
+  description: String
+}
+
+input UpdateRoleInput{
+  _id: String
+  idPermissions: [String]
+  name: String
+  description: String
+}

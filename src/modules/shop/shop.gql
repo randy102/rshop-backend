@@ -4,6 +4,7 @@ type Shop{
   domain: String
   isActive: Boolean
 
+  master: User
   template: Template
 }
 

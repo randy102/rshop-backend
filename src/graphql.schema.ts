@@ -257,6 +257,7 @@ export class Shop {
     name?: string;
     domain?: string;
     isActive?: boolean;
+    master?: User;
     template?: Template;
 }
 

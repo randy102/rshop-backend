@@ -70,6 +70,21 @@ export class UpdateProfileInput {
     avatar?: string;
 }
 
+export class CreateRoleInput {
+    idShop?: string;
+    idUser?: string;
+    idPermissions?: string[];
+    name?: string;
+    description?: string;
+}
+
+export class UpdateRoleInput {
+    _id?: string;
+    idPermissions?: string[];
+    name?: string;
+    description?: string;
+}
+
 export class CreateShopInput {
     name?: string;
     domain?: string;
@@ -194,6 +209,10 @@ export abstract class IMutation {
 
     abstract updateUserProfile(input?: UpdateProfileInput): Profile | Promise<Profile>;
 
+    abstract createRole(input?: CreateRoleInput): boolean | Promise<boolean>;
+
+    abstract updateRole(input?: UpdateRoleInput): boolean | Promise<boolean>;
+
     abstract createShop(input?: CreateShopInput): Shop | Promise<Shop>;
 
     abstract updateShop(input?: UpdateShopInput): Shop | Promise<Shop>;
@@ -257,6 +276,7 @@ export class Shop {
     name?: string;
     domain?: string;
     isActive?: boolean;
+    master?: User;
     template?: Template;
 }
 
