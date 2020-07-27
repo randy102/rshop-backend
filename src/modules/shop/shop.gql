@@ -3,7 +3,8 @@ type Shop{
   name: String
   domain: String
   isActive: Boolean
-
+  brandImg: String
+  
   master: User
   template: Template
 }
@@ -11,7 +12,7 @@ type Shop{
 
 type Query{
   shops: [Shop] @Admin #Get all shop
-  userShop: [Shop] @Auth #Get user's shop
+  userShops: [Shop] @Auth #Get user's shop
   shopByDomain(domain: String): Shop
 }
 

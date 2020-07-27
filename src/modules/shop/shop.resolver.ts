@@ -1,13 +1,41 @@
-import { Resolver, Mutation, Args, Context } from '@nestjs/graphql';
+import { Resolver, Mutation, Args, Context, Query, ResolveField, Parent } from '@nestjs/graphql';
 import UserEntity from '../user/user.entity';
-import { CreateShopInput, Shop, UpdateShopInput } from 'src/graphql.schema';
+import { CreateShopInput, Shop, UpdateShopInput, User, Template } from 'src/graphql.schema';
 import { ShopService } from './shop.service';
+import { ShopEntity } from './shop.entity';
+import { TemplateService } from '../template/template.service';
 
 @Resolver('Shop')
 export class ShopResolver {
   constructor(
-    private readonly shopService: ShopService
+    private readonly shopService: ShopService,
+    private readonly templateService: TemplateService
   ){}
+
+  @ResolveField()
+  master(@Parent() shop: ShopEntity): Promise<User>{
+    return this.shopService.getShopMaster(shop._id)
+  }
+
+  @ResolveField()
+  template(@Parent() shop: ShopEntity): Promise<Template>{
+    return this.templateService.findById(shop.idTemplate)
+  }
+
+  @Query()
+  userShops(@Context('user') u: UserEntity): Promise<Shop[]>{
+    return this.shopService.userShops(u._id)
+  }
+
+  @Query()
+  shopByDomain(@Args('domain') domain: string): Promise<Shop>{
+    return this.shopService.findOne({domain})
+  }
+
+  @Query()
+  shops(@Args('domain') domain: string): Promise<Shop[]>{
+    return this.shopService.find()
+  }
 
   @Mutation()
   createShop(@Context('user') u: UserEntity, @Args('input') i: CreateShopInput): Promise<Shop>{

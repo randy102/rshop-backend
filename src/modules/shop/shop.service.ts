@@ -4,6 +4,8 @@ import { ShopEntity } from './shop.entity';
 import { CreateShopInput, UpdateShopInput } from 'src/graphql.schema';
 import { RoleService } from '../role/role.service';
 import { RoleEntity } from '../role/role.entity';
+import { GraphQLError } from 'graphql';
+import UserEntity from '../user/user.entity';
 
 @Injectable()
 export class ShopService extends RootService<ShopEntity>{
@@ -14,6 +16,7 @@ export class ShopService extends RootService<ShopEntity>{
   }
 
   async create(input: CreateShopInput, master: string): Promise<ShopEntity>{
+    await this.checkLimitShop(master)
     await this.checkDuplication({domain: input.domain},'Tên miền')
     const createdShop = await this.save(new ShopEntity({
       ...input,
@@ -31,5 +34,46 @@ export class ShopService extends RootService<ShopEntity>{
       ...input,
       updatedBy
     }))
+  }
+
+  userShops(idUser: string): Promise<ShopEntity[]>{
+    const pipe = [
+      {$match: {idUser, isMaster: true}},
+      {
+        $lookup: {
+          from: 'Shop',
+          localField: 'idShop',
+          foreignField: '_id',
+          as: 'shop'
+        }
+      },
+      {$unwind: {path: '$shop'}},
+      {$replaceRoot: {newRoot: '$shop'}}
+    ]
+
+    return this.roleService.aggregate(pipe)
+  }
+
+  async checkLimitShop(idUser: string){
+    const LIMIT = 3
+    const userShops =  await this.userShops(idUser)
+    if(userShops.length >= LIMIT)
+      throw new GraphQLError(`Người dùng chỉ được tạo tối đa ${LIMIT} cửa hàng!`)
+  }
+
+  async getShopMaster(idShop: string): Promise<UserEntity>{
+    const pipe = [
+      {$match: {idShop, isMaster: true}},
+      {$lookup: {
+        from: 'User',
+        localField: 'idUser',
+        foreignField: '_id',
+        as: 'user'
+      }},
+      {$unwind: {path: '$user'}},
+      {$replaceRoot: {newRoot: '$user'}}
+    ]
+
+    return (await this.roleService.aggregate(pipe))[0]
   }
 }

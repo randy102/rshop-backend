@@ -70,6 +70,21 @@ export class UpdateProfileInput {
     avatar?: string;
 }
 
+export class CreateRoleInput {
+    idShop?: string;
+    idUser?: string;
+    idPermissions?: string[];
+    name?: string;
+    description?: string;
+}
+
+export class UpdateRoleInput {
+    _id?: string;
+    idPermissions?: string[];
+    name?: string;
+    description?: string;
+}
+
 export class CreateShopInput {
     name?: string;
     domain?: string;
@@ -158,7 +173,7 @@ export abstract class IQuery {
 
     abstract shops(): Shop[] | Promise<Shop[]>;
 
-    abstract userShop(): Shop[] | Promise<Shop[]>;
+    abstract userShops(): Shop[] | Promise<Shop[]>;
 
     abstract shopByDomain(domain?: string): Shop | Promise<Shop>;
 
@@ -193,6 +208,10 @@ export abstract class IMutation {
     abstract suppressPlan(id?: string): Plan | Promise<Plan>;
 
     abstract updateUserProfile(input?: UpdateProfileInput): Profile | Promise<Profile>;
+
+    abstract createRole(input?: CreateRoleInput): boolean | Promise<boolean>;
+
+    abstract updateRole(input?: UpdateRoleInput): boolean | Promise<boolean>;
 
     abstract createShop(input?: CreateShopInput): Shop | Promise<Shop>;
 
@@ -257,6 +276,7 @@ export class Shop {
     name?: string;
     domain?: string;
     isActive?: boolean;
+    brandImg?: string;
     master?: User;
     template?: Template;
 }

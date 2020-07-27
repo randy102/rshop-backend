@@ -173,7 +173,7 @@ export abstract class IQuery {
 
     abstract shops(): Shop[] | Promise<Shop[]>;
 
-    abstract userShop(): Shop[] | Promise<Shop[]>;
+    abstract userShops(): Shop[] | Promise<Shop[]>;
 
     abstract shopByDomain(domain?: string): Shop | Promise<Shop>;
 
@@ -276,6 +276,7 @@ export class Shop {
     name?: string;
     domain?: string;
     isActive?: boolean;
+    brandImg?: string;
     master?: User;
     template?: Template;
 }

@@ -26,5 +26,9 @@ export class ShopEntity extends RootEntity<ShopEntity>{
 
   constructor(shop: Partial<ShopEntity>) {
     super(shop, ShopEntity)
+    if(shop){
+      this.isActive = this.isActive === undefined ? true : this.isActive
+      this.brandImg = this.brandImg || process.env.S3_DEFAULT_BRAND
+    }
   }
 }

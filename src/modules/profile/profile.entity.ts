@@ -30,7 +30,7 @@ export default class ProfileEntity extends RootEntity<ProfileEntity>{
   constructor(profile: Partial<ProfileEntity>){
     super(profile, ProfileEntity)
     if(profile){
-      this.avatar = this.avatar || 'default'
+      this.avatar = this.avatar || process.env.S3_DEFAULT_AVATAR
     }
   }
 }

@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { TemplateResolver } from './template.resolver';
 import { TemplateService } from './template.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -7,9 +7,10 @@ import { ShopModule } from '../shop/shop.module';
 
 @Module({
   providers: [TemplateResolver, TemplateService],
+  exports: [TemplateService],
   imports: [
     TypeOrmModule.forFeature([TemplateEntity]),
-    ShopModule
+    forwardRef(() => ShopModule) 
   ]
 })
 export class TemplateModule {}

@@ -6,17 +6,14 @@ import { HashService } from '../utils/hash/hash.service';
 import { PhotoService } from './photo.service';
 import { File } from './photo.type';
 
+const DEFAULT_PHOTOS = ['default-avatar','default-brand']
+
 @Controller('api/photo')
 export class PhotoController {
   constructor(
-    private readonly hashService: HashService,
     private readonly photoService: PhotoService
   ) { }
 
-  @Get(':id')
-  getPhoto(@Param('id') id: string) {
-
-  }
 
   @Post()
   @UseInterceptors(FileInterceptor('file'))
@@ -26,7 +23,7 @@ export class PhotoController {
 
   @Delete()
   deletePhoto(@Body() body){
-    if(body.id === 'default') return true
+    if(DEFAULT_PHOTOS.some(p => p === body.id)) return true
     return this.photoService.remove(body.id)
   }
 }
