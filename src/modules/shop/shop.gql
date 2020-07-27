@@ -4,7 +4,7 @@ type Shop{
   domain: String
   isActive: Boolean
   brandImg: String
-  
+  createdAt: Float
   master: User
   template: Template
 }

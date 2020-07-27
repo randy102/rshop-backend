@@ -277,6 +277,7 @@ export class Shop {
     domain?: string;
     isActive?: boolean;
     brandImg?: string;
+    createdAt?: number;
     master?: User;
     template?: Template;
 }
