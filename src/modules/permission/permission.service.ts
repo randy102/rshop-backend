@@ -8,7 +8,7 @@ import { Permission, CreatePermissionInput, UpdatePermissionInput } from 'src/gr
 export class PermissionService extends RootService<PermissionEntity> {
   constructor() { super(PermissionEntity, 'Quyền') }
 
-  async create(input: CreatePermissionInput, createdBy: string) {
+  async create(input: CreatePermissionInput, createdBy: string): Promise<PermissionEntity> {
     await this.checkDuplication({ name: input.name })
 
     return this.save(new PermissionEntity({
@@ -17,7 +17,7 @@ export class PermissionService extends RootService<PermissionEntity> {
     }))
   }
 
-  async update(input: UpdatePermissionInput) {
+  async update(input: UpdatePermissionInput): Promise<PermissionEntity> {
     const existed: Permission = await this.checkExistedId(input._id)
 
     await this.checkDuplication({ name: input.name, _id: { $ne: input._id } })

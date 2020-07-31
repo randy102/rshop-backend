@@ -22,6 +22,8 @@ import { ContractModule } from './modules/contract/contract.module';
 import { RoleModule } from './modules/role/role.module';
 import { ShopModule } from './modules/shop/shop.module';
 import { TemplateModule } from './modules/template/template.module';
+import { BrandModule } from './modules/brand/brand.module';
+import { CategoryModule } from './modules/category/category.module';
 
 
 
@@ -50,6 +52,8 @@ import { TemplateModule } from './modules/template/template.module';
     RoleModule,
     ShopModule,
     TemplateModule,
+    BrandModule,
+    CategoryModule,
   ],
 })
 export class AppModule { }

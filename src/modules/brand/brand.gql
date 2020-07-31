@@ -1,0 +1,13 @@
+type Brand{
+  _id: String
+  name: String
+  createdAt: Float
+}
+
+type Query{
+  brands: [Brand]
+}
+
+type Mutation{
+  createBrand(name: String): Brand @Auth
+}

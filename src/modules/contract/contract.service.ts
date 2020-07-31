@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { ContractEntity } from './contract.entity';
 import RootService from '../root/root.service';
-import { SignContractInput } from 'src/graphql';
 import { PlanService } from '../plan/plan.service';
-import { PlanState, CreateContractInput, Contract } from 'src/graphql.schema';
+import { SignContractInput, CreateContractInput } from 'src/graphql.schema';
 import { GraphQLError } from 'graphql';
 import { UserService } from '../user/user.service';
 import { Moment } from 'src/utils/moment';
@@ -80,7 +79,7 @@ export class ContractService extends RootService<ContractEntity>{
    * @param idUser user id
    * @returns {ContractEntity[]} all contracts of user
    */
-  async byUser(idUser): Promise<ContractEntity[]> {
+  async byUser(idUser: string): Promise<ContractEntity[]> {
     await this.userService.checkExistedId(idUser)
     return this.find({ idUser })
   }

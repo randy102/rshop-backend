@@ -49,7 +49,7 @@ export class UserService extends AccountRootService<UserEntity> {
     }
   }
 
-  async create(input: CreateUserInput, createdBy: string) {
+  async create(input: CreateUserInput, createdBy: string): Promise<UserEntity> {
     await this.checkAccountDuplication(input.email)
     
     const DEFAULT_PASSWORD = '12345678'

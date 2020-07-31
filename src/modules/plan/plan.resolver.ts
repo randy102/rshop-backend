@@ -2,6 +2,7 @@ import { Resolver, Query, Mutation, Args, Context } from '@nestjs/graphql';
 import { PlanService } from './plan.service';
 import { Plan, CreateDraftPlanInput, UpdateDraftPlanInput } from 'src/graphql.schema';
 import UserEntity from '../user/user.entity';
+import { GQL_CTX } from 'src/commons/constants/gqlContext';
 
 @Resolver('Plan')
 export class PlanResolver {
@@ -18,12 +19,12 @@ export class PlanResolver {
   }
 
   @Mutation()
-  createDraftPlan(@Context('user') u: UserEntity, @Args('input') i: CreateDraftPlanInput): Promise<Plan>{
+  createDraftPlan(@Context(GQL_CTX.USER) u: UserEntity, @Args('input') i: CreateDraftPlanInput): Promise<Plan>{
     return this.planService.createDraft(i,u._id)
   }
 
   @Mutation()
-  updateDraftPlan(@Context('user') u: UserEntity, @Args('input') i: UpdateDraftPlanInput): Promise<Plan>{
+  updateDraftPlan(@Context(GQL_CTX.USER) u: UserEntity, @Args('input') i: UpdateDraftPlanInput): Promise<Plan>{
     return this.planService.updateDraft(i,u._id)
   }
 
@@ -33,12 +34,12 @@ export class PlanResolver {
   }
 
   @Mutation()
-  publishPlan(@Context('user') u: UserEntity, @Args('id') id: string): Promise<Plan>{
+  publishPlan(@Context(GQL_CTX.USER) u: UserEntity, @Args('id') id: string): Promise<Plan>{
     return this.planService.publish(id, u._id)
   }
 
   @Mutation()
-  suppressPlan(@Context('user') u: UserEntity, @Args('id') id: string): Promise<Plan>{
+  suppressPlan(@Context(GQL_CTX.USER) u: UserEntity, @Args('id') id: string): Promise<Plan>{
     return this.planService.suppress(id, u._id)
   }
 }

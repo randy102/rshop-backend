@@ -1,14 +1,3 @@
 directive @Auth on FIELD | FIELD_DEFINITION
-directive @Has(type: ACCOUNT_TYPE ,permissions: [PERMISSION]) on FIELD | FIELD_DEFINITION
 directive @Admin  on FIELD | FIELD_DEFINITION
-
-enum ACCOUNT_TYPE{
-  ADMIN
-  USER
-  CUSTOMER
-}
-
-enum PERMISSION{
-  STORE
-  STAFF
-}
+directive @Staff(with: String)  on FIELD | FIELD_DEFINITION

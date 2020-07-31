@@ -12,15 +12,14 @@ export enum PlanState {
     SUPPRESSED = "SUPPRESSED"
 }
 
-export enum ACCOUNT_TYPE {
-    ADMIN = "ADMIN",
-    USER = "USER",
-    CUSTOMER = "CUSTOMER"
+export class CreateCategoryInput {
+    idParent?: string;
+    name?: string;
 }
 
-export enum PERMISSION {
-    STORE = "STORE",
-    STAFF = "STAFF"
+export class UpdateCategoryInput {
+    _id?: string;
+    name?: string;
 }
 
 export class SignContractInput {
@@ -150,15 +149,17 @@ export class RegisterUserInput {
     password?: string;
 }
 
-export class Contract {
+export class Brand {
     _id?: string;
-    user?: User;
-    plan?: Plan;
-    expDate?: number;
-    signDate?: number;
+    name?: string;
+    createdAt?: number;
 }
 
 export abstract class IQuery {
+    abstract brands(): Brand[] | Promise<Brand[]>;
+
+    abstract categories(idShop?: string): Category[] | Promise<Category[]>;
+
     abstract contracts(): Contract[] | Promise<Contract[]>;
 
     abstract activeContract(): Contract | Promise<Contract>;
@@ -187,6 +188,14 @@ export abstract class IQuery {
 }
 
 export abstract class IMutation {
+    abstract createBrand(name?: string): Brand | Promise<Brand>;
+
+    abstract createCategory(idShop?: string, input?: CreateCategoryInput): Category | Promise<Category>;
+
+    abstract updateCategory(idShop?: string, input?: UpdateCategoryInput): Category | Promise<Category>;
+
+    abstract deleteCategory(idShop?: string, id?: string): boolean | Promise<boolean>;
+
     abstract signContract(input?: SignContractInput): Contract | Promise<Contract>;
 
     abstract createContract(input?: CreateContractInput): Contract | Promise<Contract>;
@@ -236,6 +245,20 @@ export abstract class IMutation {
     abstract updateAdmin(input?: UpdateAdminInput): User | Promise<User>;
 
     abstract deleteUser(input?: DeleteUserInput): boolean | Promise<boolean>;
+}
+
+export class Category {
+    _id?: string;
+    name?: string;
+    parent?: Category;
+}
+
+export class Contract {
+    _id?: string;
+    user?: User;
+    plan?: Plan;
+    expDate?: number;
+    signDate?: number;
 }
 
 export class Permission {

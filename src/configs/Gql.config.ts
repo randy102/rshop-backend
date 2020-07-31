@@ -2,7 +2,7 @@ import { join } from 'path'
 import { GqlModuleOptions } from '@nestjs/graphql';
 import schemaDirectives from '../commons/directives' 
 import { JwtService, AccountPayload } from 'src/modules/jwt/jwt.service';
-import { AuthService } from 'src/modules/auth/auth.service';
+import { AuthService, UserRole } from 'src/modules/auth/auth.service';
 import UserEntity from 'src/modules/user/user.entity';
 
 export default async function GqlConfigFactory(
@@ -16,23 +16,26 @@ export default async function GqlConfigFactory(
       return { currentAccount }
     }
 
+    const token = req.headers['token']
+    
     var user: UserEntity
-    var token = req.headers['token']
+    var roles: UserRole[]
 
     if(token) {
       const payload = await jwtService.verify(token)
 
       if(payload){
         const userEntity =  await authService.getCurrentAccount(payload._id)
-
+  
         if(userEntity && payload.credentialHash === userEntity.credentialHash){
           user = userEntity
+          roles = await authService.getUserRoles(payload._id)
         }
       }
     }
    
     return {
-      user
+      user, roles
     }
   }
 
@@ -40,7 +43,7 @@ export default async function GqlConfigFactory(
     typePaths: ['./**/*.gql'],
     context: contextHandler,
     definitions: {
-      path: join(process.cwd(), 'src/graphql.ts'),
+      path: join(process.cwd(), 'src/graphql.schema.ts'),
       outputAs: 'class',
     },
     schemaDirectives

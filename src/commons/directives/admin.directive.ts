@@ -1,7 +1,6 @@
 import { SchemaDirectiveVisitor } from 'graphql-tools'
 import { defaultFieldResolver } from 'graphql'
 import {AuthError, NoPermissionError} from '../exceptions/GqlException'
-import { ACCOUNT_TYPE, PERMISSION } from 'src/graphql.schema'
 import UserEntity from 'src/modules/user/user.entity'
 
 class AdminDirective extends SchemaDirectiveVisitor {

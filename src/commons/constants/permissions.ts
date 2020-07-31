@@ -1,0 +1,3 @@
+export enum MANAGE_PERMISSION{
+  PRODUCT
+}

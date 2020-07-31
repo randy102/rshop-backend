@@ -4,6 +4,7 @@ import { CreateShopInput, Shop, UpdateShopInput, User, Template } from 'src/grap
 import { ShopService } from './shop.service';
 import { ShopEntity } from './shop.entity';
 import { TemplateService } from '../template/template.service';
+import { GQL_CTX } from 'src/commons/constants/gqlContext';
 
 @Resolver('Shop')
 export class ShopResolver {
@@ -23,7 +24,7 @@ export class ShopResolver {
   }
 
   @Query()
-  userShops(@Context('user') u: UserEntity): Promise<Shop[]>{
+  userShops(@Context(GQL_CTX.USER) u: UserEntity): Promise<Shop[]>{
     return this.shopService.userShops(u._id)
   }
 
@@ -38,12 +39,12 @@ export class ShopResolver {
   }
 
   @Mutation()
-  createShop(@Context('user') u: UserEntity, @Args('input') i: CreateShopInput): Promise<Shop>{
+  createShop(@Context(GQL_CTX.USER) u: UserEntity, @Args('input') i: CreateShopInput): Promise<Shop>{
     return this.shopService.create(i,u._id)
   }
 
   @Mutation()
-  updateShop(@Context('user') u: UserEntity, @Args('input') i: UpdateShopInput): Promise<Shop>{
+  updateShop(@Context(GQL_CTX.USER) u: UserEntity, @Args('input') i: UpdateShopInput): Promise<Shop>{
     return this.shopService.update(i,u._id)
   }
 }

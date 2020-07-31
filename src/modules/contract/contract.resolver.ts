@@ -1,11 +1,11 @@
 import { Resolver, Mutation, Args, Context, Query, ResolveField, Parent } from '@nestjs/graphql';
-import { SignContractInput, Contract } from 'src/graphql';
 import UserEntity from '../user/user.entity';
 import { ContractService } from './contract.service';
 import { ContractEntity } from './contract.entity';
 import { UserService } from '../user/user.service';
 import { PlanService } from '../plan/plan.service';
-import { User, Plan, CreateContractInput } from 'src/graphql.schema';
+import { User, Plan, CreateContractInput, SignContractInput, Contract } from 'src/graphql.schema';
+import { GQL_CTX } from 'src/commons/constants/gqlContext';
 
 @Resolver('Contract')
 export class ContractResolver {
@@ -36,22 +36,22 @@ export class ContractResolver {
   }
 
   @Query()
-  activeContract(@Context('user') u: UserEntity): Promise<Contract>{
+  activeContract(@Context(GQL_CTX.USER) u: UserEntity): Promise<Contract>{
     return this.contractService.getActive(u._id)
   }
 
   @Query()
-  userContracts(@Context('user') u: UserEntity): Promise<Contract[]>{
+  userContracts(@Context(GQL_CTX.USER) u: UserEntity): Promise<Contract[]>{
     return this.contractService.byUser(u._id)
   }
 
   @Mutation()
-  signContract(@Context('user') u: UserEntity, @Args('input') i: SignContractInput): Promise<Contract> {
+  signContract(@Context(GQL_CTX.USER) u: UserEntity, @Args('input') i: SignContractInput): Promise<Contract> {
     return this.contractService.sign(i, u._id)
   }
 
   @Mutation()
-  createContract(@Context('user') u: UserEntity, @Args('input') i: CreateContractInput): Promise<Contract> {
+  createContract(@Context(GQL_CTX.USER) u: UserEntity, @Args('input') i: CreateContractInput): Promise<Contract> {
     return this.contractService.create(i, u._id)
   }
 }

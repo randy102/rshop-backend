@@ -1,0 +1,25 @@
+type Category{
+  _id: String
+  name: String
+  parent: Category
+}
+
+type Query{
+  categories(idShop: String): [Category]
+}
+
+type Mutation{
+  createCategory(idShop: String, input: CreateCategoryInput): Category 
+  updateCategory(idShop: String, input: UpdateCategoryInput): Category 
+  deleteCategory(idShop: String, id: String): Boolean
+}
+
+input CreateCategoryInput{
+  idParent: String
+  name: String
+}
+
+input UpdateCategoryInput{
+  _id: String
+  name: String
+}
