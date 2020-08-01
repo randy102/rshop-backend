@@ -1,19 +1,24 @@
 type Role{
   _id: String
   shop: Shop
-  permission: [Permission]
+  user: User
+  permissions: [Permission]
   name: String
   isMaster: Boolean
   description: String
 }
 
+type Query{
+  staffs(idShop: String): [Role] @Staff(with: "STAFF")
+}
+
 type Mutation{
-  createRole(input: CreateRoleInput): Boolean
-  updateRole(input: UpdateRoleInput): Boolean
+  createRole(idShop: String, input: CreateRoleInput): Role @Staff(with: "STAFF")
+  updateRole(idShop: String, input: UpdateRoleInput): Role @Staff(with: "STAFF")
+  deleteRole(idShop: String, id: String): Boolean @Staff(with: "STAFF")
 }
 
 input CreateRoleInput{
-  idShop: String
   idUser: String
   idPermissions: [String]
   name: String

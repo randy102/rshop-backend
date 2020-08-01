@@ -13,10 +13,10 @@ export class CredentialService extends RootService<CredentialEntity> {
   ){super(CredentialEntity,'Credential')}
 
   create(email: string, password: string): Promise<CredentialEntity>{
-    return this.save(new CredentialEntity({
+    return this.save({
       email,
       password: this.hashService.create(password)
-    }))
+    })
   }
 
   checkPasswordMatch(password: string, _password: string){
@@ -32,11 +32,11 @@ export class CredentialService extends RootService<CredentialEntity> {
     
     this.checkPasswordMatch(existed.password, hashedOldPassword)
 
-    const updatedPassword = await this.save(new CredentialEntity({
+    const updatedPassword = await this.save({
       ...existed,
       password: hashedNewPassword,
       updatedAt: Moment().valueOf()
-    }))
+    })
 
     return !!updatedPassword
   }

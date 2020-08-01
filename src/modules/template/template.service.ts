@@ -20,19 +20,19 @@ export class TemplateService extends RootService<TemplateEntity>{
 
   async create(input: CreateTemplateInput, createdBy: string): Promise<TemplateEntity> {
     await this.checkDuplication({ code: input.code }, 'Mã')
-    return this.save(new TemplateEntity({
+    return this.save({
       ...input,
       createdBy
-    }))
+    })
   }
 
   async update(input: UpdateTemplateInput, updatedBy: string): Promise<TemplateEntity> {
     const existed = await this.checkExistedId(input._id)
-    return this.save(new TemplateEntity({
+    return this.save({
       ...existed,
       ...input,
       updatedBy
-    }))
+    })
   }
 
   async deleteTemplate(id: string): Promise<boolean>{

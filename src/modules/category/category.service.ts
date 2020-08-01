@@ -18,20 +18,20 @@ export class CategoryService extends RootService<CategoryEntity>{
 
   async create(idShop: string, input: CreateCategoryInput, createdBy: string): Promise<CategoryEntity>{
     await this.checkExistedId(input.idParent)
-    return this.save(new CategoryEntity({
+    return this.save({
       idShop,
       ...input,
       createdBy
-    }))
+    })
   }
 
   async update(input: UpdateCategoryInput, updatedBy: string): Promise<CategoryEntity>{
     const existed = await this.checkExistedId(input._id)
-    return this.save(new CategoryEntity({
+    return this.save({
       ...existed,
       ...input,
       updatedBy
-    }))
+    })
   }
 
   async deleteCategory(id: string): Promise<boolean>{

@@ -24,8 +24,8 @@ export default class RootService<E extends RootEntity<E>>{
     return getMongoRepository<E>(this.Entity).findOne(query)
   }
 
-  save(entity: any): Promise<E>{
-    return getMongoRepository<E>(this.Entity).save(entity)
+  save(plain: Partial<E>): Promise<E>{
+    return getMongoRepository<E>(this.Entity).save(new this.Entity(plain))
   }
 
   async delete(ids: string[]): Promise<boolean>{
@@ -38,14 +38,15 @@ export default class RootService<E extends RootEntity<E>>{
     if(existed) throw new DuplicateError(subject || this.Name)
   }
 
-  async checkExisted(query: any, subject: string): Promise<E>{
+  async checkExisted(query: any, subject?: string): Promise<E>{
     const existed = await this.findOne(query)
-    if(!existed) throw new NotFoundError(subject)
+    console.log({existed})
+    if(!existed) throw new NotFoundError(subject || this.Name)
     return existed
   }
 
-  checkExistedId(id: string): Promise<E>{
-    return this.checkExisted({_id:id}, this.Name)
+  checkExistedId(_id: string): Promise<E>{
+    return this.checkExisted({_id}, this.Name)
   }
 
   aggregate(pipe: ObjectLiteral[]): Promise<any[]>{

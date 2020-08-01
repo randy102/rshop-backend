@@ -11,7 +11,7 @@ import { TemplateModule } from '../template/template.module';
   exports: [ShopService],
   imports: [
     TypeOrmModule.forFeature([ShopEntity]),
-    RoleModule,
+    forwardRef(() => RoleModule),
     forwardRef(() => TemplateModule) 
   ]
 })

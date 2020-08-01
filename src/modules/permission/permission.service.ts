@@ -11,10 +11,10 @@ export class PermissionService extends RootService<PermissionEntity> {
   async create(input: CreatePermissionInput, createdBy: string): Promise<PermissionEntity> {
     await this.checkDuplication({ name: input.name })
 
-    return this.save(new PermissionEntity({
+    return this.save({
       ...input,
       createdBy
-    }))
+    })
   }
 
   async update(input: UpdatePermissionInput): Promise<PermissionEntity> {
@@ -22,10 +22,10 @@ export class PermissionService extends RootService<PermissionEntity> {
 
     await this.checkDuplication({ name: input.name, _id: { $ne: input._id } })
 
-    return this.save(new PermissionEntity({
+    return this.save({
       ...existed,
       ...input
-    }))
+    })
 
   }
 }

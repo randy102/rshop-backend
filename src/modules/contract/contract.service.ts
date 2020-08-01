@@ -21,20 +21,20 @@ export class ContractService extends RootService<ContractEntity>{
     await this.checkDuplicatedSignDate(idUser)
     await this.checkRegisteredFreePlan(idUser, input.idPlan)
 
-    return this.save(new ContractEntity({
+    return this.save({
       ...input,
       idUser
-    }))
+    })
   }
 
   async create(input: CreateContractInput, createdBy: string): Promise<ContractEntity> {
     await this.planService.checkActive(input.idPlan)
     await this.checkDuplicatedSignDate(input.idUser)
 
-    return this.save(new ContractEntity({
+    return this.save({
       ...input,
       createdBy
-    }))
+    })
   }
 
   async getActive(idUser: string): Promise<ContractEntity> {

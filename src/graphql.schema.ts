@@ -70,7 +70,6 @@ export class UpdateProfileInput {
 }
 
 export class CreateRoleInput {
-    idShop?: string;
     idUser?: string;
     idPermissions?: string[];
     name?: string;
@@ -172,6 +171,8 @@ export abstract class IQuery {
 
     abstract publishedPlans(): Plan[] | Promise<Plan[]>;
 
+    abstract staffs(idShop?: string): Role[] | Promise<Role[]>;
+
     abstract shops(): Shop[] | Promise<Shop[]>;
 
     abstract userShops(): Shop[] | Promise<Shop[]>;
@@ -218,9 +219,11 @@ export abstract class IMutation {
 
     abstract updateUserProfile(input?: UpdateProfileInput): Profile | Promise<Profile>;
 
-    abstract createRole(input?: CreateRoleInput): boolean | Promise<boolean>;
+    abstract createRole(idShop?: string, input?: CreateRoleInput): Role | Promise<Role>;
 
-    abstract updateRole(input?: UpdateRoleInput): boolean | Promise<boolean>;
+    abstract updateRole(idShop?: string, input?: UpdateRoleInput): Role | Promise<Role>;
+
+    abstract deleteRole(idShop?: string, id?: string): boolean | Promise<boolean>;
 
     abstract createShop(input?: CreateShopInput): Shop | Promise<Shop>;
 
@@ -288,7 +291,8 @@ export class Profile {
 export class Role {
     _id?: string;
     shop?: Shop;
-    permission?: Permission[];
+    user?: User;
+    permissions?: Permission[];
     name?: string;
     isMaster?: boolean;
     description?: string;

@@ -33,10 +33,10 @@ export class UserService extends AccountRootService<UserEntity> {
 
     const credentialHash = this.hashService.create(JSON.stringify(hashContent))
 
-    return this.save(new UserEntity({
+    return this.save({
       ...user,
       credentialHash
-    }))
+    })
   }
 
   async login(input: LoginInput): Promise<LoginResponse> {
@@ -56,12 +56,12 @@ export class UserService extends AccountRootService<UserEntity> {
     const createdCredential = await this.credentialService.create(input.email, DEFAULT_PASSWORD)
     const createdProfile = await this.profileService.create(input)
 
-    const createdUser: UserEntity = await this.save(new UserEntity({
+    const createdUser: UserEntity = await this.save({
       isAdmin: input.isAdmin,
       idCredential: createdCredential._id,
       idProfile: createdProfile._id,  
       createdBy
-    }))
+    })
 
     await this.updateCredentialHash(createdUser._id)
     return createdUser
@@ -78,11 +78,11 @@ export class UserService extends AccountRootService<UserEntity> {
     
     const existed = await this.checkExistedId(input._id)
 
-    const updated = await this.save(new UserEntity({
+    const updated = await this.save({
       ...existed,
       ...input,
       updatedBy
-    }))
+    })
 
     await this.updateCredentialHash(input._id)
     return updated
@@ -104,11 +104,11 @@ export class UserService extends AccountRootService<UserEntity> {
     const createdCredential = await this.credentialService.create(email, password)
     const createdProfile = await this.profileService.create({fullName})
 
-    const createdUser: UserEntity = await this.save(new UserEntity({
+    const createdUser: UserEntity = await this.save({
       isAdmin: false,
       idCredential: createdCredential._id,
       idProfile: createdProfile._id
-    }))
+    })
 
     await this.updateCredentialHash(createdUser._id)
     return createdUser

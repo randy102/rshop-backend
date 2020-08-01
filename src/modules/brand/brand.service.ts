@@ -10,8 +10,8 @@ export class BrandService extends RootService<BrandEntity>{
 
   async create(name: string): Promise<BrandEntity>{
     await this.checkDuplication({name})
-    return this.save(new BrandEntity({
+    return this.save({
       name
-    }))
+    })
   }
 }

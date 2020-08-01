@@ -16,10 +16,10 @@ export class PlanService extends RootService<PlanEntity>{
 
   async createDraft(input: CreateDraftPlanInput, createdBy: string): Promise<PlanEntity> {
     await this.checkDuplication({ name: input.name })
-    return this.save(new PlanEntity({
+    return this.save({
       ...input,
       createdBy
-    }))
+    })
   }
 
   async updateDraft(input: UpdateDraftPlanInput, updatedBy: string): Promise<PlanEntity> {
@@ -30,11 +30,11 @@ export class PlanService extends RootService<PlanEntity>{
 
     await this.checkDuplication({ name: input.name, _id: { $ne: input._id } })
 
-    return this.save(new PlanEntity({
+    return this.save({
       ...existed,
       ...input,
       updatedBy
-    }))
+    })
   }
 
   async deleteDraft(ids: string[]): Promise<boolean> {
@@ -48,21 +48,21 @@ export class PlanService extends RootService<PlanEntity>{
   async publish(id: string, updatedBy: string): Promise<PlanEntity> {
     const existed = await this.checkExistedId(id)
 
-    return this.save(new PlanEntity({
+    return this.save({
       ...existed,
       state: PlanState.PUBLISHED,
       updatedBy
-    }))
+    })
   }
 
   async suppress(id: string, updatedBy: string): Promise<PlanEntity> {
     const existed = await this.checkExistedId(id)
 
-    return this.save(new PlanEntity({
+    return this.save({
       ...existed,
       state: PlanState.SUPPRESSED,
       updatedBy
-    }))
+    })
   }
 
   async checkActive(id: string): Promise<PlanEntity> {

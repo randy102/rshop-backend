@@ -25,7 +25,7 @@ export class ShopResolver {
 
   @Query()
   userShops(@Context(GQL_CTX.USER) u: UserEntity): Promise<Shop[]>{
-    return this.shopService.userShops(u._id)
+    return this.shopService.byUser(u._id)
   }
 
   @Query()

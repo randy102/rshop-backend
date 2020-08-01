@@ -9,14 +9,14 @@ export class ProfileService extends RootService<ProfileEntity>{
   constructor() { super(ProfileEntity, "Profile") }
   
   create(input: Partial<ProfileEntity>): Promise<ProfileEntity>{
-    return this.save(new ProfileEntity({...input}))
+    return this.save({...input})
   }
 
   update(_id: string, input: UpdateProfileInput): Promise<ProfileEntity>{
-    return this.save(new ProfileEntity({
+    return this.save({
       _id,
       ...input,
       updatedAt: Moment().valueOf()
-    }))
+    })
   }
 }
