@@ -10,6 +10,7 @@ type Role{
 
 type Query{
   staffs(idShop: String): [Role] @Staff(with: "STAFF")
+  currentRole(idShop: String): Role @Auth
 }
 
 type Mutation{

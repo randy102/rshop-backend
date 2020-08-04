@@ -9,6 +9,7 @@ import { UtilsModule } from '../utils/utils.module';
 import { ProfileModule } from '../profile/profile.module';
 import { TokenModule } from '../token/token.module';
 import { MailerModule } from '../mailer/mailer.module';
+import { PhotoModule } from '../photo/photo.module';
 
 
 

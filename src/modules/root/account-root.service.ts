@@ -5,10 +5,17 @@ import CredentialEntity from "../credential/credential.entity"
 import { AccountRootEntity } from "./account-root.entity"
 import ProfileEntity from "../profile/profile.entity"
 import { LoginInput, ChangePasswordInput, LoginResponse } from "src/graphql.schema"
+import { CredentialService } from "../credential/credential.service"
+import { ProfileService } from "../profile/profile.service"
 
 
 export default abstract class AccountRootService<E extends AccountRootEntity<E>> extends RootService<E>{
-  constructor(readonly entity: any, readonly name: string){
+  constructor(
+    protected readonly entity: any, 
+    protected readonly name: string,
+    protected readonly credentialService: CredentialService,
+    protected readonly profileService: ProfileService
+  ){
     super(entity, name)
   }
   
@@ -35,7 +42,7 @@ export default abstract class AccountRootService<E extends AccountRootEntity<E>>
    * if not found throw LoginError
    */
   async authenticate(email: string, hashedPassword: string): Promise<any>{
-    const existedCredentials = await getMongoRepository(CredentialEntity).find({email,password: hashedPassword})
+    const existedCredentials = await this.credentialService.find({email,password: hashedPassword})
     const credentialIds = existedCredentials.map(cred => cred._id)
     const matchedAccount = await this.findOne({idCredential: {$in: credentialIds}})
     if(!matchedAccount) throw new LoginError()
@@ -53,7 +60,7 @@ export default abstract class AccountRootService<E extends AccountRootEntity<E>>
    * if found, throw DuplicationError
    */
   async checkAccountDuplication(email: string, exceptId?: string){
-    const credentials = await getMongoRepository(CredentialEntity).find({email})
+    const credentials = await this.credentialService.find({email})
     const credentialIds = credentials.map(acc => acc._id)
 
     if(exceptId){
@@ -74,8 +81,8 @@ export default abstract class AccountRootService<E extends AccountRootEntity<E>>
     for(let id of ids){
       const account: AccountRootEntity<E> = await this.findById(id)
 
-      await getMongoRepository(CredentialEntity).delete({_id: account.idCredential})
-      await getMongoRepository(ProfileEntity).delete({_id: account.idProfile})
+      await this.credentialService.delete([account.idCredential])
+      await this.profileService.deleteProfile([account.idProfile])
     }
     return this.delete(ids)
   }

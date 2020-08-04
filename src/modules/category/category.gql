@@ -5,13 +5,13 @@ type Category{
 }
 
 type Query{
-  categories(idShop: String): [Category]
+  categories(idShop: String): [Category] @Staff(with: "PRODUCT")
 }
 
 type Mutation{
-  createCategory(idShop: String, input: CreateCategoryInput): Category 
-  updateCategory(idShop: String, input: UpdateCategoryInput): Category 
-  deleteCategory(idShop: String, id: String): Boolean
+  createCategory(idShop: String, input: CreateCategoryInput): Category @Staff(with: "PRODUCT")
+  updateCategory(idShop: String, input: UpdateCategoryInput): Category @Staff(with: "PRODUCT")
+  deleteCategory(idShop: String, id: String): Boolean @Staff(with: "PRODUCT")
 }
 
 input CreateCategoryInput{

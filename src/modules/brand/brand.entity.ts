@@ -6,7 +6,19 @@ import { Expose } from "class-transformer";
 export class BrandEntity extends RootEntity<BrandEntity>{
   @Column()
   @Expose()
+  idShop: string
+  
+  @Column()
+  @Expose()
   name: string
+
+  @Column()
+  @Expose()
+  intro: string
+
+  @Column()
+  @Expose()
+  img: string
 
   constructor(plain: Partial<BrandEntity>){
     super(plain, BrandEntity)

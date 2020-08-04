@@ -40,13 +40,22 @@ export default class RootService<E extends RootEntity<E>>{
 
   async checkExisted(query: any, subject?: string): Promise<E>{
     const existed = await this.findOne(query)
-    console.log({existed})
     if(!existed) throw new NotFoundError(subject || this.Name)
     return existed
   }
 
   checkExistedId(_id: string): Promise<E>{
     return this.checkExisted({_id}, this.Name)
+  }
+
+  async checkExistedIds(ids: string[]): Promise<E[]>{
+    let rows: E[]
+    for(let i=0; i<ids.length; i++){
+      const existed = await this.findById(ids[i])
+      if(!existed) throw new NotFoundError(this.Name)
+      rows.push(existed)
+    }
+    return rows
   }
 
   aggregate(pipe: ObjectLiteral[]): Promise<any[]>{

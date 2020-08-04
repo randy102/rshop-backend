@@ -6,6 +6,7 @@ import { UtilsModule } from '../utils/utils.module';
 @Module({
   providers: [PhotoService],
   imports: [UtilsModule],
-  controllers: [PhotoController]
+  controllers: [PhotoController],
+  exports: [PhotoService]
 })
 export class PhotoModule { }

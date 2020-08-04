@@ -9,18 +9,20 @@ import { ProfileService } from '../profile/profile.service';
 import { TokenService } from '../token/token.service';
 import { MailerService } from '../mailer/mailer.service';
 import {SendMailError, SelfUpdateRoleError} from 'src/commons/exceptions/GqlException'
+import { GraphQLError } from 'graphql';
+import { PhotoService } from '../photo/photo.service';
 
 
 @Injectable()
 export class UserService extends AccountRootService<UserEntity> {
   constructor(
     private readonly jwtService: JwtService,
-    private readonly credentialService: CredentialService,
+    protected readonly credentialService: CredentialService,
     private readonly hashService: HashService,
-    private readonly profileService: ProfileService,
+    protected readonly profileService: ProfileService,
     private readonly tokenService: TokenService,
     private readonly mailerService: MailerService
-  ) { super(UserEntity, 'Người dùng') }
+  ) { super(UserEntity, 'Người dùng', credentialService, profileService) }
   
   async updateCredentialHash(id: string): Promise<UserEntity>{
     const user: UserEntity = await this.checkExistedId(id)
@@ -112,5 +114,14 @@ export class UserService extends AccountRootService<UserEntity> {
 
     await this.updateCredentialHash(createdUser._id)
     return createdUser
+  }
+
+  async deleteUser(ids: string[], userId: string): Promise<boolean>{
+    if(ids.some(id => id === userId))
+    throw new GraphQLError('Không được thể tự xóa tài khoản của mình')
+
+    await this.checkExistedIds(ids)
+   
+    return this.deleteAccount(ids)
   }
 }

@@ -3,11 +3,15 @@ import { BrandResolver } from './brand.resolver';
 import { BrandService } from './brand.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { BrandEntity } from './brand.entity';
+import { UserModule } from '../user/user.module';
+import { PhotoModule } from '../photo/photo.module';
 
 @Module({
   providers: [BrandResolver, BrandService],
   imports: [
-    TypeOrmModule.forFeature([BrandEntity])
+    TypeOrmModule.forFeature([BrandEntity]),
+    UserModule,
+    PhotoModule
   ]
 })
 export class BrandModule {}

@@ -3,6 +3,10 @@ type User{
   isAdmin: Boolean
   profile: Profile
   credential: Credential
+  createdAt: Float
+  creator: User
+  updatedAt: Float
+  updater: User
 }
 
 type Credential{
@@ -16,7 +20,7 @@ type LoginResponse{
 }
 
 type Query{
-  users: [User] @Admin
+  users: [User] @Auth
   currentUser: User @Auth 
 }
 

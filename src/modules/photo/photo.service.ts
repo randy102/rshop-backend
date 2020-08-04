@@ -43,7 +43,7 @@ export class PhotoService {
     return new Promise(resolve => {
       this.S3.deleteObject(params, (err, data) => {
         if(err) throw Error('Delete Object fail: ' + err.message)
-        console.log('File deleted successfully')
+        console.log(`File deleted successfully. ${id}`)
         resolve(true)
       })
     })

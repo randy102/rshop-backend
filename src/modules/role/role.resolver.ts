@@ -37,6 +37,11 @@ export class RoleResolver {
     return this.roleService.find({idShop})
   }
 
+  @Query()
+  currentRole(@Context(GQL_CTX.USER) u: UserEntity, @Args('idShop') idShop: string): Promise<Role>{
+    return this.roleService.findOne({idShop, idUser: u._id})
+  }
+
   @Mutation()
   createRole(@Args('idShop') idShop: string, @Args('input') i: CreateRoleInput, @Context(GQL_CTX.USER) u: UserEntity): Promise<Role>{
     return this.roleService.create(idShop,i,u._id)

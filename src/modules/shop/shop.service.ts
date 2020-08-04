@@ -54,7 +54,7 @@ export class ShopService extends RootService<ShopEntity>{
     return this.roleService.aggregate(pipe)
   }
 
-  userShops(idUser: string): Promise<ShopEntity[]>{
+  ownedByUser(idUser: string): Promise<ShopEntity[]>{
     const pipe = [
       {$match: {idUser, isMaster: true}},
       {
@@ -74,7 +74,7 @@ export class ShopService extends RootService<ShopEntity>{
 
   async checkLimitShop(idUser: string){
     const LIMIT = 3
-    const userShops =  await this.userShops(idUser)
+    const userShops =  await this.ownedByUser(idUser)
     if(userShops.length >= LIMIT)
       throw new GraphQLError(`Người dùng chỉ được tạo tối đa ${LIMIT} cửa hàng!`)
   }

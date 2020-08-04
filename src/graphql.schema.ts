@@ -12,6 +12,19 @@ export enum PlanState {
     SUPPRESSED = "SUPPRESSED"
 }
 
+export class CreateBrandInput {
+    name?: string;
+    intro?: string;
+    img?: string;
+}
+
+export class UpdateBrandInput {
+    _id?: string;
+    name?: string;
+    intro?: string;
+    img?: string;
+}
+
 export class CreateCategoryInput {
     idParent?: string;
     name?: string;
@@ -151,11 +164,16 @@ export class RegisterUserInput {
 export class Brand {
     _id?: string;
     name?: string;
+    intro?: string;
+    img?: string;
     createdAt?: number;
+    creator?: User;
+    updatedAt?: number;
+    updater?: User;
 }
 
 export abstract class IQuery {
-    abstract brands(): Brand[] | Promise<Brand[]>;
+    abstract brands(idShop?: string): Brand[] | Promise<Brand[]>;
 
     abstract categories(idShop?: string): Category[] | Promise<Category[]>;
 
@@ -173,6 +191,8 @@ export abstract class IQuery {
 
     abstract staffs(idShop?: string): Role[] | Promise<Role[]>;
 
+    abstract currentRole(idShop?: string): Role | Promise<Role>;
+
     abstract shops(): Shop[] | Promise<Shop[]>;
 
     abstract userShops(): Shop[] | Promise<Shop[]>;
@@ -189,7 +209,11 @@ export abstract class IQuery {
 }
 
 export abstract class IMutation {
-    abstract createBrand(name?: string): Brand | Promise<Brand>;
+    abstract createBrand(idShop?: string, input?: CreateBrandInput): Brand | Promise<Brand>;
+
+    abstract updateBrand(idShop?: string, input?: UpdateBrandInput): Brand | Promise<Brand>;
+
+    abstract deleteBrand(idShop?: string, ids?: string[]): boolean | Promise<boolean>;
 
     abstract createCategory(idShop?: string, input?: CreateCategoryInput): Category | Promise<Category>;
 
@@ -322,6 +346,10 @@ export class User {
     isAdmin?: boolean;
     profile?: Profile;
     credential?: Credential;
+    createdAt?: number;
+    creator?: User;
+    updatedAt?: number;
+    updater?: User;
 }
 
 export class Credential {

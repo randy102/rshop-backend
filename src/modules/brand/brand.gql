@@ -1,13 +1,33 @@
 type Brand{
   _id: String
   name: String
+  intro: String
+  img: String
   createdAt: Float
+  creator: User
+  updatedAt: Float
+  updater: User
 }
 
 type Query{
-  brands: [Brand]
+  brands(idShop: String): [Brand] @Staff(with: "PRODUCT")
 }
 
 type Mutation{
-  createBrand(name: String): Brand @Auth
+  createBrand(idShop: String, input: CreateBrandInput): Brand @Staff(with: "PRODUCT")
+  updateBrand(idShop: String, input: UpdateBrandInput): Brand @Staff(with: "PRODUCT")
+  deleteBrand(idShop: String, ids: [String]): Boolean @Staff(with: "PRODUCT")
+}
+
+input CreateBrandInput{
+  name: String
+  intro: String
+  img: String
+}
+
+input UpdateBrandInput{
+  _id: String
+  name: String
+  intro: String
+  img: String
 }

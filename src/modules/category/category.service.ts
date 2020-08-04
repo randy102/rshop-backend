@@ -35,12 +35,11 @@ export class CategoryService extends RootService<CategoryEntity>{
   }
 
   async deleteCategory(id: string): Promise<boolean>{
-    await this.checkExistedId(id)
     await this.checkUsedCateogry(id)
     return this.delete([id])
   }
 
   async checkUsedCateogry(idCategory: string){
-
+    //TODO check used category
   }
 }

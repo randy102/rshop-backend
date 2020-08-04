@@ -6,15 +6,16 @@ import { ProfileService } from '../profile/profile.service';
 import { CredentialService } from '../credential/credential.service';
 import { AccountRootResolver } from '../root/account-root.resolver';
 import { GQL_CTX } from 'src/commons/constants/gqlContext';
+import { PhotoService } from '../photo/photo.service';
 
 
 @Resolver('User')
 export class UserResolver extends AccountRootResolver<UserEntity> {
   constructor(
-    private readonly userService: UserService,
-    readonly profileService: ProfileService,
-    readonly credentialService: CredentialService,
-  ) { super(profileService, credentialService) }
+    protected readonly userService: UserService,
+    protected readonly profileService: ProfileService,
+    protected readonly credentialService: CredentialService,
+  ) { super(profileService, credentialService, userService) }
 
   @Query()
   users(): Promise<User[]> {
@@ -48,8 +49,7 @@ export class UserResolver extends AccountRootResolver<UserEntity> {
 
   @Mutation()
   deleteUser(@Context(GQL_CTX.USER) user: UserEntity, @Args('input') input: DeleteUserInput): Promise<boolean> {
-    if(!input.ids.some(id => id === user._id))
-    return this.userService.deleteAccount(input.ids)
+    return this.userService.deleteUser(input.ids, user._id)
   }
 
   @Mutation()
