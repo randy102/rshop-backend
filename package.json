@@ -35,7 +35,7 @@
     "@types/nodemailer": "^6.4.0",
     "apollo-server-express": "^2.12.0",
     "aws-sdk": "^2.707.0",
-    "class-transformer": "^0.2.3",
+    "class-transformer": "^0.3.1",
     "class-validator": "^0.12.2",
     "graphql": "^15.0.0",
     "graphql-tools": "^5.0.0",
