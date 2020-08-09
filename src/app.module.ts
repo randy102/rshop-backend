@@ -24,6 +24,7 @@ import { ShopModule } from './modules/shop/shop.module';
 import { TemplateModule } from './modules/template/template.module';
 import { BrandModule } from './modules/brand/brand.module';
 import { CategoryModule } from './modules/category/category.module';
+import { StoreModule } from './modules/store/store.module';
 
 
 
@@ -54,6 +55,7 @@ import { CategoryModule } from './modules/category/category.module';
     TemplateModule,
     BrandModule,
     CategoryModule,
+    StoreModule,
   ],
 })
 export class AppModule { }

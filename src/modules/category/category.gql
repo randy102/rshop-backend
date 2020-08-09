@@ -1,6 +1,7 @@
 type Category{
   _id: String
   name: String
+  idParent: String
   parent: Category
 }
 

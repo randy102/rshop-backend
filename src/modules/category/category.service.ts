@@ -6,9 +6,7 @@ import { CreateCategoryInput, UpdateCategoryInput } from 'src/graphql.schema';
 
 @Injectable()
 export class CategoryService extends RootService<CategoryEntity>{
-  constructor(
-    private readonly roleService: RoleService
-  ) {
+  constructor() {
     super(CategoryEntity, 'Thể loại')
   }
 
@@ -17,7 +15,7 @@ export class CategoryService extends RootService<CategoryEntity>{
   }
 
   async create(idShop: string, input: CreateCategoryInput, createdBy: string): Promise<CategoryEntity>{
-    await this.checkExistedId(input.idParent)
+    if(input.idParent !== null) await this.checkExistedId(input.idParent)
     return this.save({
       idShop,
       ...input,
@@ -35,11 +33,31 @@ export class CategoryService extends RootService<CategoryEntity>{
   }
 
   async deleteCategory(id: string): Promise<boolean>{
-    await this.checkUsedCateogry(id)
+    await this.checkExistedId(id)
+    await this.checkUsedCateogries([id])
+    await this.deleteChilds(id)
     return this.delete([id])
   }
 
-  async checkUsedCateogry(idCategory: string){
+  async deleteChilds(idParent: string){
+    let toDeleteIds: string[] = []
+    
+    const firstChilds = await this.find({idParent})
+    const firstChildIds = firstChilds.map(c=>c._id)
+    await this.checkUsedCateogries(firstChildIds)
+    toDeleteIds.push(...firstChildIds)
+
+    for(let {_id: idParent} of firstChilds){
+      const secondChilds = await this.find({idParent})
+      const secondChildIds = secondChilds.map(c=>c._id)
+      await this.checkUsedCateogries(secondChildIds)
+      toDeleteIds.push(...secondChildIds)
+    }
+
+    await this.delete(toDeleteIds)
+  }
+
+  async checkUsedCateogries(ids: string[]){
     //TODO check used category
   }
 }

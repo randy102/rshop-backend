@@ -3,5 +3,6 @@ export enum MANAGE_PERMISSION{
   STAFF,
   SHOP,
   SALE,
-  ACTIVITY
+  PROMOTION,
+  STORE
 }

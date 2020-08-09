@@ -112,6 +112,17 @@ export class UpdateShopInput {
     isActive?: boolean;
 }
 
+export class CreateStoreInput {
+    name?: string;
+    address?: string;
+}
+
+export class UpdateStoreInput {
+    _id?: string;
+    name?: string;
+    address?: string;
+}
+
 export class CreateTemplateInput {
     name?: string;
     code?: string;
@@ -199,6 +210,8 @@ export abstract class IQuery {
 
     abstract shopByDomain(domain?: string): Shop | Promise<Shop>;
 
+    abstract stores(idShop?: string): Store[] | Promise<Store[]>;
+
     abstract templates(): Template[] | Promise<Template[]>;
 
     abstract activeTemplates(): Template[] | Promise<Template[]>;
@@ -253,6 +266,12 @@ export abstract class IMutation {
 
     abstract updateShop(input?: UpdateShopInput): Shop | Promise<Shop>;
 
+    abstract createStore(idShop?: string, input?: CreateStoreInput): Store | Promise<Store>;
+
+    abstract updateStore(idShop?: string, input?: UpdateStoreInput): Store | Promise<Store>;
+
+    abstract deleteStore(idShop?: string, ids?: string[]): boolean | Promise<boolean>;
+
     abstract createTemplate(input?: CreateTemplateInput): Template | Promise<Template>;
 
     abstract updateTemplate(input?: UpdateTemplateInput): Template | Promise<Template>;
@@ -277,6 +296,7 @@ export abstract class IMutation {
 export class Category {
     _id?: string;
     name?: string;
+    idParent?: string;
     parent?: Category;
 }
 
@@ -331,6 +351,16 @@ export class Shop {
     createdAt?: number;
     master?: User;
     template?: Template;
+}
+
+export class Store {
+    _id?: string;
+    name?: string;
+    address?: string;
+    creator?: User;
+    createdAt?: number;
+    updater?: User;
+    updatedAt?: number;
 }
 
 export class Template {

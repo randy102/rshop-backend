@@ -1,0 +1,30 @@
+type Store{
+  _id: String
+  name: String
+  address: String
+  creator: User
+  createdAt: Float
+  updater: User
+  updatedAt: Float
+}
+
+type Query{
+  stores(idShop: String): [Store] @Staff(with: "STORE")
+}
+
+type Mutation{
+  createStore(idShop: String, input: CreateStoreInput): Store @Staff(with: "STORE")
+  updateStore(idShop: String, input: UpdateStoreInput): Store @Staff(with: "STORE")
+  deleteStore(idShop: String, ids: [String]): Boolean @Staff(with: "STORE")
+}
+
+input CreateStoreInput{
+  name: String
+  address: String
+}
+
+input UpdateStoreInput{
+  _id: String
+  name: String
+  address: String
+}

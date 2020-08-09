@@ -49,9 +49,9 @@ export default class RootService<E extends RootEntity<E>>{
   }
 
   async checkExistedIds(ids: string[]): Promise<E[]>{
-    let rows: E[]
-    for(let i=0; i<ids.length; i++){
-      const existed = await this.findById(ids[i])
+    let rows: E[] = []
+    for(let id of ids){
+      const existed = await this.findById(id)
       if(!existed) throw new NotFoundError(this.Name)
       rows.push(existed)
     }
