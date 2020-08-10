@@ -74,6 +74,23 @@ export class UpdateDraftPlanInput {
     description?: string;
 }
 
+export class CreateProductInput {
+    isActive?: boolean;
+    name?: string;
+    description?: string;
+    idCategory?: string;
+    idBrand?: string;
+}
+
+export class UpdateProductInput {
+    _id?: string;
+    isActive?: boolean;
+    name?: string;
+    description?: string;
+    idCategory?: string;
+    idBrand?: string;
+}
+
 export class UpdateProfileInput {
     dob?: number;
     fullName?: string;
@@ -200,6 +217,8 @@ export abstract class IQuery {
 
     abstract publishedPlans(): Plan[] | Promise<Plan[]>;
 
+    abstract products(idShop?: string): Product[] | Promise<Product[]>;
+
     abstract staffs(idShop?: string): Role[] | Promise<Role[]>;
 
     abstract currentRole(idShop?: string): Role | Promise<Role>;
@@ -253,6 +272,12 @@ export abstract class IMutation {
     abstract publishPlan(id?: string): Plan | Promise<Plan>;
 
     abstract suppressPlan(id?: string): Plan | Promise<Plan>;
+
+    abstract createProduct(idShop?: string, input?: CreateProductInput): Product | Promise<Product>;
+
+    abstract updateProduct(idShop?: string, input?: UpdateProductInput): Product | Promise<Product>;
+
+    abstract deleteProduct(idShop?: string, ids?: string[]): boolean | Promise<boolean>;
 
     abstract updateUserProfile(input?: UpdateProfileInput): Profile | Promise<Profile>;
 
@@ -322,6 +347,19 @@ export class Plan {
     state?: PlanState;
     description?: string;
     createdAt?: number;
+}
+
+export class Product {
+    _id?: string;
+    category?: Category;
+    brand?: Brand;
+    name?: string;
+    description?: string;
+    isActive?: boolean;
+    createdAt?: number;
+    creator?: User;
+    updatedAt?: number;
+    updater?: User;
 }
 
 export class Profile {

@@ -12,6 +12,7 @@ import { PhotoModule } from '../photo/photo.module';
     TypeOrmModule.forFeature([BrandEntity]),
     UserModule,
     PhotoModule
-  ]
+  ],
+  exports: [BrandService]
 })
 export class BrandModule {}

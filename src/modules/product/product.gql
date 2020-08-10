@@ -1,0 +1,40 @@
+type Product{
+  _id: String
+  category: Category
+  brand: Brand
+  name: String
+  description: String
+  isActive: Boolean
+
+  createdAt: Float
+  creator: User
+  updatedAt: Float
+  updater: User
+}
+
+type Query{
+  products(idShop: String): [Product] @Staff(with: "PRODUCT")
+}
+
+type Mutation{
+  createProduct(idShop: String, input: CreateProductInput): Product
+  updateProduct(idShop: String, input: UpdateProductInput): Product
+  deleteProduct(idShop: String, ids: [String]): Boolean
+}
+
+input CreateProductInput{
+  isActive: Boolean
+  name: String
+  description: String
+  idCategory: String
+  idBrand: String
+}
+
+input UpdateProductInput{
+  _id: String
+  isActive: Boolean
+  name: String
+  description: String
+  idCategory: String
+  idBrand: String
+}

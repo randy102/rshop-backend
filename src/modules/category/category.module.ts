@@ -10,6 +10,7 @@ import { RoleModule } from '../role/role.module';
   imports: [
     TypeOrmModule.forFeature([CategoryEntity]),
     RoleModule
-  ]
+  ],
+  exports: [CategoryService]
 })
 export class CategoryModule {}
