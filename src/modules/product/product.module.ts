@@ -14,6 +14,7 @@ import { CategoryModule } from '../category/category.module';
     UserModule,
     BrandModule,
     CategoryModule
-  ]
+  ],
+   exports: [ProductService]
 })
 export class ProductModule {}

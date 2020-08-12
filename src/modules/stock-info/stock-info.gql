@@ -1,0 +1,6 @@
+type StockInfo{
+  long: Float
+  width: Float
+  height: Float
+  weight: Float
+}

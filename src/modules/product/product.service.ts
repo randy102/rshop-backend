@@ -11,7 +11,7 @@ export class ProductService extends RootService<ProductEntity>{
     protected readonly brandService: BrandService,
     protected readonly categoryService: CategoryService 
   ){
-    super(ProductEntity, 'Sản phẩm')
+    super(ProductEntity, 'Mặt hàng')
   }
 
   async create(idShop: string, input: CreateProductInput, createdBy: string): Promise<ProductEntity>{

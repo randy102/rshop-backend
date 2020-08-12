@@ -10,6 +10,7 @@ import { UserModule } from '../user/user.module';
   imports: [
     TypeOrmModule.forFeature([StoreEntity]),
     UserModule
-  ]
+  ],
+  exports: [StoreService]
 })
 export class StoreModule {}

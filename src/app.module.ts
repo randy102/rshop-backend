@@ -26,6 +26,9 @@ import { BrandModule } from './modules/brand/brand.module';
 import { CategoryModule } from './modules/category/category.module';
 import { StoreModule } from './modules/store/store.module';
 import { ProductModule } from './modules/product/product.module';
+import { StockModule } from './modules/stock/stock.module';
+import { StockInfoModule } from './modules/stock-info/stock-info.module';
+import { StockRecordModule } from './modules/stock-record/stock-record.module';
 
 
 
@@ -58,6 +61,9 @@ import { ProductModule } from './modules/product/product.module';
     CategoryModule,
     StoreModule,
     ProductModule,
+    StockModule,
+    StockInfoModule,
+    StockRecordModule,
   ],
 })
 export class AppModule { }

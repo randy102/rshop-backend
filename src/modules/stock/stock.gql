@@ -1,0 +1,51 @@
+type Stock{
+  _id: String
+  name: String
+  salePrice: Float
+  imgs: [String]
+
+  product: Product
+  info: StockInfo
+  records: [StockRecord]
+  
+  createdAt: Float
+  creator: User
+  updatedAt: Float
+  updater: User
+}
+
+type Query{
+  stocks(idShop: String): [Stock] @Staff(with: "STORE")
+}
+
+type Mutation{
+  createStock(idShop: String, input: CreateStockInput): Stock @Staff(with: "PRODUCT")
+  updateStock(idShop: String, input: UpdateStockInput): Stock @Staff(with: "PRODUCT")
+  deleteStock(idShop: String, ids: [String]): Boolean @Staff(with: "PRODUCT")
+}
+
+input CreateStockInput{
+  idProduct: String
+  name: String
+  salePrice: Float
+  imgs: [String]
+
+  #info
+  long: Float
+  width: Float
+  height: Float
+  weight: Float
+}
+
+input UpdateStockInput{
+  _id: String
+  name: String
+  salePrice: Float
+  imgs: [String]
+
+  #info
+  long: Float
+  width: Float
+  height: Float
+  weight: Float
+}

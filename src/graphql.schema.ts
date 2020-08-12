@@ -129,6 +129,28 @@ export class UpdateShopInput {
     isActive?: boolean;
 }
 
+export class CreateStockInput {
+    idProduct?: string;
+    name?: string;
+    salePrice?: number;
+    imgs?: string[];
+    long?: number;
+    width?: number;
+    height?: number;
+    weight?: number;
+}
+
+export class UpdateStockInput {
+    _id?: string;
+    name?: string;
+    salePrice?: number;
+    imgs?: string[];
+    long?: number;
+    width?: number;
+    height?: number;
+    weight?: number;
+}
+
 export class CreateStoreInput {
     name?: string;
     address?: string;
@@ -229,6 +251,8 @@ export abstract class IQuery {
 
     abstract shopByDomain(domain?: string): Shop | Promise<Shop>;
 
+    abstract stocks(idShop?: string): Stock[] | Promise<Stock[]>;
+
     abstract stores(idShop?: string): Store[] | Promise<Store[]>;
 
     abstract templates(): Template[] | Promise<Template[]>;
@@ -290,6 +314,12 @@ export abstract class IMutation {
     abstract createShop(input?: CreateShopInput): Shop | Promise<Shop>;
 
     abstract updateShop(input?: UpdateShopInput): Shop | Promise<Shop>;
+
+    abstract createStock(idShop?: string, input?: CreateStockInput): Stock | Promise<Stock>;
+
+    abstract updateStock(idShop?: string, input?: UpdateStockInput): Stock | Promise<Stock>;
+
+    abstract deleteStock(idShop?: string, ids?: string[]): boolean | Promise<boolean>;
 
     abstract createStore(idShop?: string, input?: CreateStoreInput): Store | Promise<Store>;
 
@@ -389,6 +419,33 @@ export class Shop {
     createdAt?: number;
     master?: User;
     template?: Template;
+}
+
+export class StockInfo {
+    long?: number;
+    width?: number;
+    height?: number;
+    weight?: number;
+}
+
+export class StockRecord {
+    _id?: string;
+    quantity?: number;
+    store?: Store;
+}
+
+export class Stock {
+    _id?: string;
+    name?: string;
+    salePrice?: number;
+    imgs?: string[];
+    product?: Product;
+    info?: StockInfo;
+    records?: StockRecord[];
+    createdAt?: number;
+    creator?: User;
+    updatedAt?: number;
+    updater?: User;
 }
 
 export class Store {

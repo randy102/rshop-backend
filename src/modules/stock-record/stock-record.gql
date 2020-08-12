@@ -1,0 +1,5 @@
+type StockRecord{
+  _id: String
+  quantity: Int
+  store: Store
+}
