@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { StockRecordService } from './stock-record.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { StockRecordEntity } from './stock-record.entity';
@@ -9,7 +9,7 @@ import { StoreModule } from '../store/store.module';
   providers: [StockRecordService, StockRecordResolver],
   imports: [
     TypeOrmModule.forFeature([StockRecordEntity]),
-    StoreModule
+    forwardRef(() => StoreModule)
   ],
   exports: [StockRecordService]
 })

@@ -16,6 +16,8 @@ type Mutation{
   createStore(idShop: String, input: CreateStoreInput): Store @Staff(with: "STORE")
   updateStore(idShop: String, input: UpdateStoreInput): Store @Staff(with: "STORE")
   deleteStore(idShop: String, ids: [String]): Boolean @Staff(with: "STORE")
+
+  transferStore(idShop: String, input: TransferStoreInput): StoreTransfer @Staff(with: "STORE")
 }
 
 input CreateStoreInput{
@@ -27,4 +29,17 @@ input UpdateStoreInput{
   _id: String
   name: String
   address: String
+}
+
+input TransferStoreInput{
+  idSrc: String
+  idDes: String
+  type: TransferType
+  note: String
+  items: [TransferItemInput]
+}
+
+input TransferItemInput{
+  idStock: String
+  quantity: Int
 }

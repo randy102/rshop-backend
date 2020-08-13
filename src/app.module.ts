@@ -29,6 +29,8 @@ import { ProductModule } from './modules/product/product.module';
 import { StockModule } from './modules/stock/stock.module';
 import { StockInfoModule } from './modules/stock-info/stock-info.module';
 import { StockRecordModule } from './modules/stock-record/stock-record.module';
+import { StoreTransferModule } from './modules/store-transfer/store-transfer.module';
+import { StoreTransferItemModule } from './modules/store-transfer-item/store-transfer-item.module';
 
 
 
@@ -64,6 +66,8 @@ import { StockRecordModule } from './modules/stock-record/stock-record.module';
     StockModule,
     StockInfoModule,
     StockRecordModule,
+    StoreTransferModule,
+    StoreTransferItemModule,
   ],
 })
 export class AppModule { }

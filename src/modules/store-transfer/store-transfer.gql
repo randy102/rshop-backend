@@ -1,0 +1,20 @@
+type StoreTransfer{
+  _id: String
+  src: Store
+  des: Store
+  type: TransferType
+  note: String
+  items: [TransferItem]
+
+  createdAt: Float
+  creator: User
+  updatedAt: Float
+  updater: User
+}
+
+enum TransferType{
+  IMPORT
+  EXPORT
+  TRANSFER
+  SELL
+}

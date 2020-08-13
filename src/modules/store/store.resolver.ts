@@ -30,11 +30,10 @@ export class StoreResolver extends RootResolver<StoreEntity>{
 
   @Mutation()
   updateStore(
-    @Args('idShop') idShop: string,
     @Args('input') i: UpdateStoreInput,
     @Context(GQL_CTX.USER) u: UserEntity
   ): Promise<Store> {
-    return this.storeService.update(idShop, i, u._id)
+    return this.storeService.update(i, u._id)
   }
 
   @Mutation()

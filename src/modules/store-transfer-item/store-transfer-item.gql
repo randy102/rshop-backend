@@ -1,0 +1,6 @@
+type TransferItem{
+  _id: String
+  transfer: StoreTransfer
+  stock: Stock
+  quantity: Int
+}

@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { StockService } from './stock.service';
 import { StockResolver } from './stock.resolver';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -17,7 +17,8 @@ import { StoreModule } from '../store/store.module';
     StockRecordModule,
     ProductModule,
     UserModule,
-    StoreModule
-  ]
+    forwardRef(() => StoreModule)
+  ],
+  exports: [StockService]
 })
 export class StockModule {}

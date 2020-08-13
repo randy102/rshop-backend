@@ -12,8 +12,7 @@ export class StockService extends RootService<StockEntity>{
   constructor(
     protected readonly stockInfoService: StockInfoService,
     protected readonly stockRecordService: StockRecordService,
-    protected readonly productService: ProductService,
-    protected readonly storeService: StoreService
+    protected readonly productService: ProductService
   ){super(StockEntity,'Hàng hóa')}
   
   async byShop(idShop: string): Promise<StockEntity[]>{

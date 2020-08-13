@@ -12,6 +12,13 @@ export enum PlanState {
     SUPPRESSED = "SUPPRESSED"
 }
 
+export enum TransferType {
+    IMPORT = "IMPORT",
+    EXPORT = "EXPORT",
+    TRANSFER = "TRANSFER",
+    SELL = "SELL"
+}
+
 export class CreateBrandInput {
     name?: string;
     intro?: string;
@@ -160,6 +167,19 @@ export class UpdateStoreInput {
     _id?: string;
     name?: string;
     address?: string;
+}
+
+export class TransferStoreInput {
+    idSrc?: string;
+    idDes?: string;
+    type?: TransferType;
+    note?: string;
+    items?: TransferItemInput[];
+}
+
+export class TransferItemInput {
+    idStock?: string;
+    quantity?: number;
 }
 
 export class CreateTemplateInput {
@@ -327,6 +347,8 @@ export abstract class IMutation {
 
     abstract deleteStore(idShop?: string, ids?: string[]): boolean | Promise<boolean>;
 
+    abstract transferStore(idShop?: string, input?: TransferStoreInput): StoreTransfer | Promise<StoreTransfer>;
+
     abstract createTemplate(input?: CreateTemplateInput): Template | Promise<Template>;
 
     abstract updateTemplate(input?: UpdateTemplateInput): Template | Promise<Template>;
@@ -442,6 +464,26 @@ export class Stock {
     product?: Product;
     info?: StockInfo;
     records?: StockRecord[];
+    createdAt?: number;
+    creator?: User;
+    updatedAt?: number;
+    updater?: User;
+}
+
+export class TransferItem {
+    _id?: string;
+    transfer?: StoreTransfer;
+    stock?: Stock;
+    quantity?: number;
+}
+
+export class StoreTransfer {
+    _id?: string;
+    src?: Store;
+    des?: Store;
+    type?: TransferType;
+    note?: string;
+    items?: TransferItem[];
     createdAt?: number;
     creator?: User;
     updatedAt?: number;
