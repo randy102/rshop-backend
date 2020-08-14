@@ -1,12 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject, forwardRef } from '@nestjs/common';
 import RootService from '../root/root.service';
 import { CategoryEntity } from './category.entity';
 import { RoleService } from '../role/role.service';
 import { CreateCategoryInput, UpdateCategoryInput } from 'src/graphql.schema';
+import { ProductService } from '../product/product.service';
+import { GraphQLError } from 'graphql';
 
 @Injectable()
 export class CategoryService extends RootService<CategoryEntity>{
-  constructor() {
+  constructor(
+    @Inject(forwardRef(() => ProductService)) protected readonly productService: ProductService
+  ) {
     super(CategoryEntity, 'Thể loại')
   }
 
@@ -44,12 +48,14 @@ export class CategoryService extends RootService<CategoryEntity>{
     
     const firstChilds = await this.find({idParent})
     const firstChildIds = firstChilds.map(c=>c._id)
+
     await this.checkUsedCateogries(firstChildIds)
     toDeleteIds.push(...firstChildIds)
 
     for(let {_id: idParent} of firstChilds){
       const secondChilds = await this.find({idParent})
       const secondChildIds = secondChilds.map(c=>c._id)
+      
       await this.checkUsedCateogries(secondChildIds)
       toDeleteIds.push(...secondChildIds)
     }
@@ -58,6 +64,9 @@ export class CategoryService extends RootService<CategoryEntity>{
   }
 
   async checkUsedCateogries(ids: string[]){
-    //TODO check used category
+    const productByBrand = await this.productService.find({idCategory: {$in: ids}})
+    if(productByBrand.length)
+      throw new GraphQLError('Thể loại đã được sử dụng!')
+
   }
 }

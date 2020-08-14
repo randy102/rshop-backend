@@ -4,10 +4,13 @@ import schemaDirectives from '../commons/directives'
 import { JwtService, AccountPayload } from 'src/modules/jwt/jwt.service';
 import { AuthService, UserRole } from 'src/modules/auth/auth.service';
 import UserEntity from 'src/modules/user/user.entity';
+import { ContractEntity } from 'src/modules/contract/contract.entity';
+import { ContractService } from 'src/modules/contract/contract.service';
 
 export default async function GqlConfigFactory(
   jwtService: JwtService,
-  authService: AuthService
+  authService: AuthService,
+  contractService: ContractService
 ): Promise<GqlModuleOptions> {
 
   async function contextHandler({ req, connection }) {
@@ -20,6 +23,7 @@ export default async function GqlConfigFactory(
     
     var user: UserEntity
     var roles: UserRole[]
+    var contract: ContractEntity
 
     if(token) {
       const payload = await jwtService.verify(token)
@@ -30,12 +34,13 @@ export default async function GqlConfigFactory(
         if(userEntity && payload.credentialHash === userEntity.credentialHash){
           user = userEntity
           roles = await authService.getUserRoles(payload._id)
+          contract = await contractService.getActive(payload._id)
         }
       }
     }
    
     return {
-      user, roles
+      user, roles, contract
     }
   }
 

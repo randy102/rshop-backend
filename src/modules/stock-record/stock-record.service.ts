@@ -62,4 +62,14 @@ export class StockRecordService extends RootService<StockRecordEntity>{
         throw new GraphQLError('Số lượng hàng hóa không đủ để thực hiện yêu cầu')
     }
   }
+
+  async deleteByStore(idStores: string[]): Promise<boolean>{
+    const records = await this.find({idStore: {$in: idStores}})
+    return this.delete(records.map(r => r._id))
+  }
+
+  async deleteByStock(idStocks: string[]): Promise<boolean>{
+    const records = await this.find({idStock: {$in: idStocks}})
+    return this.delete(records.map(r => r._id))
+  }
 }

@@ -41,9 +41,7 @@ export class ContractService extends RootService<ContractEntity>{
     await this.userService.checkExistedId(idUser)
 
     const userContracts = await this.aggregate([
-      {
-        $match: { idUser }
-      },
+      { $match: { idUser } },
       {
         $lookup: {
           from: 'Plan',
@@ -120,7 +118,7 @@ export class ContractService extends RootService<ContractEntity>{
         { $unwind: { path: '$plan', preserveNullAndEmptyArrays: true } }
       ])
 
-      if(userRegistered.some(({plan}) => plan.price === 0)){
+      if (userRegistered.some(({ plan }) => plan.price === 0)) {
         throw new GraphQLError("Gói dùng thử chỉ được đăng ký một lần")
       }
     }

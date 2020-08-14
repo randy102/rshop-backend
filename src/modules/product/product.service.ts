@@ -1,15 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject, forwardRef } from '@nestjs/common';
 import RootService from '../root/root.service';
 import { ProductEntity } from './product.entity';
 import { CreateProductInput, UpdateProductInput } from 'src/graphql.schema';
 import { BrandService } from '../brand/brand.service';
 import { CategoryService } from '../category/category.service';
+import { StockService } from '../stock/stock.service';
 
 @Injectable()
 export class ProductService extends RootService<ProductEntity>{
   constructor(
-    protected readonly brandService: BrandService,
-    protected readonly categoryService: CategoryService 
+    protected readonly categoryService: CategoryService,
+    protected readonly stockService: StockService,
+    @Inject(forwardRef(() => BrandService)) protected readonly brandService: BrandService,
   ){
     super(ProductEntity, 'Mặt hàng')
   }
@@ -36,8 +38,7 @@ export class ProductService extends RootService<ProductEntity>{
   }
 
   async deleteProduct(ids: string[]): Promise<boolean>{
-    // TODO Delete Stocks, stockinfo, stockRecords, transferItems
-
+    await this.stockService.deleteByProduct(ids)
     return this.delete(ids)
   }
 }

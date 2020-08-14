@@ -7,6 +7,7 @@ import { StoreTransferService } from '../store-transfer/store-transfer.service';
 import { TransferItemService } from '../store-transfer-item/store-transfer-item.service';
 import { StockService } from '../stock/stock.service';
 import { StockRecordService } from '../stock-record/stock-record.service';
+import { GraphQLError } from 'graphql';
 
 @Injectable()
 export class StoreService extends RootService<StoreEntity>{
@@ -38,21 +39,28 @@ export class StoreService extends RootService<StoreEntity>{
   async deleteStore(ids: string[]): Promise<boolean> {
     await this.checkExistedIds(ids)
     await this.checkStoreEmpty(ids)
-
+    await this.stockRecordService.deleteByStore(ids)
     return this.delete(ids)
   }
 
   async checkStoreEmpty(ids: string[]) {
-    // TODO: Check if store empty
+    const records = await this.stockRecordService.find({idStore: {$in: ids}})
+    if(records.length){
+      const remainStock = records.reduce((total, record) => total + record.quantity, 0)
+      if(remainStock > 0) throw new GraphQLError('Còn tồn hàng trong kho.')
+    }
   }
 
-  async transfer(input: TransferStoreInput, createdBy: string): Promise<StoreTransferEntity>{
+  async transfer(idShop: string, input: TransferStoreInput, createdBy: string): Promise<StoreTransferEntity>{
+    if(!input.items.length)
+      throw new GraphQLError('Danh sách hàng hóa rỗng!')
+
     // Check Stock existed
     const idStocks = input.items.map(i => i.idStock)
-    await this.stockService.checkExistedIds(idStocks)
+    await this.stockService.checkExistedInShop(idShop, idStocks)
     
     // Check Src Des existed
-    await this.checkSrcDes(input.type, input.idSrc, input.idDes)
+    await this.checkSrcDes(idShop, input.type, input.idSrc, input.idDes)
 
     // Check record is available if export or transfer
     await this.stockRecordService.checkAvailable(input)
@@ -66,14 +74,14 @@ export class StoreService extends RootService<StoreEntity>{
     return transfer
   }
 
-  async checkSrcDes(type: TransferType, idSrc: string, idDes: string){
+  async checkSrcDes(idShop:string, type: TransferType, idSrc: string, idDes: string){
     if(type === TransferType.EXPORT)
-      await this.checkExistedId(idSrc)
+      await this.checkExisted({_id: idSrc, idShop})
     else if(type === TransferType.IMPORT)
-      await this.checkExistedId(idDes)
+      await this.checkExisted({_id: idDes, idShop})
     else{
-      await this.checkExistedId(idSrc)
-      await this.checkExistedId(idDes)
+      await this.checkExisted({_id: idSrc, idShop})
+      await this.checkExisted({_id: idDes, idShop})
     }
   }
 

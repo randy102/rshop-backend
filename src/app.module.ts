@@ -31,6 +31,7 @@ import { StockInfoModule } from './modules/stock-info/stock-info.module';
 import { StockRecordModule } from './modules/stock-record/stock-record.module';
 import { StoreTransferModule } from './modules/store-transfer/store-transfer.module';
 import { StoreTransferItemModule } from './modules/store-transfer-item/store-transfer-item.module';
+import { ContractService } from './modules/contract/contract.service';
 
 
 
@@ -40,8 +41,8 @@ import { StoreTransferItemModule } from './modules/store-transfer-item/store-tra
     TypeOrmModule.forRootAsync({ useClass: TypeOrmConfigService }),
     ConfigModule.forRoot({ isGlobal: true }),
     GraphQLModule.forRootAsync({
-      imports: [JwtModule, AuthModule],
-      inject: [JwtService, AuthService],
+      imports: [JwtModule, AuthModule, ContractModule],
+      inject: [JwtService, AuthService, ContractService],
       useFactory: GqlConfigFactory
     }),
     UserModule,

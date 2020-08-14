@@ -11,7 +11,7 @@ import { StoreModule } from '../store/store.module';
   providers: [StoreTransferService, StoreTransferResolver],
   imports: [
     TypeOrmModule.forFeature([StoreTransferEntity]),
-    StoreTransferItemModule,
+    forwardRef(() => StoreTransferItemModule),
     UserModule,
     forwardRef(() => StoreModule)
   ],

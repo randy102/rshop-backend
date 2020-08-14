@@ -8,6 +8,7 @@ import { StockRecordModule } from '../stock-record/stock-record.module';
 import { UserModule } from '../user/user.module';
 import { ProductModule } from '../product/product.module';
 import { StoreModule } from '../store/store.module';
+import { StoreTransferItemModule } from '../store-transfer-item/store-transfer-item.module';
 
 @Module({
   providers: [StockService, StockResolver],
@@ -15,10 +16,11 @@ import { StoreModule } from '../store/store.module';
     TypeOrmModule.forFeature([StockEntity]),
     StockInfoModule,
     StockRecordModule,
-    ProductModule,
+    forwardRef(() => ProductModule),
     UserModule,
-    forwardRef(() => StoreModule)
+    forwardRef(() => StoreModule),
+    forwardRef(() => StoreTransferItemModule)
   ],
   exports: [StockService]
 })
-export class StockModule {}
+export class StockModule { }

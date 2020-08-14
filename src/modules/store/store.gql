@@ -36,7 +36,7 @@ input TransferStoreInput{
   idDes: String
   type: TransferType
   note: String
-  items: [TransferItemInput]
+  items: [TransferItemInput]!
 }
 
 input TransferItemInput{

@@ -174,7 +174,7 @@ export class TransferStoreInput {
     idDes?: string;
     type?: TransferType;
     note?: string;
-    items?: TransferItemInput[];
+    items: TransferItemInput[];
 }
 
 export class TransferItemInput {

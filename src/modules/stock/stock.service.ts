@@ -1,18 +1,20 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject, forwardRef } from '@nestjs/common';
 import RootService from '../root/root.service';
 import { StockEntity } from './stock.entity';
 import { StockInfoService } from '../stock-info/stock-info.service';
 import { StockRecordService } from '../stock-record/stock-record.service';
 import { CreateStockInput, UpdateStockInput } from 'src/graphql.schema';
 import { ProductService } from '../product/product.service';
-import { StoreService } from '../store/store.service';
+import { NotFoundError } from 'src/commons/exceptions/GqlException';
+import { TransferItemService } from '../store-transfer-item/store-transfer-item.service';
 
 @Injectable()
 export class StockService extends RootService<StockEntity>{
   constructor(
     protected readonly stockInfoService: StockInfoService,
     protected readonly stockRecordService: StockRecordService,
-    protected readonly productService: ProductService
+    @Inject(forwardRef(() => ProductService)) protected readonly productService: ProductService,
+    protected readonly transferItemService: TransferItemService
   ){super(StockEntity,'Hàng hóa')}
   
   async byShop(idShop: string): Promise<StockEntity[]>{
@@ -57,8 +59,33 @@ export class StockService extends RootService<StockEntity>{
     return updated
   }
 
+  async deleteByProduct(idProducs: string[]): Promise<boolean>{
+    const stocks = await this.find({idProduct: {$in: idProducs}})
+    return this.deleteStock(stocks.map(s => s._id))
+  }
+
   async deleteStock(ids: string[]): Promise<boolean>{
-    // TODO delete Info, record, transferItem
+    await this.stockInfoService.deleteByStock(ids)
+    await this.stockRecordService.deleteByStock(ids)
+    await this.transferItemService.deleteByStock(ids)
+
     return this.delete(ids)
+  }
+
+  async checkExistedInShop(idShop: string, idStocks: string[]){
+    const stocks = await this.aggregate([
+      {$match: {_id: {$in: idStocks}}},
+      {$lookup: {
+        from: 'Product',
+        localField: 'idProduct',
+        foreignField: '_id',
+        as: 'product'
+      }},
+      {$unwind: {path: '$product'}},
+      {$match: {'product.idShop': idShop}}
+    ])
+
+    if(stocks.length !== idStocks.length)
+      throw new NotFoundError('Hàng hóa')
   }
 }

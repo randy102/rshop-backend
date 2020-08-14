@@ -54,3 +54,9 @@ export class SelfUpdateRoleError extends GraphQLError{
     super(`Không thể thay đổi quyền của bạn!`)
   }
 }
+
+export class ContractError extends GraphQLError{
+  constructor(){
+    super(`Hợp đồng hết hạn hoặc chưa đăng ký.`)
+  }
+}

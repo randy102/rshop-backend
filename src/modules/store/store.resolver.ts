@@ -3,7 +3,7 @@ import { RootResolver } from '../root/root.resolver';
 import { StoreEntity } from './store.entity';
 import { UserService } from '../user/user.service';
 import { StoreService } from './store.service';
-import { CreateStoreInput, Store, UpdateStoreInput } from 'src/graphql.schema';
+import { CreateStoreInput, Store, UpdateStoreInput, StoreTransfer, TransferStoreInput } from 'src/graphql.schema';
 import { GQL_CTX } from 'src/commons/constants/gqlContext';
 import UserEntity from '../user/user.entity';
 
@@ -37,7 +37,17 @@ export class StoreResolver extends RootResolver<StoreEntity>{
   }
 
   @Mutation()
-  deleteStore(@Args('ids') ids: string[]): Promise<boolean>{
+  @Mutation()
+  transferStore(
+    @Args('idShop') idShop: string,
+    @Args('input') i: TransferStoreInput,
+    @Context(GQL_CTX.USER) u: UserEntity
+  ): Promise<StoreTransfer> {
+    return this.storeService.transfer(idShop, i, u._id)
+  }
+
+  @Mutation()
+  deleteStore(@Args('ids') ids: string[]): Promise<boolean> {
     return this.storeService.deleteStore(ids)
   }
 }

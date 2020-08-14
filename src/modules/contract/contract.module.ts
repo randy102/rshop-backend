@@ -12,6 +12,7 @@ import { UserModule } from '../user/user.module';
     PlanModule,
     UserModule
   ],
-  providers: [ContractResolver, ContractService]
+  providers: [ContractResolver, ContractService],
+  exports: [ContractService]
 })
 export class ContractModule {}
