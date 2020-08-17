@@ -10,9 +10,9 @@ export class TransferItemService extends RootService<TransferItemEntity>{
     @Inject(forwardRef(() => StoreTransferService)) protected readonly transferService: StoreTransferService
   ){super(TransferItemEntity, 'Mục chuyển kho')}
 
-  create(idStoreTransfer: string, items: TransferItemInput[]){
+  async create(idStoreTransfer: string, items: TransferItemInput[]): Promise<void>{
     for(let item of items){
-      this.save({
+      await this.save({
         idStoreTransfer,
         ...item
       })

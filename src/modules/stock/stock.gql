@@ -6,7 +6,8 @@ type Stock{
 
   product: Product
   info: StockInfo
-  records: [StockRecord]
+
+  records: [StockRecord] @Staff(with: "STORE")
   
   createdAt: Float
   creator: User
@@ -16,6 +17,7 @@ type Stock{
 
 type Query{
   stocks(idShop: String): [Stock] @Staff(with: "STORE")
+  stocksByProduct(idShop: String, idProduct: String): [Stock] @Staff(with: "PRODUCT")
 }
 
 type Mutation{

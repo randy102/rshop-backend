@@ -273,6 +273,10 @@ export abstract class IQuery {
 
     abstract stocks(idShop?: string): Stock[] | Promise<Stock[]>;
 
+    abstract stocksByProduct(idShop?: string, idProduct?: string): Stock[] | Promise<Stock[]>;
+
+    abstract storeTransfers(idShop?: string): StoreTransfer[] | Promise<StoreTransfer[]>;
+
     abstract stores(idShop?: string): Store[] | Promise<Store[]>;
 
     abstract templates(): Template[] | Promise<Template[]>;

@@ -18,3 +18,7 @@ enum TransferType{
   TRANSFER
   SELL
 }
+
+type Query{
+  storeTransfers(idShop: String): [StoreTransfer] @Staff(with: "STORE")
+}

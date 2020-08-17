@@ -12,8 +12,8 @@ import { StoreModule } from '../store/store.module';
   imports: [
     TypeOrmModule.forFeature([StoreTransferEntity]),
     forwardRef(() => StoreTransferItemModule),
+    forwardRef(() => StoreModule),
     UserModule,
-    forwardRef(() => StoreModule)
   ],
   exports: [StoreTransferService]
 })

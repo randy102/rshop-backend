@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject, forwardRef } from '@nestjs/common';
 import RootService from '../root/root.service';
 import { StoreEntity } from './store.entity';
 import { CreateStoreInput, UpdateStoreInput, TransferStoreInput, TransferType, TransferItemInput } from 'src/graphql.schema';
@@ -12,7 +12,9 @@ import { GraphQLError } from 'graphql';
 @Injectable()
 export class StoreService extends RootService<StoreEntity>{
   constructor(
+    @Inject(forwardRef(() => StoreTransferService))
     protected readonly storeTransferService: StoreTransferService,
+    @Inject(forwardRef(() => StockService))
     protected readonly stockService: StockService,
     protected readonly stockRecordService: StockRecordService
   ) { super(StoreEntity, 'Kho hàng') }

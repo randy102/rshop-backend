@@ -9,6 +9,7 @@ import { UserModule } from '../user/user.module';
 import { ProductModule } from '../product/product.module';
 import { StoreModule } from '../store/store.module';
 import { StoreTransferItemModule } from '../store-transfer-item/store-transfer-item.module';
+import { PhotoModule } from '../photo/photo.module';
 
 @Module({
   providers: [StockService, StockResolver],
@@ -19,7 +20,8 @@ import { StoreTransferItemModule } from '../store-transfer-item/store-transfer-i
     forwardRef(() => ProductModule),
     UserModule,
     forwardRef(() => StoreModule),
-    forwardRef(() => StoreTransferItemModule)
+    forwardRef(() => StoreTransferItemModule),
+    PhotoModule
   ],
   exports: [StockService]
 })
