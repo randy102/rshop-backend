@@ -20,7 +20,7 @@ class StaffDirective extends SchemaDirectiveVisitor {
       if (!user) throw new AuthError()
 
       if(!contract) throw new ContractError()
-
+      
       const shopRole = roles.find(role => role.idShop === idShop)
       if(!shopRole) throw new NoPermissionError()
 

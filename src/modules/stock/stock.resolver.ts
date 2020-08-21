@@ -45,6 +45,11 @@ export class StockResolver extends RootResolver<StockEntity>{
     return this.stockService.find({idProduct})
   }
 
+  @Query()
+  stocksByStore(@Args('idStore') idStore: string): Promise<Stock[]>{
+    return this.stockService.byStore(idStore)
+  }
+
   @Mutation()
   createStock(@Args('idShop') idShop: string, @Args('input') i: CreateStockInput, @Context(GQL_CTX.USER) u: UserEntity): Promise<Stock> {
     return this.stockService.create(idShop, i, u._id)

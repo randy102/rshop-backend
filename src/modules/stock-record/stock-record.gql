@@ -1,5 +1,9 @@
 type StockRecord{
-  _id: String
   quantity: Int
   store: Store
+
+  creator: User
+  createdAt: Float
+  updater: User
+  updatedAt: Float
 }

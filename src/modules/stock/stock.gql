@@ -1,13 +1,14 @@
 type Stock{
   _id: String
   name: String
+  code: String
   salePrice: Float
   imgs: [String]
 
   product: Product
   info: StockInfo
 
-  records: [StockRecord] @Staff(with: "STORE")
+  records(idShop: String): [StockRecord]
   
   createdAt: Float
   creator: User
@@ -18,6 +19,7 @@ type Stock{
 type Query{
   stocks(idShop: String): [Stock] @Staff(with: "STORE")
   stocksByProduct(idShop: String, idProduct: String): [Stock] @Staff(with: "PRODUCT")
+  stocksByStore(idShop: String, idStore: String): [Stock] @Staff(with: "STORE")
 }
 
 type Mutation{

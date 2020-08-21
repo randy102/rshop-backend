@@ -33,6 +33,7 @@
     "@types/mongodb": "^3.5.20",
     "@types/multer": "^1.4.3",
     "@types/nodemailer": "^6.4.0",
+    "@types/shortid": "0.0.29",
     "apollo-server-express": "^2.12.0",
     "aws-sdk": "^2.707.0",
     "class-transformer": "^0.2.3",
@@ -47,6 +48,7 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.0",
     "rxjs": "^6.5.4",
+    "shortid": "^2.2.15",
     "typeorm": "^0.2.24",
     "uuid": "^8.0.0"
   },

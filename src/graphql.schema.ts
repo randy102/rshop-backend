@@ -275,6 +275,8 @@ export abstract class IQuery {
 
     abstract stocksByProduct(idShop?: string, idProduct?: string): Stock[] | Promise<Stock[]>;
 
+    abstract stocksByStore(idShop?: string, idStore?: string): Stock[] | Promise<Stock[]>;
+
     abstract storeTransfers(idShop?: string): StoreTransfer[] | Promise<StoreTransfer[]>;
 
     abstract stores(idShop?: string): Store[] | Promise<Store[]>;
@@ -455,14 +457,18 @@ export class StockInfo {
 }
 
 export class StockRecord {
-    _id?: string;
     quantity?: number;
     store?: Store;
+    creator?: User;
+    createdAt?: number;
+    updater?: User;
+    updatedAt?: number;
 }
 
 export class Stock {
     _id?: string;
     name?: string;
+    code?: string;
     salePrice?: number;
     imgs?: string[];
     product?: Product;

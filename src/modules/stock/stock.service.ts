@@ -26,6 +26,19 @@ export class StockService extends RootService<StockEntity>{
     return this.find({idProduct: {$in: idProducts}})
   }
 
+  async byStore(idStore: string): Promise<StockEntity[]>{
+    return this.aggregate([
+      {$lookup: {
+        from: 'StockRecord',
+        localField: '_id',
+        foreignField: 'idStock',
+        as: 'record'
+      }},
+      {$unwind: {path: '$record'}},
+      {$match: {'record.idStore': idStore, 'record.quantity': {$ne: 0}}}
+    ])
+  }
+
   async create(idShop: string, input: CreateStockInput, createdBy: string): Promise<StockEntity>{
     await this.productService.checkExisted({_id: input.idProduct, idShop})
     await this.checkDuplication({idProduct: input.idProduct, name: input.name}, 'Tên phân loại')
