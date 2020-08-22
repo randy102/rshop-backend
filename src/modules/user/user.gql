@@ -20,7 +20,8 @@ type LoginResponse{
 }
 
 type Query{
-  users: [User] @Auth
+  users: [User] @Admin
+  usersByEmail(idShop: String, email: String): [User] @Staff(with: "STAFF")
   currentUser: User @Auth 
 }
 

@@ -10,26 +10,32 @@ export class StoreTransferService extends RootService<StoreTransferEntity>{
   constructor(
     @Inject(forwardRef(() => TransferItemService)) protected readonly transferItemService: TransferItemService,
     protected readonly storeService: StoreService
-  ){super(StoreTransferEntity,'Đơn chuyển kho')}
+  ) { super(StoreTransferEntity, 'Đơn chuyển kho') }
 
-  async create(input: TransferStoreInput, createdBy: string): Promise<StoreTransferEntity>{
+  async create(input: TransferStoreInput, createdBy: string): Promise<StoreTransferEntity> {
     const transfer = await this.save({
       ...input,
       createdBy
     })
-    
+
     // Create transfered items
     await this.transferItemService.create(transfer._id, input.items)
 
     return transfer
   }
 
-  async byShop(idShop: string): Promise<StoreTransferEntity[]>{
-    const storesByShop = await this.storeService.find({idShop})
+  async byShop(idShop: string): Promise<StoreTransferEntity[]> {
+    const storesByShop = await this.storeService.find({ idShop })
     const storeIds = storesByShop.map(s => s._id)
-    return this.find({$or: [
-      {idSrc: {$in: storeIds}},
-      {idDes: {$in: storeIds}}
-    ]})
+    return this.aggregate([
+      {$match: {
+        $or: [
+          { idSrc: { $in: storeIds } },
+          { idDes: { $in: storeIds } }
+        ]
+      }},
+      {$sort: {createdAt: -1}}
+    ])
+      
   }
 }

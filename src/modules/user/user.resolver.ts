@@ -23,6 +23,11 @@ export class UserResolver extends AccountRootResolver<UserEntity> {
   }
 
   @Query()
+  usersByEmail(@Args('email') email:string): Promise<User[]> {
+    return this.userService.findByEmail(email)
+  }
+
+  @Query()
   currentUser(@Context("user") user: UserEntity): User {
     return user
   }

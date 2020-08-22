@@ -287,6 +287,8 @@ export abstract class IQuery {
 
     abstract users(): User[] | Promise<User[]>;
 
+    abstract usersByEmail(idShop?: string, email?: string): User[] | Promise<User[]>;
+
     abstract currentUser(): User | Promise<User>;
 }
 

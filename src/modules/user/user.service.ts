@@ -124,4 +124,17 @@ export class UserService extends AccountRootService<UserEntity> {
    
     return this.deleteAccount(ids)
   }
+
+  async findByEmail(email: string): Promise<UserEntity[]>{
+    return this.aggregate([
+      {$lookup: {
+        from: 'Credential',
+        localField: 'idCredential',
+        foreignField: '_id',
+        as: 'credential'
+      }},
+      {$unwind: {path: '$credential'}},
+      {$match: {'credential.email': email}}
+    ])
+  }
 }
