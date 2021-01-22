@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_","ns":"rshop.Stock"}],"uuid":"6cb7377050784f46adade3f4a326a5a6","collectionName":"Stock"}
