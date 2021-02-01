@@ -1,6 +1,6 @@
-import { SchemaDirectiveVisitor } from 'graphql-tools'
-import { defaultFieldResolver } from 'graphql'
-import { AuthError } from '../exceptions/GqlException'
+import {SchemaDirectiveVisitor} from 'graphql-tools'
+import {defaultFieldResolver} from 'graphql'
+import {AuthError} from '../exceptions/GqlException'
 
 class AuthDirective extends SchemaDirectiveVisitor {
   visitFieldDefinition(field) {
@@ -8,7 +8,7 @@ class AuthDirective extends SchemaDirectiveVisitor {
 
     field.resolve = function (...args) {
       const { user } = args[2] //Context
-      
+
       if (!user) throw new AuthError()
 
       return resolve.apply(this, args)

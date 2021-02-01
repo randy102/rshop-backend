@@ -1,9 +1,9 @@
-import { Entity, Column } from "typeorm";
-import { RootEntity } from "../root/root.entity";
-import { Expose } from "class-transformer";
+import {Entity, Column} from "typeorm";
+import {RootEntity} from "../root/root.entity";
+import {Expose} from "class-transformer";
 
-@Entity({name: 'Template'})
-export class TemplateEntity extends RootEntity<TemplateEntity>{
+@Entity({ name: 'Template' })
+export class TemplateEntity extends RootEntity<TemplateEntity> {
   @Expose()
   @Column()
   name: string
@@ -20,7 +20,7 @@ export class TemplateEntity extends RootEntity<TemplateEntity>{
   @Column()
   demoImg: string
 
-  constructor(tem: Partial<TemplateEntity>){
+  constructor(tem: Partial<TemplateEntity>) {
     super(tem, TemplateEntity)
   }
 }

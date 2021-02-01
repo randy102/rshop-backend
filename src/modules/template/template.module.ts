@@ -1,10 +1,10 @@
-import { Module, forwardRef } from '@nestjs/common';
-import { TemplateResolver } from './template.resolver';
-import { TemplateService } from './template.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { TemplateEntity } from './template.entity';
-import { ShopModule } from '../shop/shop.module';
-import { PhotoModule } from '../photo/photo.module';
+import {Module, forwardRef} from '@nestjs/common';
+import {TemplateResolver} from './template.resolver';
+import {TemplateService} from './template.service';
+import {TypeOrmModule} from '@nestjs/typeorm';
+import {TemplateEntity} from './template.entity';
+import {ShopModule} from '../shop/shop.module';
+import {PhotoModule} from '../photo/photo.module';
 
 @Module({
   providers: [TemplateResolver, TemplateService],
@@ -15,4 +15,5 @@ import { PhotoModule } from '../photo/photo.module';
     PhotoModule
   ]
 })
-export class TemplateModule {}
+export class TemplateModule {
+}

@@ -1,18 +1,20 @@
-import { Resolver, Mutation, Args, Context, Query } from '@nestjs/graphql';
-import { RootResolver } from '../root/root.resolver';
-import { StoreEntity } from './store.entity';
-import { UserService } from '../user/user.service';
-import { StoreService } from './store.service';
-import { CreateStoreInput, Store, UpdateStoreInput, StoreTransfer, TransferStoreInput } from 'src/graphql.schema';
-import { GQL_CTX } from 'src/commons/constants/gqlContext';
+import {Resolver, Mutation, Args, Context, Query} from '@nestjs/graphql';
+import {RootResolver} from '../root/root.resolver';
+import {StoreEntity} from './store.entity';
+import {UserService} from '../user/user.service';
+import {StoreService} from './store.service';
+import {CreateStoreInput, Store, UpdateStoreInput, StoreTransfer, TransferStoreInput} from 'src/graphql.schema';
+import {GQL_CTX} from 'src/commons/constants/gqlContext';
 import UserEntity from '../user/user.entity';
 
 @Resolver('Store')
-export class StoreResolver extends RootResolver<StoreEntity>{
+export class StoreResolver extends RootResolver<StoreEntity> {
   constructor(
     protected readonly userService: UserService,
     protected readonly storeService: StoreService
-  ) { super(userService) }
+  ) {
+    super(userService)
+  }
 
   @Query()
   stores(@Args('idShop') idShop: string): Promise<Store[]> {

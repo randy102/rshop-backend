@@ -1,12 +1,12 @@
-import { Module, forwardRef } from '@nestjs/common';
-import { StoreResolver } from './store.resolver';
-import { StoreService } from './store.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { StoreEntity } from './store.entity';
-import { UserModule } from '../user/user.module';
-import { StoreTransferModule } from '../store-transfer/store-transfer.module';
-import { StockModule } from '../stock/stock.module';
-import { StockRecordModule } from '../stock-record/stock-record.module';
+import {Module, forwardRef} from '@nestjs/common';
+import {StoreResolver} from './store.resolver';
+import {StoreService} from './store.service';
+import {TypeOrmModule} from '@nestjs/typeorm';
+import {StoreEntity} from './store.entity';
+import {UserModule} from '../user/user.module';
+import {StoreTransferModule} from '../store-transfer/store-transfer.module';
+import {StockModule} from '../stock/stock.module';
+import {StockRecordModule} from '../stock-record/stock-record.module';
 
 @Module({
   providers: [StoreResolver, StoreService],
@@ -19,4 +19,5 @@ import { StockRecordModule } from '../stock-record/stock-record.module';
   ],
   exports: [StoreService]
 })
-export class StoreModule {}
+export class StoreModule {
+}

@@ -1,8 +1,8 @@
-import { sign as jwtSign, verify as jwtVerify } from 'jsonwebtoken'
-import { Injectable } from '@nestjs/common';
+import {sign as jwtSign, verify as jwtVerify} from 'jsonwebtoken'
+import {Injectable} from '@nestjs/common';
 import UserEntity from '../user/user.entity';
 
-export interface AccountPayload{
+export interface AccountPayload {
   _id: string
   credentialHash?: string
 }

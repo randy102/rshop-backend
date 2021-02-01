@@ -2,7 +2,7 @@ type Store{
   _id: String
   name: String
   address: String
-  
+
   creator: User
   createdAt: Float
   updater: User

@@ -1,10 +1,10 @@
-import { Entity, Column } from "typeorm";
-import { RootEntity } from "../root/root.entity";
-import { Expose } from "class-transformer";
-import { PlanState } from "src/graphql.schema";
+import {Entity, Column} from "typeorm";
+import {RootEntity} from "../root/root.entity";
+import {Expose} from "class-transformer";
+import {PlanState} from "src/graphql.schema";
 
-@Entity({name: 'Plan'})
-export class PlanEntity extends RootEntity<PlanEntity>{
+@Entity({ name: 'Plan' })
+export class PlanEntity extends RootEntity<PlanEntity> {
   @Expose()
   @Column()
   name: string
@@ -25,9 +25,9 @@ export class PlanEntity extends RootEntity<PlanEntity>{
   @Column()
   description: string
 
-  constructor(plan: Partial<PlanEntity>){
+  constructor(plan: Partial<PlanEntity>) {
     super(plan, PlanEntity)
-    if(plan){
+    if (plan) {
       this.state = this.state || PlanState.DRAFT
     }
   }

@@ -1,11 +1,11 @@
-import { join } from 'path'
-import { GqlModuleOptions } from '@nestjs/graphql';
-import schemaDirectives from '../commons/directives' 
-import { JwtService, AccountPayload } from 'src/modules/jwt/jwt.service';
-import { AuthService, UserRole } from 'src/modules/auth/auth.service';
+import {join} from 'path'
+import {GqlModuleOptions} from '@nestjs/graphql';
+import schemaDirectives from '../commons/directives'
+import {JwtService, AccountPayload} from 'src/modules/jwt/jwt.service';
+import {AuthService, UserRole} from 'src/modules/auth/auth.service';
 import UserEntity from 'src/modules/user/user.entity';
-import { ContractEntity } from 'src/modules/contract/contract.entity';
-import { ContractService } from 'src/modules/contract/contract.service';
+import {ContractEntity} from 'src/modules/contract/contract.entity';
+import {ContractService} from 'src/modules/contract/contract.service';
 
 export default async function GqlConfigFactory(
   jwtService: JwtService,
@@ -20,25 +20,25 @@ export default async function GqlConfigFactory(
     }
 
     const token = req.headers['token']
-    
+
     var user: UserEntity
     var roles: UserRole[]
     var contract: ContractEntity
 
-    if(token) {
+    if (token) {
       const payload = await jwtService.verify(token)
 
-      if(payload){
-        const userEntity =  await authService.getCurrentAccount(payload._id)
-  
-        if(userEntity && payload.credentialHash === userEntity.credentialHash){
+      if (payload) {
+        const userEntity = await authService.getCurrentAccount(payload._id)
+
+        if (userEntity && payload.credentialHash === userEntity.credentialHash) {
           user = userEntity
           roles = await authService.getUserRoles(payload._id)
           contract = await contractService.getActive(payload._id)
         }
       }
     }
-   
+
     return {
       user, roles, contract
     }

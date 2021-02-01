@@ -1,9 +1,9 @@
-import { Entity, ObjectIdColumn, Column } from "typeorm";
+import {Entity, ObjectIdColumn, Column} from "typeorm";
 import {Expose} from 'class-transformer'
-import { RootEntity } from "../root/root.entity";
+import {RootEntity} from "../root/root.entity";
 
 @Entity({ name: 'Permission' })
-export default class PermissionEntity extends RootEntity<PermissionEntity>{
+export default class PermissionEntity extends RootEntity<PermissionEntity> {
   @Expose()
   @ObjectIdColumn()
   _id: string
@@ -16,8 +16,8 @@ export default class PermissionEntity extends RootEntity<PermissionEntity>{
   @Column()
   description: string
 
-  constructor(permission: Partial<PermissionEntity>){
+  constructor(permission: Partial<PermissionEntity>) {
     super(permission, PermissionEntity)
-    
+
   }
 }

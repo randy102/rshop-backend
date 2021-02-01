@@ -1,10 +1,10 @@
-import { Entity, Column } from "typeorm";
-import { RootEntity } from "../root/root.entity";
+import {Entity, Column} from "typeorm";
+import {RootEntity} from "../root/root.entity";
 import {TransferType} from 'src/graphql.schema'
-import { Expose } from "class-transformer";
+import {Expose} from "class-transformer";
 
-@Entity({name: 'StoreTransfer'})
-export class StoreTransferEntity extends RootEntity<StoreTransferEntity>{
+@Entity({ name: 'StoreTransfer' })
+export class StoreTransferEntity extends RootEntity<StoreTransferEntity> {
   @Expose()
   @Column()
   idSrc: string
@@ -20,8 +20,8 @@ export class StoreTransferEntity extends RootEntity<StoreTransferEntity>{
   @Expose()
   @Column()
   note: string
-  
-  constructor(plain: Partial<StoreTransferEntity>){
+
+  constructor(plain: Partial<StoreTransferEntity>) {
     super(plain, StoreTransferEntity)
   }
 }

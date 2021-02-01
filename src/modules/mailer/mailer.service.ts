@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import {Injectable} from '@nestjs/common';
 import nodemailer = require('nodemailer')
 import os = require('os')
 import Mail = require('nodemailer/lib/mailer');
 
-export interface MailParam{
+export interface MailParam {
   to: string
   subject: string
   html: string
@@ -26,18 +26,18 @@ export class MailerService {
       subject,
       from: `RShop <${process.env.MAIL_USER}>`
     }
+    console.log(process.env.MAIL_USER, process.env.MAIL_PASSWORD)
     return new Promise((resolve) => {
       this.transporter.sendMail(mailOption, (error, info) => {
         if (error) {
           console.log(error)
           resolve(false)
-        }
-        else resolve(true)
+        } else resolve(true)
       })
     })
   }
 
-  sendComfirmEmail({ to, token }): Promise<boolean>{
+  sendComfirmEmail({ to, token }): Promise<boolean> {
     const host = process.env.HOSTNAME || 'http://localhost:3000'
     const confirmURL = host + '/register/create/' + token
     const subject = 'Xác thực tài khoản RShop'
@@ -56,6 +56,6 @@ export class MailerService {
         Xác nhận
       </a>
     `
-    return this.send({to,subject,html})
+    return this.send({ to, subject, html })
   }
 }

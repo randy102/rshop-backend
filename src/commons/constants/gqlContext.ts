@@ -1,4 +1,4 @@
-export enum GQL_CTX{
+export enum GQL_CTX {
   USER = 'user',
   ROLES = 'roles'
 }

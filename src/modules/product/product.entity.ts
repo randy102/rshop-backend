@@ -1,9 +1,9 @@
-import { Entity, Column } from "typeorm";
-import { RootEntity } from "../root/root.entity";
-import { Expose } from "class-transformer";
+import {Entity, Column} from "typeorm";
+import {RootEntity} from "../root/root.entity";
+import {Expose} from "class-transformer";
 
-@Entity({name: 'Product'})
-export class ProductEntity extends RootEntity<ProductEntity>{
+@Entity({ name: 'Product' })
+export class ProductEntity extends RootEntity<ProductEntity> {
   @Column()
   @Expose()
   idShop: string
@@ -27,8 +27,8 @@ export class ProductEntity extends RootEntity<ProductEntity>{
   @Column()
   @Expose()
   description: string
-  
-  constructor(plain: Partial<ProductEntity>){
-    super(plain,ProductEntity)
+
+  constructor(plain: Partial<ProductEntity>) {
+    super(plain, ProductEntity)
   }
 }

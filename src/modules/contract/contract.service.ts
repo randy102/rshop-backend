@@ -1,14 +1,14 @@
-import { Injectable } from '@nestjs/common';
-import { ContractEntity } from './contract.entity';
+import {Injectable} from '@nestjs/common';
+import {ContractEntity} from './contract.entity';
 import RootService from '../root/root.service';
-import { PlanService } from '../plan/plan.service';
-import { SignContractInput, CreateContractInput } from 'src/graphql.schema';
-import { GraphQLError } from 'graphql';
-import { UserService } from '../user/user.service';
-import { Moment } from 'src/utils/moment';
+import {PlanService} from '../plan/plan.service';
+import {SignContractInput, CreateContractInput} from 'src/graphql.schema';
+import {GraphQLError} from 'graphql';
+import {UserService} from '../user/user.service';
+import {Moment} from 'src/utils/moment';
 
 @Injectable()
-export class ContractService extends RootService<ContractEntity>{
+export class ContractService extends RootService<ContractEntity> {
   constructor(
     private readonly planService: PlanService,
     private readonly userService: UserService
@@ -73,7 +73,7 @@ export class ContractService extends RootService<ContractEntity>{
 
 
   /**
-   * 
+   *
    * @param idUser user id
    * @returns {ContractEntity[]} all contracts of user
    */

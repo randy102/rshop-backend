@@ -1,13 +1,14 @@
-import { Injectable } from '@nestjs/common';
-import { StockRecordEntity } from './stock-record.entity';
+import {Injectable} from '@nestjs/common';
+import {StockRecordEntity} from './stock-record.entity';
 import RootService from '../root/root.service';
-import { TransferItemInput, TransferType, TransferStoreInput } from 'src/graphql.schema';
-import { GraphQLError } from 'graphql';
-import { stringList } from 'aws-sdk/clients/datapipeline';
+import {TransferStoreInput, TransferType} from 'src/graphql.schema';
+import {GraphQLError} from 'graphql';
 
 @Injectable()
-export class StockRecordService extends RootService<StockRecordEntity>{
-  constructor() { super(StockRecordEntity, 'Bản ghi hàng hóa') }
+export class StockRecordService extends RootService<StockRecordEntity> {
+  constructor() {
+    super(StockRecordEntity, 'Bản ghi hàng hóa')
+  }
 
   async update(input: TransferStoreInput, createdBy: string) {
     //* Update Src records (sender)
@@ -55,7 +56,7 @@ export class StockRecordService extends RootService<StockRecordEntity>{
 
       // If some src record dont have enough quantity
       const notMatchQuantity = records.some((r) => r.quantity < input.items.find(i => i.idStock === r.idStock).quantity)
-      
+
       const notAvailable = notMatchLength || notMatchQuantity
 
       if (notAvailable)
@@ -63,13 +64,13 @@ export class StockRecordService extends RootService<StockRecordEntity>{
     }
   }
 
-  async deleteByStore(idStores: string[]): Promise<boolean>{
-    const records = await this.find({idStore: {$in: idStores}})
+  async deleteByStore(idStores: string[]): Promise<boolean> {
+    const records = await this.find({ idStore: { $in: idStores } })
     return this.delete(records.map(r => r._id))
   }
 
-  async deleteByStock(idStocks: string[]): Promise<boolean>{
-    const records = await this.find({idStock: {$in: idStocks}})
+  async deleteByStock(idStocks: string[]): Promise<boolean> {
+    const records = await this.find({ idStock: { $in: idStocks } })
     return this.delete(records.map(r => r._id))
   }
 }

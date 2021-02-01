@@ -1,9 +1,9 @@
-import { Entity, Column } from "typeorm";
-import { RootEntity } from "../root/root.entity";
-import { Expose } from "class-transformer";
+import {Entity, Column} from "typeorm";
+import {RootEntity} from "../root/root.entity";
+import {Expose} from "class-transformer";
 
-@Entity({name: 'Role'})
-export class RoleEntity extends RootEntity<RoleEntity>{
+@Entity({ name: 'Role' })
+export class RoleEntity extends RootEntity<RoleEntity> {
   @Expose()
   @Column()
   idShop: string
@@ -30,7 +30,7 @@ export class RoleEntity extends RootEntity<RoleEntity>{
 
   constructor(role: Partial<RoleEntity>) {
     super(role, RoleEntity)
-    if(role){
+    if (role) {
       this.isMaster = this.isMaster || false
     }
   }

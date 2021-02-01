@@ -1,10 +1,10 @@
-import { Module, forwardRef } from '@nestjs/common';
-import { ShopService } from './shop.service';
-import { ShopResolver } from './shop.resolver';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { ShopEntity } from './shop.entity';
-import { RoleModule } from '../role/role.module';
-import { TemplateModule } from '../template/template.module';
+import {Module, forwardRef} from '@nestjs/common';
+import {ShopService} from './shop.service';
+import {ShopResolver} from './shop.resolver';
+import {TypeOrmModule} from '@nestjs/typeorm';
+import {ShopEntity} from './shop.entity';
+import {RoleModule} from '../role/role.module';
+import {TemplateModule} from '../template/template.module';
 
 @Module({
   providers: [ShopService, ShopResolver],
@@ -12,7 +12,8 @@ import { TemplateModule } from '../template/template.module';
   imports: [
     TypeOrmModule.forFeature([ShopEntity]),
     forwardRef(() => RoleModule),
-    forwardRef(() => TemplateModule) 
+    forwardRef(() => TemplateModule)
   ]
 })
-export class ShopModule {}
+export class ShopModule {
+}

@@ -1,16 +1,16 @@
-import { Entity, ObjectIdColumn, Column } from "typeorm";
+import {Entity, ObjectIdColumn, Column} from "typeorm";
 import {Expose, plainToClass} from 'class-transformer'
 import * as moment from 'moment'
-import { uuid } from "src/utils/uuid";
-import { AccountRootEntity } from "../root/account-root.entity";
+import {uuid} from "src/utils/uuid";
+import {AccountRootEntity} from "../root/account-root.entity";
 
 @Entity({ name: 'User' })
-export default class UserEntity extends AccountRootEntity<UserEntity>{
+export default class UserEntity extends AccountRootEntity<UserEntity> {
   @Expose()
   @Column()
   isAdmin: boolean
 
-  constructor(user: Partial<UserEntity>){
+  constructor(user: Partial<UserEntity>) {
     super(user, UserEntity)
 
     // if(user){

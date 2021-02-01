@@ -1,9 +1,9 @@
-import { Entity, Column } from "typeorm";
-import { RootEntity } from "../root/root.entity";
-import { Expose } from "class-transformer";
+import {Entity, Column} from "typeorm";
+import {RootEntity} from "../root/root.entity";
+import {Expose} from "class-transformer";
 
-@Entity({name: 'StockRecord'})
-export class StockRecordEntity extends RootEntity<StockRecordEntity>{
+@Entity({ name: 'StockRecord' })
+export class StockRecordEntity extends RootEntity<StockRecordEntity> {
   @Column()
   @Expose()
   idStock: string
@@ -15,8 +15,8 @@ export class StockRecordEntity extends RootEntity<StockRecordEntity>{
   @Column()
   @Expose()
   quantity: number
-  
-  constructor(plain: Partial<StockRecordEntity>){
+
+  constructor(plain: Partial<StockRecordEntity>) {
     super(plain, StockRecordEntity)
   }
 }

@@ -1,12 +1,13 @@
-import { Resolver, Mutation, Args, Query, Context } from '@nestjs/graphql';
-import { CreatePermissionInput, Permission, UpdatePermissionInput, DeletePermissionInput } from 'src/graphql.schema';
-import { PermissionService } from './permission.service';
+import {Resolver, Mutation, Args, Query, Context} from '@nestjs/graphql';
+import {CreatePermissionInput, Permission, UpdatePermissionInput, DeletePermissionInput} from 'src/graphql.schema';
+import {PermissionService} from './permission.service';
 import UserEntity from '../user/user.entity';
-import { GQL_CTX } from 'src/commons/constants/gqlContext';
+import {GQL_CTX} from 'src/commons/constants/gqlContext';
 
 @Resolver('Permission')
 export class PermissionResolver {
-  constructor(private readonly permissionService: PermissionService) { }
+  constructor(private readonly permissionService: PermissionService) {
+  }
 
   @Query()
   permissions(): Promise<Permission[]> {

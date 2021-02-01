@@ -1,24 +1,26 @@
-import { Resolver, ResolveField, Parent, Mutation, Context, Query, Args } from '@nestjs/graphql';
-import { RootResolver } from '../root/root.resolver';
-import { StockEntity } from './stock.entity';
-import { UserService } from '../user/user.service';
-import { StockInfoService } from '../stock-info/stock-info.service';
-import { StockRecordService } from '../stock-record/stock-record.service';
-import { StockInfo, StockRecord, CreateStockInput, Stock, Product, UpdateStockInput } from 'src/graphql.schema';
-import { GQL_CTX } from 'src/commons/constants/gqlContext';
+import {Resolver, ResolveField, Parent, Mutation, Context, Query, Args} from '@nestjs/graphql';
+import {RootResolver} from '../root/root.resolver';
+import {StockEntity} from './stock.entity';
+import {UserService} from '../user/user.service';
+import {StockInfoService} from '../stock-info/stock-info.service';
+import {StockRecordService} from '../stock-record/stock-record.service';
+import {StockInfo, StockRecord, CreateStockInput, Stock, Product, UpdateStockInput} from 'src/graphql.schema';
+import {GQL_CTX} from 'src/commons/constants/gqlContext';
 import UserEntity from '../user/user.entity';
-import { StockService } from './stock.service';
-import { ProductService } from '../product/product.service';
+import {StockService} from './stock.service';
+import {ProductService} from '../product/product.service';
 
 @Resolver('Stock')
-export class StockResolver extends RootResolver<StockEntity>{
+export class StockResolver extends RootResolver<StockEntity> {
   constructor(
     protected readonly userService: UserService,
     protected readonly stockInfoService: StockInfoService,
     protected readonly stockRecordService: StockRecordService,
     protected readonly stockService: StockService,
     protected readonly productService: ProductService,
-  ) { super(userService) }
+  ) {
+    super(userService)
+  }
 
   @ResolveField()
   info(@Parent() stock: StockEntity): Promise<StockInfo> {
@@ -36,17 +38,17 @@ export class StockResolver extends RootResolver<StockEntity>{
   }
 
   @Query()
-  stocks(@Args('idShop') idShop: string): Promise<Stock[]>{
+  stocks(@Args('idShop') idShop: string): Promise<Stock[]> {
     return this.stockService.byShop(idShop)
   }
 
   @Query()
-  stocksByProduct(@Args('idProduct') idProduct: string): Promise<Stock[]>{
-    return this.stockService.find({idProduct})
+  stocksByProduct(@Args('idProduct') idProduct: string): Promise<Stock[]> {
+    return this.stockService.find({ idProduct })
   }
 
   @Query()
-  stocksByStore(@Args('idStore') idStore: string): Promise<Stock[]>{
+  stocksByStore(@Args('idStore') idStore: string): Promise<Stock[]> {
     return this.stockService.byStore(idStore)
   }
 
@@ -61,7 +63,7 @@ export class StockResolver extends RootResolver<StockEntity>{
   }
 
   @Mutation()
-  deleteStock(@Args('ids') ids: string[]): Promise<boolean>{
+  deleteStock(@Args('ids') ids: string[]): Promise<boolean> {
     return this.stockService.deleteStock(ids)
   }
 }

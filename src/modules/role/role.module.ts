@@ -1,11 +1,11 @@
-import { Module, forwardRef } from '@nestjs/common';
-import { RoleResolver } from './role.resolver';
-import { RoleService } from './role.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { RoleEntity } from './role.entity';
-import { ShopModule } from '../shop/shop.module';
-import { UserModule } from '../user/user.module';
-import { PermissionModule } from '../permission/permission.module';
+import {Module, forwardRef} from '@nestjs/common';
+import {RoleResolver} from './role.resolver';
+import {RoleService} from './role.service';
+import {TypeOrmModule} from '@nestjs/typeorm';
+import {RoleEntity} from './role.entity';
+import {ShopModule} from '../shop/shop.module';
+import {UserModule} from '../user/user.module';
+import {PermissionModule} from '../permission/permission.module';
 
 @Module({
   providers: [RoleResolver, RoleService],
@@ -17,4 +17,5 @@ import { PermissionModule } from '../permission/permission.module';
     PermissionModule
   ]
 })
-export class RoleModule {}
+export class RoleModule {
+}

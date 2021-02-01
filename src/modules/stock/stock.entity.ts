@@ -1,10 +1,10 @@
-import { Entity, Column } from "typeorm";
-import { RootEntity } from "../root/root.entity";
-import { Expose } from "class-transformer";
+import {Entity, Column} from "typeorm";
+import {RootEntity} from "../root/root.entity";
+import {Expose} from "class-transformer";
 import shortid = require("shortid");
 
-@Entity({name: 'Stock'})
-export class StockEntity extends RootEntity<StockEntity>{
+@Entity({ name: 'Stock' })
+export class StockEntity extends RootEntity<StockEntity> {
   @Column()
   @Expose()
   idProduct: string
@@ -24,10 +24,10 @@ export class StockEntity extends RootEntity<StockEntity>{
   @Column()
   @Expose()
   imgs: string[]
-  
-  constructor(plain: Partial<StockEntity>){
+
+  constructor(plain: Partial<StockEntity>) {
     super(plain, StockEntity)
-    if(plain){
+    if (plain) {
       this.code = this.code || shortid.generate()
     }
   }

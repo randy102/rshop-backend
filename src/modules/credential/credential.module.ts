@@ -1,7 +1,7 @@
-import { Module } from '@nestjs/common';
-import { CredentialService } from './credential.service';
-import { UtilsModule } from '../utils/utils.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import {Module} from '@nestjs/common';
+import {CredentialService} from './credential.service';
+import {UtilsModule} from '../utils/utils.module';
+import {TypeOrmModule} from '@nestjs/typeorm';
 import CredentialEntity from './credential.entity';
 
 @Module({
@@ -12,4 +12,5 @@ import CredentialEntity from './credential.entity';
     UtilsModule
   ]
 })
-export class CredentialModule {}
+export class CredentialModule {
+}

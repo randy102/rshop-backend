@@ -1,12 +1,13 @@
-import { Module } from '@nestjs/common';
-import { PlanResolver } from './plan.resolver';
-import { PlanService } from './plan.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { PlanEntity } from './plan.entity';
+import {Module} from '@nestjs/common';
+import {PlanResolver} from './plan.resolver';
+import {PlanService} from './plan.service';
+import {TypeOrmModule} from '@nestjs/typeorm';
+import {PlanEntity} from './plan.entity';
 
 @Module({
-  imports:[TypeOrmModule.forFeature([PlanEntity])],
+  imports: [TypeOrmModule.forFeature([PlanEntity])],
   providers: [PlanResolver, PlanService],
   exports: [PlanService]
 })
-export class PlanModule {}
+export class PlanModule {
+}

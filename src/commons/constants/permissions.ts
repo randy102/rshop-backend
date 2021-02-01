@@ -1,4 +1,4 @@
-export enum MANAGE_PERMISSION{
+export enum MANAGE_PERMISSION {
   PRODUCT,
   STAFF,
   SHOP,

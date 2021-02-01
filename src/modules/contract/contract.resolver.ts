@@ -1,11 +1,11 @@
-import { Resolver, Mutation, Args, Context, Query, ResolveField, Parent } from '@nestjs/graphql';
+import {Resolver, Mutation, Args, Context, Query, ResolveField, Parent} from '@nestjs/graphql';
 import UserEntity from '../user/user.entity';
-import { ContractService } from './contract.service';
-import { ContractEntity } from './contract.entity';
-import { UserService } from '../user/user.service';
-import { PlanService } from '../plan/plan.service';
-import { User, Plan, CreateContractInput, SignContractInput, Contract } from 'src/graphql.schema';
-import { GQL_CTX } from 'src/commons/constants/gqlContext';
+import {ContractService} from './contract.service';
+import {ContractEntity} from './contract.entity';
+import {UserService} from '../user/user.service';
+import {PlanService} from '../plan/plan.service';
+import {User, Plan, CreateContractInput, SignContractInput, Contract} from 'src/graphql.schema';
+import {GQL_CTX} from 'src/commons/constants/gqlContext';
 
 @Resolver('Contract')
 export class ContractResolver {
@@ -13,7 +13,8 @@ export class ContractResolver {
     private readonly contractService: ContractService,
     private readonly userService: UserService,
     private readonly planService: PlanService
-  ) { }
+  ) {
+  }
 
   @ResolveField()
   user(@Parent() contract: ContractEntity): Promise<User> {
@@ -24,9 +25,9 @@ export class ContractResolver {
   plan(@Parent() contract: ContractEntity): Promise<Plan> {
     return this.planService.findById(contract.idPlan)
   }
-  
+
   @ResolveField()
-  expDate(@Parent() contract: ContractEntity): Promise<number>{
+  expDate(@Parent() contract: ContractEntity): Promise<number> {
     return this.contractService.getExpDate(contract._id)
   }
 
@@ -36,12 +37,12 @@ export class ContractResolver {
   }
 
   @Query()
-  activeContract(@Context(GQL_CTX.USER) u: UserEntity): Promise<Contract>{
+  activeContract(@Context(GQL_CTX.USER) u: UserEntity): Promise<Contract> {
     return this.contractService.getActive(u._id)
   }
 
   @Query()
-  userContracts(@Context(GQL_CTX.USER) u: UserEntity): Promise<Contract[]>{
+  userContracts(@Context(GQL_CTX.USER) u: UserEntity): Promise<Contract[]> {
     return this.contractService.byUser(u._id)
   }
 

@@ -1,12 +1,14 @@
-import { Injectable } from '@nestjs/common';
+import {Injectable} from '@nestjs/common';
 import PermissionEntity from './permission.entity';
 import RootService from '../root/root.service';
-import { Permission, CreatePermissionInput, UpdatePermissionInput } from 'src/graphql.schema';
+import {Permission, CreatePermissionInput, UpdatePermissionInput} from 'src/graphql.schema';
 
 
 @Injectable()
 export class PermissionService extends RootService<PermissionEntity> {
-  constructor() { super(PermissionEntity, 'Quyền') }
+  constructor() {
+    super(PermissionEntity, 'Quyền')
+  }
 
   async create(input: CreatePermissionInput, createdBy: string): Promise<PermissionEntity> {
     await this.checkDuplication({ name: input.name })

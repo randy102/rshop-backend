@@ -1,9 +1,9 @@
-import { Entity, Column } from "typeorm";
-import { RootEntity } from "../root/root.entity";
-import { Expose } from "class-transformer";
+import {Entity, Column} from "typeorm";
+import {RootEntity} from "../root/root.entity";
+import {Expose} from "class-transformer";
 
-@Entity({name:'Store'})
-export class StoreEntity extends RootEntity<StoreEntity>{
+@Entity({ name: 'Store' })
+export class StoreEntity extends RootEntity<StoreEntity> {
 
   @Column()
   @Expose()

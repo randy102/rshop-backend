@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import {Injectable} from '@nestjs/common';
 import md5 = require('md5');
-import { uuid } from 'src/utils/uuid';
+import {uuid} from 'src/utils/uuid';
 import shortId = require('shortid')
 
 @Injectable()

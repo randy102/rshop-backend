@@ -1,9 +1,9 @@
-import { RootEntity } from "../root/root.entity";
-import { Expose } from "class-transformer";
-import { Column, Entity } from "typeorm";
+import {RootEntity} from "../root/root.entity";
+import {Expose} from "class-transformer";
+import {Column, Entity} from "typeorm";
 
-@Entity({name: 'Shop'})
-export class ShopEntity extends RootEntity<ShopEntity>{
+@Entity({ name: 'Shop' })
+export class ShopEntity extends RootEntity<ShopEntity> {
   @Expose()
   @Column()
   idTemplate: string
@@ -26,7 +26,7 @@ export class ShopEntity extends RootEntity<ShopEntity>{
 
   constructor(shop: Partial<ShopEntity>) {
     super(shop, ShopEntity)
-    if(shop){
+    if (shop) {
       this.isActive = this.isActive === undefined ? true : this.isActive
       this.brandImg = this.brandImg || process.env.S3_DEFAULT_BRAND
     }

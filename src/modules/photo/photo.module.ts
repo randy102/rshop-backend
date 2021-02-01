@@ -1,7 +1,7 @@
-import { Module } from '@nestjs/common';
-import { PhotoService } from './photo.service';
-import { PhotoController } from './photo.controller';
-import { UtilsModule } from '../utils/utils.module';
+import {Module} from '@nestjs/common';
+import {PhotoService} from './photo.service';
+import {PhotoController} from './photo.controller';
+import {UtilsModule} from '../utils/utils.module';
 
 @Module({
   providers: [PhotoService],
@@ -9,4 +9,5 @@ import { UtilsModule } from '../utils/utils.module';
   controllers: [PhotoController],
   exports: [PhotoService]
 })
-export class PhotoModule { }
+export class PhotoModule {
+}

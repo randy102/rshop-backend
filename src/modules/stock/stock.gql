@@ -9,7 +9,7 @@ type Stock{
   info: StockInfo
 
   records(idShop: String): [StockRecord]
-  
+
   createdAt: Float
   creator: User
   updatedAt: Float

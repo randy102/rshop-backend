@@ -1,11 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import {Injectable} from '@nestjs/common';
 import RootService from '../root/root.service';
-import { PlanEntity } from './plan.entity';
-import { CreateDraftPlanInput, UpdateDraftPlanInput, PlanState } from 'src/graphql.schema';
-import { GraphQLError } from 'graphql';
+import {PlanEntity} from './plan.entity';
+import {CreateDraftPlanInput, UpdateDraftPlanInput, PlanState} from 'src/graphql.schema';
+import {GraphQLError} from 'graphql';
 
 @Injectable()
-export class PlanService extends RootService<PlanEntity>{
+export class PlanService extends RootService<PlanEntity> {
   constructor() {
     super(PlanEntity, 'Gói')
   }
