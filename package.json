@@ -27,7 +27,7 @@
     "@nestjs/core": "^6.10.14",
     "@nestjs/graphql": "^7.3.5",
     "@nestjs/jwt": "^7.0.0",
-    "@nestjs/platform-express": "^6.10.14",
+    "@nestjs/platform-express": "^9.2.1",
     "@nestjs/typeorm": "^7.0.0",
     "@types/md5": "^2.2.0",
     "@types/mongodb": "^3.5.20",
